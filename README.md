@@ -1,2 +1,4 @@
-# krakjam2015
-krakjam2015
+Gra stworzona na KrakJam'ie 2015
+===================
+
+To zaczynamy :)
