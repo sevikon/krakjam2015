@@ -1,3 +1,3 @@
 #include "glSettings.h"
 
-const string glSettings::ASSETS_PATH = "../assets/"; 
+const string glSettings::ASSETS_PATH = "assets/"; 

@@ -2,10 +2,13 @@ libs/
 visual/
 Debug/
 Release/
+ipch/
 *.opensdf
 *.sdf
 *.suo
 *.vcxproj
 *.vcxproj.filters
 *.sln
+*.dll
+*.user
 krakjam2015
