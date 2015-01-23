@@ -1,2 +1,10 @@
 libs/
 visual/
+Debug/
+Release/
+*.opensdf
+*.sdf
+*.suo
+*.vcxproj
+*.vcxproj.filters
+*.sln
