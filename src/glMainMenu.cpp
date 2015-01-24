@@ -4,7 +4,7 @@
 #include "glSettings.h"
 
 
-seMainMenu::MenuResult seMainMenu::Show(sf::RenderWindow& window, float viewWidth, float viewHeight)
+glMainMenu::MenuResult glMainMenu::Show(sf::RenderWindow& window, float viewWidth, float viewHeight)
 {
 	mBackgroundMenu.loadFromFile(concat(glSettings::ASSETS_PATH, "menuBg.png"));
 
@@ -49,7 +49,7 @@ seMainMenu::MenuResult seMainMenu::Show(sf::RenderWindow& window, float viewWidt
 	_menuItems.push_back(playButton);
 	_menuItems.push_back(exitButton);
 
-	seMainMenu::MenuResult result;
+	glMainMenu::MenuResult result;
 	while(true)
 	{
 		/*// inicjalizacja naszzego widoku (view) i jego rozmiarów
@@ -76,7 +76,7 @@ seMainMenu::MenuResult seMainMenu::Show(sf::RenderWindow& window, float viewWidt
 	}
 }
 
-seMainMenu::MenuResult seMainMenu::HandleClick(int x, int y, sf::RenderWindow& window, float viewWidth, float viewHeight)
+glMainMenu::MenuResult glMainMenu::HandleClick(int x, int y, sf::RenderWindow& window, float viewWidth, float viewHeight)
 {
 	std::list<MenuItem>::iterator it;
 
@@ -98,7 +98,7 @@ seMainMenu::MenuResult seMainMenu::HandleClick(int x, int y, sf::RenderWindow& w
 	return Nothing;
 }
 
-seMainMenu::MenuResult  seMainMenu::GetMenuResponse(sf::RenderWindow& window, float viewWidth, float viewHeight)
+glMainMenu::MenuResult  glMainMenu::GetMenuResponse(sf::RenderWindow& window, float viewWidth, float viewHeight)
 {
 	sf::Event menuEvent;
 

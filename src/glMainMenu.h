@@ -3,7 +3,7 @@
 #include "SFML\Graphics.hpp"
 #include <list>
 
-class seMainMenu
+class glMainMenu
 {
 
 public:

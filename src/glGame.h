@@ -9,8 +9,8 @@ private:
 	sf::Texture backgroundTexture;
 	sf::View player1View;
 	sf::View player2View;
-	seMainMenu mainMenu;
-	seMainMenu::MenuResult chosenOption;
+	glMainMenu mainMenu;
+	glMainMenu::MenuResult chosenOption;
 	enum GAME_STATE {MENU, GAMEPLAY} gameState;
 
 public: 

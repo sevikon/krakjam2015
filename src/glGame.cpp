@@ -81,10 +81,10 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			chosenOption = mainMenu.Show(graphics, graphics.getSize().x, graphics.getSize().y);
 			switch(chosenOption) 
 			{
-				case seMainMenu::Exit:
+				case glMainMenu::Exit:
 					graphics.close();
 					break;
-				case seMainMenu::Play:
+				case glMainMenu::Play:
 					gameState = GAME_STATE::GAMEPLAY;
 					break;
 			}
