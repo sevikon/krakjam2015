@@ -87,7 +87,7 @@ void glTiledLoader::setActive(int x,int y){
 
 bool glTiledLoader::isLadder(int x,int y){
 
-	if (vecTiled.at(x).at(y).type==3){
+	if (vecTiled.at(x).at(y).type >= LADDER_MIN && vecTiled.at(x).at(y).type <= LADDER_MAX){
 		return true;
 	}
 	return false;
@@ -95,7 +95,7 @@ bool glTiledLoader::isLadder(int x,int y){
 
 bool glTiledLoader::isWall(int x,int y){
 
-	if (vecTiled.at(x).at(y).type==2){
+	if (vecTiled.at(x).at(y).type >= GROUND_MIN && vecTiled.at(x).at(y).type <= GROUND_MAX){
 		return true;
 	}
 	return false;
@@ -103,7 +103,7 @@ bool glTiledLoader::isWall(int x,int y){
 
 bool glTiledLoader::isFree(int x,int y){
 
-	if (vecTiled.at(x).at(y).type==1){
+	if (vecTiled.at(x).at(y).type == FREE){
 		return true;
 	}
 	return false;
