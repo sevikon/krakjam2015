@@ -7,11 +7,11 @@
 #include "glUtils.h"
 #include "glMainMenu.h"
 #include "glGame.h"
+#include "glHandleMusic.h"
 
 
 int main()
 {
-
     sf::RenderWindow window(sf::VideoMode(glSettings::WINDOW_WIDTH, glSettings::WINDOW_HEIGHT), "The everlasting race!"/*, sf::Style::Fullscreen*/);
 	
 	glGame gameObject;

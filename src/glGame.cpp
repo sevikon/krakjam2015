@@ -45,6 +45,10 @@ void glGame::Init(sf::RenderWindow& window)
 
 	// gameState = GAME_STATE::MENU;
 	gameState = GAME_STATE::GAMEPLAY;
+	musicObject.HandleMusic();
+	gameState = GAME_STATE::MENU;
+	isMenu = false;
+	isPlaying = false;
 }
 
 void glGame::Update()
@@ -123,6 +127,14 @@ void glGame::Draw(sf::RenderWindow& graphics)
 	switch(gameState)
 	{
 		case GAME_STATE::MENU:
+			if(isPlaying){
+				musicObject.MusicLevel1.stop();
+				isPlaying = false;
+			}
+			if(!isMenu){	
+				musicObject.MusicMenu.play();
+				isMenu = true;
+			}
 			chosenOption = mainMenu.Show(graphics, graphics.getSize().x, graphics.getSize().y);
 			switch(chosenOption) 
 			{
@@ -134,7 +146,14 @@ void glGame::Draw(sf::RenderWindow& graphics)
 					break;
 			}
 		case GAME_STATE::GAMEPLAY:
-
+			if(isMenu){
+				musicObject.MusicMenu.stop();
+				isMenu = false;
+			}
+			if(!isPlaying){
+				musicObject.MusicLevel1.play();
+				isPlaying = true;
+			}
 			graphics.setView(player1View);
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
 			gProgressBar.DrawLava(graphics,true);
