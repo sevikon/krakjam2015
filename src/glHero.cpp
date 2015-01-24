@@ -70,6 +70,7 @@ void glHero::Init(float x, float y, sf::View View)
 	lastEvent = NONE;
 
 	playerView = View;
+	death = false;
 
 	if (side == 0)
 	{

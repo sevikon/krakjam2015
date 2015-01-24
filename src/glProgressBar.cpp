@@ -27,9 +27,11 @@ void glProgressBar::Load()
 
 void glProgressBar::Init()
 {
-	lava=6400-24;
+	lava=6400-12;
 	player1=6400-24;
 	player2=6400-24;
+
+	timer.restart();
 }
 
 void glProgressBar::Update(float play1, float play2)
@@ -42,10 +44,15 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 {	
 	// define a 120x50 rectangle
 
-	lava-=0.05;
+	if(timer.getElapsedTime().asSeconds() > 10){
+		lava-=0.01;}
+
 	if (lava<0){
 		lava=0;
 	}
+	//if (lava<player1-50){
+	//	lava=player1-50;
+	//}
 
 	backgroundSprite[0].setPosition(620,0);
 	graphics.draw(backgroundSprite[0]);
