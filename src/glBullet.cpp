@@ -2,9 +2,9 @@
 #include "glSettings.h"
 #include "glUtils.h"
 
-void glBullet::Init(float x, float y, float velocity, sf::Texture bulletTexture2)
+void glBullet::Init(float x, float y, float velocity)
 {	
-	bulletTexture = bulletTexture2;
+	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
 	bulletSprite.setTexture(bulletTexture);
 	bulletSprite.setOrigin(bulletTexture.getSize().x/2., bulletTexture.getSize().y/2.);
 

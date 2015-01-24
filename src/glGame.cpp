@@ -3,6 +3,7 @@
 #include "glUtils.h"
 #include "glSettings.h"
 #include <iostream>
+#include <stdlib.h>
 
 void glGame::Load()
 {
@@ -28,12 +29,16 @@ void glGame::Init(sf::RenderWindow& window)
 
 	gBoard.Init(window);
 
-	
-	for(int i=0; i<3;++i){
-		bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
+	bulletsLeft[0].Init(200,6200,0.005);
+	bulletsLeft[1].Init(200,6000,-0.005);
+
+	bulletsRight[0].Init(200,6200,0.005);
+	bulletsRight[1].Init(200,6000,-0.005);
+
+	/*for(int i=0; i<3;++i){
 		glBulletsVec.push_back(glBullet());
-		glBulletsVec.at(i).Init(200,6200,0.01*(i+1),bulletTexture);
-	}
+		glBulletsVec.at(i).Init(200,6200,0.01*(i+1));
+	}*/
 
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
@@ -211,11 +216,11 @@ void glGame::Update()
 	// progress bar
 	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
 
-	for(int i=0; i<glBulletsVec.size();++i){
-		glBulletsVec.at(i).Update();
-	}
-
-	bullet.Update();
+	/*for(int i=0; i<10;++i){
+		bullets[i].Update();
+	}*/
+	CheckColisions();
+	//bullet.Update();
 
 
 	// updating the camera
@@ -273,15 +278,17 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			graphics.setView(player1View);
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
 			gProgressBar.DrawLava(graphics,true);
-			
-			for(int i=0; i<glBulletsVec.size();++i){
-				glBulletsVec.at(i).Draw(graphics);
+			for(int i=0; i<10;++i){
+				bulletsLeft[i].Draw(graphics);
 			}
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false);
 			gProgressBar.DrawLava(graphics,false);
+			for(int i=0; i<10;++i){
+				bulletsLeft[i].Draw(graphics);
+			}
 			heroRight.Draw(graphics);
 
 			graphics.setView(graphics.getDefaultView());
@@ -356,93 +363,49 @@ void glGame::HandleEvent(sf::Event event)
 	}
 }
 
-/*void glGame::CheckColisions()
+void glGame::CheckColisions()
 {
 	sf::Vector2f leftHeroPosition =  heroLeft.getSpirte().getPosition();
 	sf::Vector2f rightHeroPosition = heroRight.getSpirte().getPosition();
 	float leftHeroWidth  = heroLeft.getSpirte().getLocalBounds().width;
-	float leftHeroPositionHeight = heroLeft.getSpirte().getLocalBounds().height;
-	float rightHeroPositionWidth  = heroRight.getSpirte().getLocalBounds().width;
-	float rightHeroPositionHeight = heroRight.getSpirte().getLocalBounds().height;
+	float leftHeroHeight = heroLeft.getSpirte().getLocalBounds().height;
+	float rightHeroWidth  = heroRight.getSpirte().getLocalBounds().width;
+	float rightHeroHeight = heroRight.getSpirte().getLocalBounds().height;
 	
-	std::vector<glBullet>::iterator it;
-	for (int i = 0; i < glBulletsVec.size(); ++i) {
-		glBulletsVec.at(i).Step();
+	for (int i = 0; i < 10; ++i) {
+		bulletsLeft[i].Update();
 
-		if(!mEggsVec.at(i).mDying)
+		if(!bulletsLeft[i].mDying)
 		{
-			sf::Vector2f positions = mEggsVec.at(i).mSprite.GetPosition();
-			float height = mEggsVec.at(i).mSprite.GetSize().y;
-			float width = mEggsVec.at(i).mSprite.GetSize().x;
-			float srodekPostaciSad = mHeroSadPos.x + mHeroSadWidth/2;
-			float srodekPostaciHappy = mHeroHappyPos.x + mHeroHappyWidth/2;
-			float doljajka = mEggsVec.at(i).mSprite.GetPosition().y + height/2;
-			float diffHappy;
-			float diffSad;
-			bool exit =false;
+			sf::Vector2f positions = bulletsLeft[i].bulletSprite.getOrigin();
+			float height = bulletsLeft[i].bulletSprite.getLocalBounds().height;
+			float width = bulletsLeft[i].bulletSprite.getLocalBounds().width;
+			float leftHeroCenter = leftHeroPosition.x + leftHeroWidth/2.;
+			float rightHeroCenter = rightHeroPosition.x + rightHeroWidth/2.;
+			sf::Vector2f bulletPosition = bulletsLeft[i].bulletSprite.getPosition();
 
-			if (srodekPostaciSad>positions.x){
-				diffSad=srodekPostaciSad-positions.x;
-			}else{
-				diffSad=positions.x-srodekPostaciSad;
+			if(std::abs(bulletPosition.y-leftHeroPosition.y) < 50 && std::abs(bulletPosition.x-leftHeroPosition.x) < 50){
+					heroLeft.death = true;
 			}
-
-			if (srodekPostaciHappy>positions.x){
-				diffHappy=srodekPostaciHappy-positions.x;
-			}else{
-				diffHappy=positions.x-srodekPostaciHappy;
-			}
-
-			if (doljajka>(viewHeight-25.0f)){
-				cout<<"jajko spadlo"<<endl;	
-
-					playSound("FallEgg_0");
-
-				if (mEggsVec.at(i).mType<=1){
-					lives--;
-					combo=1;
-				}
-				mEggsVec.at(i).mDying = true;
-				mEggsVec.at(i).mFallen = true;
-			}else{
-				if (diffSad<(mHeroSadWidth/2+width/2+3) && (doljajka>mHeroSadPos.y)){
-					if(mEggsVec.at(i).mType==0 &&  mHeroSad.counter<5){
-						cout<<"sad zlapal"<<endl;
-						playSound("FallEgg_1");
-						mEggsVec.at(i).mDying = true;
-						mScore.AddScore(combo*basicScores);
-						combo++;
-						mHeroSad.counter++;	
-						exit=true;
-					}else if (mEggsVec.at(i).mType==3){
-						cout<<"sad dodaje zycie"<<endl;
-						if (lives<10)lives++;
-						mEggsVec.at(i).mDying = true;
-						exit=true;
-					}
-				}
-				if (!exit && diffHappy<(mHeroHappyWidth/2+width/2+3) && (doljajka>mHeroHappyPos.y)){
-					if(mEggsVec.at(i).mType==1 &&  mHeroHappy.counter<5){
-						cout<<"happy zlapal"<<endl;
-						playSound("CatchEgg_1");
-						mEggsVec.at(i).mDying = true;
-						mScore.AddScore(combo*basicScores);
-						combo++;
-						mHeroHappy.counter++;
-					}else if(mEggsVec.at(i).mType==3){
-						cout<<"happy dodaje zycie"<<endl;
-						if (lives<10)lives++;
-						mEggsVec.at(i).mDying = true;
-					}
-				}
-			}
-			mCombo.SetCurrentScore(combo);
-
-		}
-		else if(mEggsVec.at(i).mScale >= 1)
-		{
-			mEggsVec.erase(mEggsVec.begin() + i);
-			--i;
 		}
 	}
-}*/
+
+	for (int i = 0; i < 10; ++i) {
+		bulletsRight[i].Update();
+
+		if(!bulletsRight[i].mDying)
+		{
+			sf::Vector2f positions = bulletsRight[i].bulletSprite.getOrigin();
+			float height = bulletsRight[i].bulletSprite.getLocalBounds().height;
+			float width = bulletsRight[i].bulletSprite.getLocalBounds().width;
+			float leftHeroCenter = leftHeroPosition.x + leftHeroWidth/2.;
+			float rightHeroCenter = rightHeroPosition.x + rightHeroWidth/2.;
+			sf::Vector2f bulletPosition = bulletsRight[i].bulletSprite.getPosition();
+
+			if(std::abs(bulletPosition.y-rightHeroPosition.y) < 50 && std::abs(bulletPosition.x-rightHeroPosition.x) < 50){
+					heroRight.death = true;
+			}
+		}
+	}
+								
+}
