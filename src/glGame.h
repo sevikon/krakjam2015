@@ -6,6 +6,7 @@
 #include "glBoard.h"
 #include "glHandleMusic.h"
 #include "glProgressBar.h"
+#include "glBullet.h"
 
 #define GRAVITY 10.f
 
@@ -31,6 +32,7 @@ private:
 	glHero heroRight;
 
 	glHandleMusic musicObject;
+	glBullet bullet;
 
 	enum GAME_STATE {MENU, GAMEPLAY, GAMEOVER, WIN} gameState;
 	bool isMenu, isPlaying, isGameOver, isWin;
@@ -48,6 +50,7 @@ public:
 
 	void GameStateWin();
 	void GameStateGameOver();
+	void CheckColisions();
 
 	/**
 	* Draw game on the main window object

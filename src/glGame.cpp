@@ -28,6 +28,8 @@ void glGame::Init(sf::RenderWindow& window)
 
 	gBoard.Init(window);
 
+	bullet.Init(200,6200,0.2);
+
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
 	player1View.setCenter(player1View.getSize().x/2.f, gBoard.getTileManager().getMapHeight()-384);
@@ -44,7 +46,7 @@ void glGame::Init(sf::RenderWindow& window)
 
 	playerLeftOnLadder = playerRightOnLadder = false;
 
-	// gameState = GAME_STATE::MENU;
+	gameState = GAME_STATE::MENU;
 	musicObject.HandleMusic();
 	isMenu = false;
 	isPlaying = false;
@@ -184,6 +186,8 @@ void glGame::Update()
 	// progress bar
 	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
 
+	bullet.Update();
+
 
 	// updating the camera
 	float y1 = heroLeft.position.y + heroLeft.getHeight() / 2;
@@ -240,6 +244,7 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			graphics.setView(player1View);
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
 			gProgressBar.DrawLava(graphics,true);
+			bullet.Draw(graphics);
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
@@ -316,5 +321,96 @@ void glGame::HandleEvent(sf::Event event)
 		{
 			player2View.move(0.f, -2.f);
 		}*/
+	}
+}
+
+void glGame::CheckColisions()
+{
+	sf::Vector2f mHeroSadPos =  mHeroSad.mActiveSprite.GetPosition();
+	sf::Vector2f mHeroHappyPos = mHeroHappy.mActiveSprite.GetPosition();
+	float mHeroSadWidth  = mHeroSad.mActiveSprite.GetSize().x;
+	float mHeroSadHeight = mHeroSad.mActiveSprite.GetSize().y;
+	float mHeroHappyWidth  = mHeroHappy.mActiveSprite.GetSize().x;
+	float mHeroHappyHeight = mHeroHappy.mActiveSprite.GetSize().y;
+	
+	std::vector<seEgg>::iterator it;
+	for (int i = 0; i < mEggsVec.size(); ++i) {
+		mEggsVec.at(i).Step();
+
+		if(!mEggsVec.at(i).mDying)
+		{
+			sf::Vector2f positions = mEggsVec.at(i).mSprite.GetPosition();
+			float height = mEggsVec.at(i).mSprite.GetSize().y;
+			float width = mEggsVec.at(i).mSprite.GetSize().x;
+			float srodekPostaciSad = mHeroSadPos.x + mHeroSadWidth/2;
+			float srodekPostaciHappy = mHeroHappyPos.x + mHeroHappyWidth/2;
+			float doljajka = mEggsVec.at(i).mSprite.GetPosition().y + height/2;
+			float diffHappy;
+			float diffSad;
+			bool exit =false;
+
+			if (srodekPostaciSad>positions.x){
+				diffSad=srodekPostaciSad-positions.x;
+			}else{
+				diffSad=positions.x-srodekPostaciSad;
+			}
+
+			if (srodekPostaciHappy>positions.x){
+				diffHappy=srodekPostaciHappy-positions.x;
+			}else{
+				diffHappy=positions.x-srodekPostaciHappy;
+			}
+
+			if (doljajka>(viewHeight-25.0f)){
+				cout<<"jajko spadlo"<<endl;	
+
+					playSound("FallEgg_0");
+
+				if (mEggsVec.at(i).mType<=1){
+					lives--;
+					combo=1;
+				}
+				mEggsVec.at(i).mDying = true;
+				mEggsVec.at(i).mFallen = true;
+			}else{
+				if (diffSad<(mHeroSadWidth/2+width/2+3) && (doljajka>mHeroSadPos.y)){
+					if(mEggsVec.at(i).mType==0 &&  mHeroSad.counter<5){
+						cout<<"sad zlapal"<<endl;
+						playSound("FallEgg_1");
+						mEggsVec.at(i).mDying = true;
+						mScore.AddScore(combo*basicScores);
+						combo++;
+						mHeroSad.counter++;	
+						exit=true;
+					}else if (mEggsVec.at(i).mType==3){
+						cout<<"sad dodaje zycie"<<endl;
+						if (lives<10)lives++;
+						mEggsVec.at(i).mDying = true;
+						exit=true;
+					}
+				}
+				if (!exit && diffHappy<(mHeroHappyWidth/2+width/2+3) && (doljajka>mHeroHappyPos.y)){
+					if(mEggsVec.at(i).mType==1 &&  mHeroHappy.counter<5){
+						cout<<"happy zlapal"<<endl;
+						playSound("CatchEgg_1");
+						mEggsVec.at(i).mDying = true;
+						mScore.AddScore(combo*basicScores);
+						combo++;
+						mHeroHappy.counter++;
+					}else if(mEggsVec.at(i).mType==3){
+						cout<<"happy dodaje zycie"<<endl;
+						if (lives<10)lives++;
+						mEggsVec.at(i).mDying = true;
+					}
+				}
+			}
+			mCombo.SetCurrentScore(combo);
+
+		}
+		else if(mEggsVec.at(i).mScale >= 1)
+		{
+			mEggsVec.erase(mEggsVec.begin() + i);
+			--i;
+		}
 	}
 }
