@@ -9,6 +9,8 @@ void glGame::Load()
 	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "back1.png"));
 	backgroundSprite.setTexture(backgroundTexture);
 
+	gProgressBar.Load();
+
 	heroLeft.Load(0);
 	heroRight.Load(1);
 
@@ -19,6 +21,7 @@ void glGame::Init(sf::RenderWindow& window)
 {
 	//wczytanie mapy
 	gTiledLoader.loadMap(1);
+	gProgressBar.Init();
 	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
 
 	printf("-----------------------------------------------------\n");
@@ -36,10 +39,14 @@ void glGame::Init(sf::RenderWindow& window)
 	// player 1 (left side of the screen)
 	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
 
-	heroLeft.Init(100, 6400 - 64 - heroLeft.getHeight());
-	heroRight.Init(500, 6400 - 64 - heroRight.getHeight());
+	heroLeft.Init(100, 6400 - 64 - heroLeft.getHeight(),player1View);
+	heroRight.Init(500, 6400 - 64 - heroRight.getHeight(),player2View);
+
+	musicObject.HandleMusic();
 
 	gameState = GAME_STATE::MENU;
+	isMenu = false;
+	isPlaying = false;
 }
 
 void glGame::Update()
@@ -63,6 +70,13 @@ void glGame::Update()
 	{
 		heroLeft.Update(glHero::CLIMBDOWN);
 	}
+	
+	if (heroLeft.position.x < 0){
+		heroLeft.Update(glHero::LEFTBORDER);
+	}
+	if (heroLeft.position.x > player1View.getSize().x - heroLeft.getWidth()){
+		heroLeft.Update(glHero::RIGHTBORDER);
+	}
 
 	// player 2 movement
 
@@ -82,8 +96,17 @@ void glGame::Update()
 	{
 		heroRight.Update(glHero::CLIMBDOWN);
 	}
+	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
+
+	if (heroRight.position.x < 0){
+		heroRight.Update(glHero::LEFTBORDER);
+	}
+	if (heroRight.position.x > player2View.getSize().x - heroRight.getWidth()){
+		heroRight.Update(glHero::RIGHTBORDER);
+	}
 	
 }
+
 
 void glGame::Draw(sf::RenderWindow& graphics)
 {		
@@ -92,6 +115,14 @@ void glGame::Draw(sf::RenderWindow& graphics)
 	switch(gameState)
 	{
 		case GAME_STATE::MENU:
+			if(isPlaying){
+				musicObject.MusicLevel1.stop();
+				isPlaying = false;
+			}
+			if(!isMenu){	
+				musicObject.MusicMenu.play();
+				isMenu = true;
+			}
 			chosenOption = mainMenu.Show(graphics, graphics.getSize().x, graphics.getSize().y);
 			switch(chosenOption) 
 			{
@@ -103,14 +134,26 @@ void glGame::Draw(sf::RenderWindow& graphics)
 					break;
 			}
 		case GAME_STATE::GAMEPLAY:
-
+			if(isMenu){
+				musicObject.MusicMenu.stop();
+				isMenu = false;
+			}
+			if(!isPlaying){
+				musicObject.MusicLevel1.play();
+				isPlaying = true;
+			}
 			graphics.setView(player1View);
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), gTiledLoader, true);
+			gProgressBar.DrawLava(graphics,true);
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), gTiledLoader, false);
+			gProgressBar.DrawLava(graphics,false);
 			heroRight.Draw(graphics);
+
+			graphics.setView(graphics.getDefaultView());
+			gProgressBar.Draw(graphics);
 
 			break;
 	}

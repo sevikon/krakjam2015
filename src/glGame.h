@@ -4,6 +4,9 @@
 #include "glHero.h"
 #include "glTiledLoader.h"
 #include "glBoard.h"
+#include "glHandleMusic.h"
+#include "glProgressBar.h"
+
 
 class glGame
 {
@@ -12,6 +15,7 @@ private:
 	sf::Texture backgroundTexture;
 	glTiledLoader gTiledLoader;
 	glBoard gBoard;
+	glProgressBar gProgressBar;
 	sf::View player1View;
 	sf::View player2View;
 	glMainMenu mainMenu;
@@ -20,7 +24,10 @@ private:
 	glHero heroLeft;
 	glHero heroRight;
 
+	glHandleMusic musicObject;
+
 	enum GAME_STATE {MENU, GAMEPLAY} gameState;
+	bool isMenu, isPlaying;
 
 public: 
 	void ShowScores();
@@ -28,6 +35,7 @@ public:
 	void Load();
 	void Init(sf::RenderWindow& window);
 	void Update();
+	void CheckCollisionBorder();
 
 	/**
 	* Draw game on the main window object

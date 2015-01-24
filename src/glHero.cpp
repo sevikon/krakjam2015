@@ -60,7 +60,7 @@ void glHero::Load(int _side)
 
 }
 
-void glHero::Init(float x, float y)
+void glHero::Init(float x, float y, sf::View View)
 {
 
 	position.x = x;
@@ -68,6 +68,8 @@ void glHero::Init(float x, float y)
 
 	currentFrame = 0;
 	lastEvent = NONE;
+
+	playerView = View;
 
 	if (side == 0)
 	{
@@ -102,7 +104,7 @@ void glHero::Update(event _event)
 
 	if (_event & RIGHT)
 	{
-		position.x += walkingSpeed * DELTA;
+			position.x += walkingSpeed * DELTA;//}
 	}
 
 	if (_event & LEFT)
@@ -120,6 +122,15 @@ void glHero::Update(event _event)
 		animationTimer = 0;
 		currentFrame;
 	}
+
+	if (_event & RIGHTBORDER){
+			position.x = playerView.getSize().x  - getWidth(); 
+	}
+	if (_event & LEFTBORDER){
+			position.x = 0; 
+	}
+	
+	// Collision with borders
 	
 	// animacje
 
@@ -200,7 +211,6 @@ void glHero::Update(event _event)
 			sprite.setTexture(imageWalkingLeft[currentFrame]);
 		}
 	}
-	
 }
 
 void glHero::Draw(sf::RenderWindow& graphics)
