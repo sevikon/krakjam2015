@@ -45,6 +45,7 @@ public:
 	float getLowerOpacity(int x,int y);
 	void runActionOnAssociated(int x,int y);
 	glTiled &searchTiled(int c, int type);
+	vector<glTiled*> searchTilesAssociatedForAction(int scope, int search_type);
 		// returns tile coordinates by position
 	void getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileX, int& tileY);
 };
