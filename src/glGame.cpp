@@ -6,20 +6,27 @@
 
 void glGame::Load()
 {
-	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bg.png"));
+	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "back1.png"));
 	backgroundSprite.setTexture(backgroundTexture);
+	gBoard.Load();
 }
 
 void glGame::Init(sf::RenderWindow& window)
 {
+	//wczytanie mapy
+	gTiledLoader.loadMap(1);
+	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
+
 	printf("-----------------------------------------------------\n");
 	printf("Zaczynamy nowa gre.\n");
 	printf("-----------------------------------------------------\n");
 
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
-	player1View.setCenter(player1View.getSize().x/2, player1View.getSize().y/2);
-	player2View.setCenter(player2View.getSize().x/2, player2View.getSize().y/2);
+	player1View.setCenter(player1View.getSize().x/2, 6400-384);
+	player2View.setCenter(player2View.getSize().x/2, 6400-384);
+	//player1View.setCenter(0, 85*64);
+	//player2View.setCenter(0, 85*64);
 
 	// player 1 (left side of the screen)
 	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
@@ -40,14 +47,14 @@ void glGame::Update()
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		player1View.move(0.f, 0.05f);
+		player1View.move(0.f, 0.55f);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		player1View.move(0.f, -0.05f);
+		player1View.move(0.f, -0.55f);
 	}
 
 
@@ -57,14 +64,14 @@ void glGame::Update()
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		player2View.move(0.f, 0.05f);
+		player2View.move(0.f, 0.55f);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		player2View.move(0.f, -0.05f);
+		player2View.move(0.f, -0.55f);
 	}
 	
 }
@@ -90,9 +97,11 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			}
 		case GAME_STATE::GAMEPLAY:
 			graphics.setView(player1View);
-			graphics.draw(backgroundSprite);
+			//graphics.draw(backgroundSprite);
+			gBoard.Draw(graphics,player1View.getCenter(),player1View.getSize(),gTiledLoader,true);
 			graphics.setView(player2View);
-			graphics.draw(backgroundSprite);	
+			//graphics.draw(backgroundSprite);
+			gBoard.Draw(graphics,player2View.getCenter(),player2View.getSize(),gTiledLoader,false);
 			break;
 	}
 	

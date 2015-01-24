@@ -6,7 +6,6 @@
 #include "glSettings.h"
 #include "glUtils.h"
 #include "glMainMenu.h"
-#include "glTiledLoader.h"
 #include "glGame.h"
 
 float viewWidth;
@@ -19,11 +18,6 @@ int main()
 	glGame gameObject;
 	gameObject.Load();
 	gameObject.Init(window);
-
-
-	glTiledLoader gTiledLoader;
-	gTiledLoader.loadMap(1);
-	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
 	sf::Texture texture;
 	if(!texture.loadFromFile(concat(glSettings::ASSETS_PATH, "bg.png")));
 
