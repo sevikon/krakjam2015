@@ -24,6 +24,9 @@ private:
 	
 	glScore score;
 
+	bool playerLeftOnLadder;
+	bool playerRightOnLadder;
+
 	glHero heroLeft;
 	glHero heroRight;
 

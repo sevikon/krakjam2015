@@ -3,7 +3,7 @@
 #include "glBoard.h"
 #include "glTiledLoader.h"
 
-#define SPRITES 10
+#define SPRITES 100
 
 class glBoard
 {
@@ -14,6 +14,7 @@ private:
 
 public: 
 	void Load();
+	void Update();
 	void Init(sf::RenderWindow& window);
 
 	/**

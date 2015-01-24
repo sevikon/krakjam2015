@@ -60,11 +60,12 @@ void glHero::Load(int _side)
 
 }
 
-void glHero::Init(float x, float y, sf::View View)
+void glHero::Init(float x, float y, sf::View View, glHero::PLAYER _playerId)
 {
 
 	position.x = x;
 	position.y = y;
+	playerId = _playerId;
 
 	currentFrame = 0;
 	lastEvent = NONE;
@@ -107,7 +108,7 @@ void glHero::Update(event _event)
 
 	if (_event & RIGHT)
 	{
-			position.x += walkingSpeed * DELTA;//}
+		position.x += walkingSpeed * DELTA;//}
 	}
 
 	if (_event & LEFT)
@@ -229,6 +230,18 @@ void glHero::UpdateReverse(event _event)
 	if (_event & FALL)
 	{
 		position.y -= fallingSpeed * DELTA;
+	}
+	if (_event & RIGHT)
+	{
+		position.x -= walkingSpeed * DELTA;
+	}
+	if (_event & LEFT)
+	{
+		position.x += walkingSpeed * DELTA;
+	}
+	if (_event & CLIMBDOWN)
+	{
+		position.y -= climbingSpeed * DELTA;
 	}
 }
 

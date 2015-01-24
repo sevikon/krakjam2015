@@ -1,6 +1,7 @@
 #include "glTiledLoader.h"
-#include "glTiledLoader.h"
+#include "glTiled.h"
 #include "glSettings.h"
+#include "glHero.h"
 #include <iostream>
 #include <fstream>
 #include <iostream>     // std::cout
@@ -12,6 +13,20 @@ using namespace std;
 
 glTiledLoader::glTiledLoader()
 {
+
+}
+
+glTiled &glTiledLoader::searchTiled(int c, int type){
+	int d=c+6;
+	c-=6;
+	if (c<0) c=0;
+	if (d>=100) d=99;
+	for (int a=c; a<=d;a++){
+		for (int b=0; b<vecTiled.at(0).size();b++){
+			if (vecTiled.at(a).at(b).type == type+1) 
+				return (vecTiled.at(a).at(b));
+		}
+	}
 
 }
 
@@ -50,24 +65,54 @@ void glTiledLoader::loadMap(int number) {
 			std::string delimiter = ",";
 
 			vec.push_back ( vector<int>() );
+			vecTiled.push_back(vector<glTiled>() );
 
 			while ((pos = s.find(delimiter)) != std::string::npos) {
 				token = s.substr(0, pos);	
 				vec.at(i).push_back( atoi(token.c_str()) );
-				s.erase(0, pos + delimiter.length());			
+				vecTiled.at(i).push_back(glTiled(atoi(token.c_str())));
+				s.erase(0, pos + delimiter.length());		
 			}
 			++i;
 		}
 		myfile.close();
+
+		for (int a=0; a<vecTiled.size();a++){
+			for (int b=0; b<vecTiled.at(0).size();b++){
+				if (vecTiled.at(a).at(b).type >= OBJECTS_MIN){
+					vecTiled.at(a).at(b).associated = &searchTiled(a, vecTiled.at(a).at(b).type);
+				}
+			}
 		}
-	else {
+	}else {
 		cout << "Unable to open file"; 
 	}
 }
 
+bool glTiledLoader::isActive(int x,int y){
+	return vecTiled.at(x).at(y).isActive();
+}
+
+void glTiledLoader::Update(){
+	for (int a=0; a<vecTiled.size();a++){
+		for (int b=0; a<vecTiled.at(0).size();b++){
+			vecTiled.at(a).at(b).Update();
+		}
+	}
+
+}
+
+void glTiledLoader::setActive(int x,int y){
+	vecTiled.at(x).at(y).setDefinitelyActive();
+}
+
+float glTiledLoader::getLowerOpacity(int x,int y){
+	return vecTiled.at(x).at(y).getLowerOpacity();
+}
+
 bool glTiledLoader::isLadder(int x,int y){
 
-	if (vec[x][y]==3){
+	if (vecTiled.at(x).at(y).type >= LADDER_MIN && vecTiled.at(x).at(y).type <= LADDER_MAX){
 		return true;
 	}
 	return false;
@@ -75,7 +120,7 @@ bool glTiledLoader::isLadder(int x,int y){
 
 bool glTiledLoader::isWall(int x,int y){
 
-	if (vec[x][y]==2){
+	if (vecTiled.at(x).at(y).type >= GROUND_MIN && vecTiled.at(x).at(y).type <= GROUND_MAX){
 		return true;
 	}
 	return false;
@@ -83,7 +128,7 @@ bool glTiledLoader::isWall(int x,int y){
 
 bool glTiledLoader::isFree(int x,int y){
 
-	if (vec[x][y]==1){
+	if (vecTiled.at(x).at(y).type == FREE){
 		return true;
 	}
 	return false;
@@ -91,7 +136,7 @@ bool glTiledLoader::isFree(int x,int y){
 
 int glTiledLoader::getValue(int x,int y){
 
-	return vec[x][y];
+	return vecTiled.at(x).at(y).type;
 }
 
 int glTiledLoader::getMapWidth()
@@ -110,31 +155,40 @@ int glTiledLoader::getMapHeight()
 //
 //
 // (TILE_HEIGHT*iloœæ, 0) -> HEROES
-void glTiledLoader::getTileCoords(float posX, float posY, int& tileRow, int& tileColumn)
+void glTiledLoader::getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileRow, int& tileColumn)
 {
 	tileRow = (int)posY/glSettings::TILE_HEIGHT;
 	tileColumn = (int)posX/glSettings::TILE_WIDTH;
+
+	if(playerId == glHero::PLAYER::SND)
+	{
+		tileColumn += 10;
+	}
 }
 
-sf::FloatRect glTiledLoader::getTileBoundingBox(int row, int col)
+sf::FloatRect glTiledLoader::getTileBoundingBox(int row, int col, glHero::PLAYER playerId)
 {
-	return sf::FloatRect(col*glSettings::TILE_WIDTH, row*glSettings::TILE_HEIGHT, glSettings::TILE_HEIGHT,  glSettings::TILE_WIDTH);
+	if(playerId == glHero::PLAYER::FST)
+		return sf::FloatRect(col*glSettings::TILE_WIDTH, row*glSettings::TILE_HEIGHT, glSettings::TILE_HEIGHT,  glSettings::TILE_WIDTH);
+	else 
+		return sf::FloatRect(col*glSettings::TILE_WIDTH-640, row*glSettings::TILE_HEIGHT, glSettings::TILE_HEIGHT,  glSettings::TILE_WIDTH);
 }
 
-bool glTiledLoader::intersectsWithWall(sf::Sprite& sprite)
+bool glTiledLoader::intersectsWithWall(glHero& hero)
 {
 	int firstTileRow, firstTileColumn;
 	int row, column;
 	bool debug = false;
+	sf::Sprite sprite = hero.getSpirte();
 
-	getTileCoords(sprite.getPosition().x+sprite.getTextureRect().width/2, sprite.getPosition().y + sprite.getTextureRect().height/2, row, column);
+	getTileCoords(sprite.getGlobalBounds().left+sprite.getTextureRect().width/2, sprite.getGlobalBounds().top + sprite.getTextureRect().height/2, hero.playerId, row, column);
 
 	if(debug)
 	{
 		cout << "Sprite position: (" << sprite.getGlobalBounds().left << ", " << sprite.getGlobalBounds().top << ")" << endl; 
-		cout << "Checking tile area for collision: " << row << ", " << column << " Intersects: " << sprite.getGlobalBounds().intersects(getTileBoundingBox(row, column)) 
+		cout << "Checking tile area for collision: " << row << ", " << column << " Intersects: " << sprite.getGlobalBounds().intersects(getTileBoundingBox(row, column, hero.playerId)) 
 			<< " Is wall: " << isWall(row, column) <<  endl;
-		cout << "Tile position: (" << getTileBoundingBox(row, column).left << ", " << getTileBoundingBox(row, column).top << ")" << endl;
+		cout << "Tile position: (" << getTileBoundingBox(row, column, hero.playerId).left << ", " << getTileBoundingBox(row, column, hero.playerId).top << ")" << endl;
 	}
 
 	for(int i = -1; i <= 1; ++i)
@@ -143,10 +197,72 @@ bool glTiledLoader::intersectsWithWall(sf::Sprite& sprite)
 		{
 			if(row+i < 0 || column+j < 0 || row+i >= amountOfRows || column+j >= amountOfColumns)
 				continue;
-			if(sprite.getGlobalBounds().intersects(getTileBoundingBox(row+i, column+j)) && isWall(row+i, column+j))
+			if(sprite.getGlobalBounds().intersects(getTileBoundingBox(row+i, column+j, hero.playerId)) && isWall(row+i, column+j))
+			{
 				return true;
+			}
 		}
 	}
 	
+	return false;
+}
+
+bool glTiledLoader::intersectsWithWallVertically(glHero& hero)
+{
+	int firstTileRow, firstTileColumn;
+	int row, column;
+	bool debug = false;
+	sf::Sprite sprite = hero.getSpirte();
+	sf::FloatRect spriteBB = sprite.getGlobalBounds();
+	spriteBB.height -= 2;
+
+	getTileCoords(sprite.getPosition().x+sprite.getTextureRect().width/2, sprite.getPosition().y + sprite.getTextureRect().height/2, hero.playerId, row, column);
+
+	if(debug)
+	{
+		cout << "Sprite position: (" << sprite.getGlobalBounds().left << ", " << sprite.getGlobalBounds().top << ")" << endl; 
+		cout << "Checking tile area for collision: " << row << ", " << column << " Intersects: " << sprite.getGlobalBounds().intersects(getTileBoundingBox(row, column, hero.playerId)) 
+			<< " Is wall: " << isWall(row, column) <<  endl;
+		cout << "Tile position: (" << getTileBoundingBox(row, column, hero.playerId).left << ", " << getTileBoundingBox(row, column, hero.playerId).top << ")" << endl;
+	}
+
+	for(int i = -1; i <= 1; ++i)
+	{
+		for(int j = -1; j <= 1; ++j)
+		{
+			if(row+i < 0 || column+j < 0 || row+i >= amountOfRows || column+j >= amountOfColumns)
+				continue;
+			if(spriteBB.intersects(getTileBoundingBox(row+i, column+j, hero.playerId)) && isWall(row+i, column+j))
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool glTiledLoader::intersectsWithLadder(glHero& hero)
+{
+	int firstTileRow, firstTileColumn;
+	int row, column;
+	bool debug = false;
+	sf::Sprite sprite = hero.getSpirte();
+
+	getTileCoords(sprite.getPosition().x+sprite.getTextureRect().width/2, sprite.getPosition().y + sprite.getTextureRect().height/2, hero.playerId, row, column);
+
+	if(debug)
+	{
+		cout << "Sprite position: (" << sprite.getPosition().x<< ", " <<  sprite.getPosition().y << ")" << endl; 
+		cout << "Checking tile area for collision: " << row << ", " << column << " Intersects: " << sprite.getGlobalBounds().intersects(getTileBoundingBox(row, column, hero.playerId)) 
+			<< " Is ladder: " << isLadder(row, column) <<  endl;
+		cout << "Tile position: (" << getTileBoundingBox(row, column, hero.playerId).left << ", " << getTileBoundingBox(row, column, hero.playerId).top << ")" << endl;
+	}
+
+	if(row < 0 || column < 0 || row >= amountOfRows || column >= amountOfColumns)
+		return false;
+	if(sprite.getGlobalBounds().intersects(getTileBoundingBox(row, column, hero.playerId)) && isLadder(row, column))
+		return true;
+
 	return false;
 }
