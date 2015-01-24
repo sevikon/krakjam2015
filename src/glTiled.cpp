@@ -66,8 +66,10 @@ void glTiled::setActive(int framesPressed) {
 }
 
 void glTiled::setDefinitelyActive() {
-	active=true;
-	framesPressed=0;
+	if (type>3){
+		active=true;
+		framesPressed=0;
+	}
 }
 
 void glTiled::setUsed() {
