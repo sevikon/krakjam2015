@@ -111,7 +111,11 @@ void glTiledLoader::runActionOnAssociated(int x,int y){
 }
 
 float glTiledLoader::getLowerOpacity(int x,int y){
-	return vecTiled.at(x).at(y).getLowerOpacity();
+	float opacity = vecTiled.at(x).at(y).getLowerOpacity();
+	if (opacity < 0.3){ 
+		vecTiled.at(x).at(y).type=0;
+	}
+	return opacity;
 }
 
 bool glTiledLoader::isLadder(int x,int y){

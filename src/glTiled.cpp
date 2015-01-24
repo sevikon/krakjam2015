@@ -18,12 +18,14 @@ glTiled::glTiled(int type){
 	this->framesPressed=false;
 	this->framesActive=false;
 	this->opacity=1;
+	this->together=false;
 }
 
 float glTiled::getLowerOpacity(){
 	opacity -= 0.001f;
 	if (opacity < 0.3){
 		opacity = 0.3;
+		this->type =0;
 	}
 	return opacity;
 }

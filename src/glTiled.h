@@ -6,6 +6,9 @@
 #define LADDER_MIN 21
 #define LADDER_MAX 23
 #define OBJECTS_MIN 24
+#define OBJECTS_MAX 36
+#define INVISIBLE_POSX 50
+#define INVISIBLE_POSY 51
 #define FREE 99
 
 class glTiled
@@ -17,6 +20,7 @@ private:
 	int framesPressed;
 	int framesActive;
 public: 
+	bool together;
 	glTiled *associated;
 	float opacity;
 	int type;
