@@ -30,6 +30,7 @@ public:
 	void Load();
 	void Init(sf::RenderWindow& window);
 	void Update();
+	void CheckCollisionBorder();
 
 	/**
 	* Draw game on the main window object

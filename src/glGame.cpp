@@ -39,8 +39,8 @@ void glGame::Init(sf::RenderWindow& window)
 	// player 1 (left side of the screen)
 	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
 
-	heroLeft.Init(300,300);
-	heroRight.Init(300,300);
+	heroLeft.Init(100, 6400 - 64 - heroLeft.getHeight(),player1View);
+	heroRight.Init(500, 6400 - 64 - heroRight.getHeight(),player2View);
 
 	gameState = GAME_STATE::MENU;
 }
@@ -66,6 +66,13 @@ void glGame::Update()
 	{
 		heroLeft.Update(glHero::CLIMBDOWN);
 	}
+	
+	if (heroLeft.position.x < 0){
+		heroLeft.Update(glHero::LEFTBORDER);
+	}
+	if (heroLeft.position.x > player1View.getSize().x - heroLeft.getWidth()){
+		heroLeft.Update(glHero::RIGHTBORDER);
+	}
 
 	// player 2 movement
 
@@ -86,7 +93,16 @@ void glGame::Update()
 		heroRight.Update(glHero::CLIMBDOWN);
 	}
 	gProgressBar.Update();
+
+	if (heroRight.position.x < 0){
+		heroRight.Update(glHero::LEFTBORDER);
+	}
+	if (heroRight.position.x > player2View.getSize().x - heroRight.getWidth()){
+		heroRight.Update(glHero::RIGHTBORDER);
+	}
+	
 }
+
 
 void glGame::Draw(sf::RenderWindow& graphics)
 {		
