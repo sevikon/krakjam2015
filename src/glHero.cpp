@@ -12,7 +12,7 @@ using namespace std;
 // PARAMS
 // how many frames for particular animations
 
-const int glHero::walkingFrames = 6;
+const int glHero::walkingFrames = 1;
 const int glHero::climbingFrames = 1;
 const float glHero::frameDuration = 0.5f;
 const float glHero::climbingSpeed = 20.0f;
@@ -108,7 +108,7 @@ void glHero::Update(event _event)
 
 	if (_event & RIGHT)
 	{
-		position.x += walkingSpeed * DELTA;//}
+		position.x += walkingSpeed * DELTA;
 	}
 
 	if (_event & LEFT)
@@ -172,7 +172,7 @@ void glHero::Update(event _event)
 	{
 		if (_event & FALL)
 		{
-			sprite.setTexture(imageWalkingRight[3]);
+			sprite.setTexture(imageWalkingRight[0]);
 		}
 		else
 		{
@@ -195,7 +195,7 @@ void glHero::Update(event _event)
 	{
 		if (_event & FALL)
 		{
-			sprite.setTexture(imageWalkingLeft[3]);
+			sprite.setTexture(imageWalkingLeft[0]);
 		}
 		else
 		{
