@@ -17,18 +17,18 @@ void glGame::Load()
 
 void glGame::Init(sf::RenderWindow& window)
 {
-	//wczytanie mapy
-	gTiledLoader.loadMap(1);
-	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
 
+	//wczytanie mapy
 	printf("-----------------------------------------------------\n");
 	printf("Zaczynamy nowa gre.\n");
 	printf("-----------------------------------------------------\n");
 
+	gBoard.Init(window);
+
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
-	player1View.setCenter(player1View.getSize().x/2, 6400-384);
-	player2View.setCenter(player2View.getSize().x/2, 6400-384);
+	player1View.setCenter(player1View.getSize().x/2.f, gBoard.getTileManager().getMapHeight()-384);
+	player2View.setCenter(player2View.getSize().x/2.f, gBoard.getTileManager().getMapHeight()-384);
 
 	// player 2 (right side of the screen)
 	player2View.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
@@ -36,10 +36,11 @@ void glGame::Init(sf::RenderWindow& window)
 	// player 1 (left side of the screen)
 	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
 
-	heroLeft.Init(100, 6400 - 64 - heroLeft.getHeight());
-	heroRight.Init(500, 6400 - 64 - heroRight.getHeight());
+	heroLeft.Init(100, gBoard.getTileManager().getMapHeight() - 64 - heroLeft.getHeight());
+	heroRight.Init(500, gBoard.getTileManager().getMapHeight() - 64 - heroRight.getHeight());
 
-	gameState = GAME_STATE::MENU;
+	// gameState = GAME_STATE::MENU;
+	gameState = GAME_STATE::GAMEPLAY;
 }
 
 void glGame::Update()
@@ -83,6 +84,16 @@ void glGame::Update()
 		heroRight.Update(glHero::CLIMBDOWN);
 	}
 	
+	int row;
+	int column;
+
+	heroLeft.Update(glHero::FALL);
+	if(gBoard.getTileManager().intersectsWithWall(heroLeft.getSpirte()))
+		heroLeft.UpdateReverse(glHero::FALL);
+
+	heroRight.Update(glHero::FALL);
+	if(gBoard.getTileManager().intersectsWithWall(heroRight.getSpirte()))
+		heroRight.UpdateReverse(glHero::FALL);
 }
 
 void glGame::Draw(sf::RenderWindow& graphics)
@@ -105,11 +116,11 @@ void glGame::Draw(sf::RenderWindow& graphics)
 		case GAME_STATE::GAMEPLAY:
 
 			graphics.setView(player1View);
-			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), gTiledLoader, true);
+			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
-			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), gTiledLoader, false);
+			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false);
 			heroRight.Draw(graphics);
 
 			break;

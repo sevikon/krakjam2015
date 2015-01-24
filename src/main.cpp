@@ -16,10 +16,7 @@ int main()
 	
 	glGame gameObject;
 	gameObject.Load();
-	gameObject.Init(window);
-
-	glTiledLoader gTiledLoader;
-	gTiledLoader.loadMap(1);
+	gameObject.Init(window);	
 
 	/*
 	// inicjalizacja naszzego widoku (view) i jego rozmiarów

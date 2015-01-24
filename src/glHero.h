@@ -45,9 +45,12 @@ public:
 
 	int getWidth();
 	int getHeight();
+	sf::Sprite& getSpirte() {return sprite;}
 
 	void Load(int _side);
 	void Init(float x, float y);
 	void Update(event _event);
+	void UpdateReverse(event _event);
 	void Draw(sf::RenderWindow& graphics);
+
 };
