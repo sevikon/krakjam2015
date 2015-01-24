@@ -44,7 +44,7 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 {	
 	// define a 120x50 rectangle
 
-	if(timer.getElapsedTime().asSeconds() > 10){
+	if(timer.getElapsedTime().asSeconds() > 3){
 		lava-=0.01;}
 
 	if (lava<0){
