@@ -39,7 +39,10 @@ void glGame::Init(sf::RenderWindow& window)
 	heroLeft.Init(100, 6400 - 64 - heroLeft.getHeight(),player1View);
 	heroRight.Init(500, 6400 - 64 - heroRight.getHeight(),player2View);
 
+	musicObject.HandleMusic();
+
 	gameState = GAME_STATE::MENU;
+	isMenu = false;
 }
 
 void glGame::Update()
@@ -108,6 +111,11 @@ void glGame::Draw(sf::RenderWindow& graphics)
 	switch(gameState)
 	{
 		case GAME_STATE::MENU:
+			if(!isMenu)	
+			{	
+					musicObject.MusicMenu.play();
+					isMenu = true;
+			}
 			chosenOption = mainMenu.Show(graphics, graphics.getSize().x, graphics.getSize().y);
 			switch(chosenOption) 
 			{
