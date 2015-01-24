@@ -9,7 +9,7 @@ public:
 	float mVelocity;
 	bool mDying;
 	bool mFallen;
-	void Init(float x, float y, float velocity);
+	void Init(float x, float y, float velocity, sf::Texture bulletTexture2);
 	void Update();
 	void Draw(sf::RenderWindow& graphics);
 };

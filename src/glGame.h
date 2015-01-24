@@ -17,6 +17,7 @@ private:
 	sf::Sprite gameOverBackgroundSprite;
 	sf::Texture backgroundTexture;
 	sf::Texture gameOverBackground;
+	sf::Texture bulletTexture;
 	glBoard gBoard;
 	glProgressBar gProgressBar;
 	sf::View player1View;
@@ -33,6 +34,8 @@ private:
 
 	glHandleMusic musicObject;
 	glBullet bullet;
+
+	std::vector<glBullet> glBulletsVec;
 
 	enum GAME_STATE {MENU, GAMEPLAY, GAMEOVER, WIN} gameState;
 	bool isMenu, isPlaying, isGameOver, isWin;

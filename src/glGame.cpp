@@ -28,7 +28,12 @@ void glGame::Init(sf::RenderWindow& window)
 
 	gBoard.Init(window);
 
-	bullet.Init(200,6200,0.2);
+	
+	for(int i=0; i<3;++i){
+		bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
+		glBulletsVec.push_back(glBullet());
+		glBulletsVec.at(i).Init(200,6200,0.01*(i+1),bulletTexture);
+	}
 
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
@@ -197,6 +202,10 @@ void glGame::Update()
 	// progress bar
 	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
 
+	for(int i=0; i<glBulletsVec.size();++i){
+		glBulletsVec.at(i).Update();
+	}
+
 	bullet.Update();
 
 
@@ -255,7 +264,10 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			graphics.setView(player1View);
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
 			gProgressBar.DrawLava(graphics,true);
-			bullet.Draw(graphics);
+			
+			for(int i=0; i<glBulletsVec.size();++i){
+				glBulletsVec.at(i).Draw(graphics);
+			}
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
@@ -335,18 +347,18 @@ void glGame::HandleEvent(sf::Event event)
 	}
 }
 
-void glGame::CheckColisions()
+/*void glGame::CheckColisions()
 {
-	sf::Vector2f mHeroSadPos =  mHeroSad.mActiveSprite.GetPosition();
-	sf::Vector2f mHeroHappyPos = mHeroHappy.mActiveSprite.GetPosition();
-	float mHeroSadWidth  = mHeroSad.mActiveSprite.GetSize().x;
-	float mHeroSadHeight = mHeroSad.mActiveSprite.GetSize().y;
-	float mHeroHappyWidth  = mHeroHappy.mActiveSprite.GetSize().x;
-	float mHeroHappyHeight = mHeroHappy.mActiveSprite.GetSize().y;
+	sf::Vector2f leftHeroPosition =  heroLeft.getSpirte().getPosition();
+	sf::Vector2f rightHeroPosition = heroRight.getSpirte().getPosition();
+	float leftHeroWidth  = heroLeft.getSpirte().getLocalBounds().width;
+	float leftHeroPositionHeight = heroLeft.getSpirte().getLocalBounds().height;
+	float rightHeroPositionWidth  = heroRight.getSpirte().getLocalBounds().width;
+	float rightHeroPositionHeight = heroRight.getSpirte().getLocalBounds().height;
 	
-	std::vector<seEgg>::iterator it;
-	for (int i = 0; i < mEggsVec.size(); ++i) {
-		mEggsVec.at(i).Step();
+	std::vector<glBullet>::iterator it;
+	for (int i = 0; i < glBulletsVec.size(); ++i) {
+		glBulletsVec.at(i).Step();
 
 		if(!mEggsVec.at(i).mDying)
 		{
@@ -424,4 +436,4 @@ void glGame::CheckColisions()
 			--i;
 		}
 	}
-}
+}*/
