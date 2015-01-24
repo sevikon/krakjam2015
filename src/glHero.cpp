@@ -1,5 +1,6 @@
 #include <string>
 #include <cstring>
+#include <sstream>
 
 #include "glHero.h"
 #include "glSettings.h"
@@ -26,30 +27,30 @@ void glHero::Load(int _side)
 
 	side = _side;
 
-	string tmp;
-
-	sprintf((char*)tmp.c_str(), "%d", _side);
-
-	string str = tmp.c_str();
-
 	for (int a = 0; a < walkingFrames; a++) {
 
-		string actual;
-		sprintf((char*)actual.c_str(), "%d", a);
-		string actualny = actual.c_str();
+		ostringstream oss;
+		oss << "hero" << side << "_left_" << a << ".png";
 
-		imageWalkingLeft[a].loadFromFile(concat(glSettings::ASSETS_PATH, "hero" + str + "_left_" + actualny + ".png"));
-		imageWalkingRight[a].loadFromFile(concat(glSettings::ASSETS_PATH, "hero" + str + "_right_" + actualny + ".png"));
+		imageWalkingLeft[a].loadFromFile(concat(glSettings::ASSETS_PATH, oss.str()));
+
+		oss.clear();
+		oss << "hero" << side << "_right_" << a << ".png";
+
+		imageWalkingRight[a].loadFromFile(concat(glSettings::ASSETS_PATH, oss.str()));
 
 	}
 
 	for (int a = 0; a < climbingFrames; a++) {
 
-		string actual;
-		sprintf((char*)actual.c_str(), "%d", a);
-		string actualny = actual.c_str();
+		ostringstream oss;
+		oss << "hero" << side << "_up_" << a << ".png";
 
-		imageWalkingRight[a].loadFromFile(concat(glSettings::ASSETS_PATH, "hero" + str + "_climb_" + actualny + ".png"));
+		imageClimbingUp[a].loadFromFile(concat(glSettings::ASSETS_PATH, oss.str()));
+
+		oss.clear();
+		oss << "hero" << side << "_down_" << a << ".png";
+		imageClimbingDown[a].loadFromFile(concat(glSettings::ASSETS_PATH, oss.str()));
 
 	}
 
