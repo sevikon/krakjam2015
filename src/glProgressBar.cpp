@@ -21,13 +21,16 @@ void glProgressBar::Load()
 	backgroundTexture[3].loadFromFile(concat(glSettings::ASSETS_PATH, "lava.png"));
 	backgroundSprite[3].setTexture(backgroundTexture[3]);
 
+	backgroundTexture[4].loadFromFile(concat(glSettings::ASSETS_PATH, "lava.png"));
+	backgroundSprite[4].setTexture(backgroundTexture[4]);
+
 	pbTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "pb-bar.png"));
 	pbTexture.setRepeated(true);
 }
 
 void glProgressBar::Init()
 {
-	lava=6400-12;
+	lava=6400-10;
 	player1=6400-24;
 	player2=6400-24;
 
@@ -45,7 +48,7 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 	// define a 120x50 rectangle
 
 	if(timer.getElapsedTime().asSeconds() > 3){
-		lava-=0.01+0.0005*timer.getElapsedTime().asSeconds();}
+		lava-=0.01+0.0008*timer.getElapsedTime().asSeconds();}
 
 	if (lava<0){
 		lava=0;}
@@ -74,5 +77,8 @@ void glProgressBar::DrawLava(sf::RenderWindow& graphics,bool left){
 	
 	backgroundSprite[3].setPosition(0,lava);
 	graphics.draw(backgroundSprite[3]);
+
+	backgroundSprite[4].setPosition(0,lava+std::sin(timer.getElapsedTime().asSeconds()));
+	graphics.draw(backgroundSprite[4]);
 
 }
