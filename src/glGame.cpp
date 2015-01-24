@@ -119,9 +119,9 @@ void glGame::Update()
 		heroRight.UpdateReverse(glHero::FALL);
 
 	// Death in lava
-	if(heroRight.position.y > gProgressBar.lava){
+	if(heroRight.position.y + heroRight.getHeight() > gProgressBar.lava){
 		heroRight.death = true;}
-	if(heroLeft.position.y > gProgressBar.lava){
+	if(heroLeft.position.y + heroLeft.getHeight() > gProgressBar.lava){
 		heroLeft.death = true;}
 }
 
