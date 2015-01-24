@@ -1,6 +1,7 @@
 #include "glTiled.h"
 #include "glSettings.h"
 #include "glTiled.h"
+#include "glAction.h"
 #include <iostream>
 #include <fstream>
 #include <iostream>     // std::cout
@@ -18,6 +19,7 @@ glTiled::glTiled(int type){
 	this->framesPressed=false;
 	this->framesActive=false;
 	this->opacity=1;
+	this->associated = NULL;
 	this->together=false;
 }
 
@@ -72,8 +74,14 @@ void glTiled::setPressed(int framesPressed) {
 	framesPressed=30+5;
 }
 
-void glTiled::runActionOnAssociated(){
-	if (type>=OBJECTS_MIN && type%2==0) (*associated).setDefinitelyActive();
+void glTiled::runActionOnAssociated() {
+	if (this->associated != NULL && type>=OBJECTS_MIN && type%2==0) 
+		(*associated).setDefinitelyActive();
+
+	for(vector<glTiled*>::iterator tile_it = actionAssociated.begin(); tile_it < actionAssociated.end(); ++tile_it)
+	{
+		(*tile_it)->showLadder();
+	}
 }
 
 void glTiled::setActive(int framesPressed) {
@@ -81,6 +89,11 @@ void glTiled::setActive(int framesPressed) {
 		active=true;
 		framesPressed=30+5;
 	}
+}
+
+void glTiled::showLadder()
+{
+	type = LADDER_INNER;
 }
 
 void glTiled::setDefinitelyActive() {
@@ -95,4 +108,9 @@ void glTiled::setDefinitelyActive() {
 
 void glTiled::setUsed() {
 	used=true;
+}
+
+void glTiled::executeAction(glAction& action) 
+{
+	// action.execute(this);
 }
