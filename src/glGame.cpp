@@ -146,6 +146,16 @@ void glGame::Update()
 	player1View.setCenter(player1View.getCenter().x, y1);
 	player2View.setCenter(player2View.getCenter().x, y2);
 
+	heroRight.Update(glHero::FALL);
+	if(gBoard.getTileManager().intersectsWithWall(heroRight.getSpirte()))
+		heroRight.UpdateReverse(glHero::FALL);
+
+	// Death in lava
+	if(heroRight.position.y > gProgressBar.lava){
+		heroRight.death = true;}
+	if(heroLeft.position.y > gProgressBar.lava){
+		heroLeft.death = true;}
+
 }
 
 

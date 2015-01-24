@@ -48,11 +48,7 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 		lava-=0.01;}
 
 	if (lava<0){
-		lava=0;
-	}
-	//if (lava<player1-50){
-	//	lava=player1-50;
-	//}
+		lava=0;}
 
 	backgroundSprite[0].setPosition(620,0);
 	graphics.draw(backgroundSprite[0]);
