@@ -17,7 +17,7 @@ const  int glGame::level5Age = 1076;
 void glGame::Load()
 {
 
-	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "back1.png"));
+	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "sky.png"));
 	backgroundSprite.setTexture(backgroundTexture);
 
 	gProgressBar.Load();
@@ -319,7 +319,16 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				musicObject.MusicLevel1.play();
 				isPlaying = true;
 			}
+
+
 			graphics.setView(player1View);
+
+			for (int i = 0; i < 15; ++i)
+			{
+				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				graphics.draw(backgroundSprite);
+			}
+
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
 			gProgressBar.DrawLava(graphics,true);
 			for(int i=0; i<10;++i){
@@ -328,6 +337,13 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
+
+			for (int i = 0; i < 15; ++i)
+			{
+				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				graphics.draw(backgroundSprite);
+			}
+
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false);
 			gProgressBar.DrawLava(graphics,false);
 			for(int i=0; i<10;++i){
