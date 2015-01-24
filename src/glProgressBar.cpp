@@ -18,8 +18,8 @@ void glProgressBar::Load()
 	backgroundTexture[2].loadFromFile(concat(glSettings::ASSETS_PATH, "pb-z2.png"));
 	backgroundSprite[2].setTexture(backgroundTexture[2]);
 
-	backgroundTexture[3].loadFromFile(concat(glSettings::ASSETS_PATH, "lava.png"));
-	backgroundSprite[3].setTexture(backgroundTexture[3]);
+	//backgroundTexture[3].loadFromFile(concat(glSettings::ASSETS_PATH, "lava.png"));
+	//backgroundSprite[3].setTexture(backgroundTexture[3]);
 
 	backgroundTexture[4].loadFromFile(concat(glSettings::ASSETS_PATH, "lava.png"));
 	backgroundSprite[4].setTexture(backgroundTexture[4]);
@@ -75,10 +75,11 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 
 void glProgressBar::DrawLava(sf::RenderWindow& graphics,bool left){
 	
-	backgroundSprite[3].setPosition(0,lava);
-	graphics.draw(backgroundSprite[3]);
+	//backgroundSprite[3].setPosition(0,lava);
+	//graphics.draw(backgroundSprite[3]);
 
-	backgroundSprite[4].setPosition(0,lava+std::sin(timer.getElapsedTime().asSeconds()));
+	backgroundSprite[4].setColor(sf::Color(255, 255, 255, std::abs(0.3* std::sin(0.5*timer.getElapsedTime().asSeconds())+0.7 ) * 255));
+	backgroundSprite[4].setPosition(0,lava+5*std::sin(timer.getElapsedTime().asSeconds()));
 	graphics.draw(backgroundSprite[4]);
 
 }
