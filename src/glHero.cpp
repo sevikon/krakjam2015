@@ -239,6 +239,10 @@ void glHero::UpdateReverse(event _event)
 	{
 		position.x += walkingSpeed * DELTA;
 	}
+	if (_event & CLIMBDOWN)
+	{
+		position.y -= climbingSpeed * DELTA;
+	}
 }
 
 void glHero::Draw(sf::RenderWindow& graphics)

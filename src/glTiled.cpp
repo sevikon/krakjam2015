@@ -16,6 +16,15 @@ glTiled::glTiled(int type){
 	this->pressed=false;
 	this->framesPressed=false;
 	this->framesActive=false;
+	this->opacity=1;
+}
+
+float glTiled::getLowerOpacity(){
+	opacity -= 0.001f;
+	if (opacity < 0.3){
+		opacity = 0.3;
+	}
+	return opacity;
 }
 
 bool glTiled::isActive()
@@ -60,15 +69,24 @@ void glTiled::setPressed(int framesPressed) {
 	framesPressed=30+5;
 }
 
+void glTiled::runActionOnAssociated(){
+	if (type%2==0) (*associated).setDefinitelyActive();
+}
+
 void glTiled::setActive(int framesPressed) {
-	active=true;
-	framesPressed=30+5;
+	if (type>3){
+		active=true;
+		framesPressed=30+5;
+	}
 }
 
 void glTiled::setDefinitelyActive() {
-	if (type>3){
-		active=true;
-		framesPressed=0;
+	if (this->type>3){
+		if (type%2!=0){
+			active=true;
+			framesPressed=0;
+		}
+		this->runActionOnAssociated();
 	}
 }
 
