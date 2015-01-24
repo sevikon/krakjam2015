@@ -295,6 +295,8 @@ void glGame::Draw(sf::RenderWindow& graphics)
 {		
 	graphics.setView(graphics.getDefaultView());
 
+	double pos = 0;
+
 	switch(gameState)
 	{
 		case GAME_STATE::MENU:
@@ -323,9 +325,13 @@ void glGame::Draw(sf::RenderWindow& graphics)
 
 			graphics.setView(player1View);
 
-			for (int i = 0; i < 15; ++i)
+			// for parallax-scrolling
+			
+			pos = gBoard.getTileManager().getMapHeight() - backgroundTexture.getSize().y * 6 - 0.8 * (gBoard.getTileManager().getMapHeight() - player1View.getCenter().y - 384.0f);
+
+			for (int i = 0; i < 6; ++i)
 			{
-				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
 
@@ -338,9 +344,13 @@ void glGame::Draw(sf::RenderWindow& graphics)
 
 			graphics.setView(player2View);
 
-			for (int i = 0; i < 15; ++i)
+			// for parallax-scrolling
+
+			pos = gBoard.getTileManager().getMapHeight() - backgroundTexture.getSize().y * 6 - 0.8 * (gBoard.getTileManager().getMapHeight() - player2View.getCenter().y - 384.0f);
+
+			for (int i = 0; i < 6; ++i)
 			{
-				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
 
@@ -418,7 +428,7 @@ void glGame::CheckColisions()
 			sf::Vector2f bulletPosition = bulletsLeft[i].bulletSprite.getPosition();
 
 			if(std::abs(bulletPosition.y-leftHeroPosition.y) < 50 && std::abs(bulletPosition.x-leftHeroPosition.x) < 50){
-					heroLeft.death = true;
+				heroLeft.death = true;
 			}
 		}
 	}
@@ -436,7 +446,7 @@ void glGame::CheckColisions()
 			sf::Vector2f bulletPosition = bulletsRight[i].bulletSprite.getPosition();
 
 			if(std::abs(bulletPosition.y-rightHeroPosition.y) < 50 && std::abs(bulletPosition.x-rightHeroPosition.x) < 50){
-					heroRight.death = true;
+				heroRight.death = true;
 			}
 		}
 	}
