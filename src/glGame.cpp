@@ -266,7 +266,7 @@ void glGame::Update()
 
 	// updating score
 
-	float progress = (float(gBoard.getTileManager().getMapHeight() - player1View.getCenter().y - 384) / float(gBoard.getTileManager().getMapHeight() - 768.0f));
+	float progress = (float(gBoard.getTileManager().getMapHeight() - min(player1View.getCenter().y, player2View.getCenter().y) - 384) / float(gBoard.getTileManager().getMapHeight() - 768.0f));
 	
 	switch (level)
 	{
@@ -294,6 +294,8 @@ void glGame::Update()
 void glGame::Draw(sf::RenderWindow& graphics)
 {		
 	graphics.setView(graphics.getDefaultView());
+
+	double pos = 0;
 
 	switch(gameState)
 	{
@@ -323,9 +325,13 @@ void glGame::Draw(sf::RenderWindow& graphics)
 
 			graphics.setView(player1View);
 
-			for (int i = 0; i < 15; ++i)
+			// for parallax-scrolling
+			
+			pos = gBoard.getTileManager().getMapHeight() - backgroundTexture.getSize().y * 6 - 0.8 * (gBoard.getTileManager().getMapHeight() - player1View.getCenter().y - 384.0f);
+
+			for (int i = 0; i < 6; ++i)
 			{
-				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
 
@@ -338,9 +344,13 @@ void glGame::Draw(sf::RenderWindow& graphics)
 
 			graphics.setView(player2View);
 
-			for (int i = 0; i < 15; ++i)
+			// for parallax-scrolling
+
+			pos = gBoard.getTileManager().getMapHeight() - backgroundTexture.getSize().y * 6 - 0.8 * (gBoard.getTileManager().getMapHeight() - player2View.getCenter().y - 384.0f);
+
+			for (int i = 0; i < 6; ++i)
 			{
-				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
 
