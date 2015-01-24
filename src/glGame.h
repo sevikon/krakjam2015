@@ -4,6 +4,7 @@
 #include "glHero.h"
 #include "glTiledLoader.h"
 #include "glBoard.h"
+#include "glProgressBar.h"
 
 class glGame
 {
@@ -12,6 +13,7 @@ private:
 	sf::Texture backgroundTexture;
 	glTiledLoader gTiledLoader;
 	glBoard gBoard;
+	glProgressBar gProgressBar;
 	sf::View player1View;
 	sf::View player2View;
 	glMainMenu mainMenu;

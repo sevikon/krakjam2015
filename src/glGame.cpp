@@ -9,6 +9,8 @@ void glGame::Load()
 	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "back1.png"));
 	backgroundSprite.setTexture(backgroundTexture);
 
+	gProgressBar.Load();
+
 	heroLeft.Load(0);
 	heroRight.Load(1);
 
@@ -19,6 +21,7 @@ void glGame::Init(sf::RenderWindow& window)
 {
 	//wczytanie mapy
 	gTiledLoader.loadMap(1);
+	gProgressBar.Init();
 	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
 
 	printf("-----------------------------------------------------\n");
@@ -82,7 +85,7 @@ void glGame::Update()
 	{
 		heroRight.Update(glHero::CLIMBDOWN);
 	}
-	
+	gProgressBar.Update();
 }
 
 void glGame::Draw(sf::RenderWindow& graphics)
@@ -111,6 +114,9 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			graphics.setView(player2View);
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), gTiledLoader, false);
 			heroRight.Draw(graphics);
+
+			graphics.setView(graphics.getDefaultView());
+			gProgressBar.Draw(graphics);
 
 			break;
 	}
