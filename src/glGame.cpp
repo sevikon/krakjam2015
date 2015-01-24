@@ -85,7 +85,7 @@ void glGame::Update()
 			float y = heroLeft.position.y+heroLeft.getHeight()/2;
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId,a,b);
-			gBoard.getTileManager().setActive(a,b);
+			gBoard.getTileManager().runActionOnAssociated(a,b);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -142,7 +142,7 @@ void glGame::Update()
 			float y = heroRight.position.y+heroRight.getHeight()/2;
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
-			gBoard.getTileManager().setActive(a,b);
+			gBoard.getTileManager().runActionOnAssociated(a,b);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
