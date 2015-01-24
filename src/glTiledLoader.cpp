@@ -79,8 +79,8 @@ void glTiledLoader::loadMap(int number) {
 
 		for (int a=0; a<vecTiled.size();a++){
 			for (int b=0; b<vecTiled.at(0).size();b++){
-				if (vecTiled.at(a).at(b).type>3){
-					vecTiled.at(a).at(b).associated = &searchTiled(a,vecTiled.at(a).at(b).type);
+				if (vecTiled.at(a).at(b).type >= OBJECTS_MIN){
+					vecTiled.at(a).at(b).associated = &searchTiled(a, vecTiled.at(a).at(b).type);
 				}
 			}
 		}
@@ -104,6 +104,10 @@ void glTiledLoader::Update(){
 
 void glTiledLoader::setActive(int x,int y){
 	vecTiled.at(x).at(y).setDefinitelyActive();
+}
+
+void glTiledLoader::runActionOnAssociated(int x,int y){
+	vecTiled.at(x).at(y).runActionOnAssociated();
 }
 
 float glTiledLoader::getLowerOpacity(int x,int y){

@@ -3,7 +3,7 @@
 #include "glBoard.h"
 #include "glTiledLoader.h"
 
-#define SPRITES 30
+#define SPRITES 100
 
 class glBoard
 {

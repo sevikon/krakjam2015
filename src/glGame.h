@@ -6,6 +6,7 @@
 #include "glBoard.h"
 #include "glHandleMusic.h"
 #include "glProgressBar.h"
+#include "glScore.h"
 
 #define GRAVITY 10.f
 
@@ -20,6 +21,9 @@ private:
 	sf::View player2View;
 	glMainMenu mainMenu;
 	glMainMenu::MenuResult chosenOption;
+	
+	glScore score;
+
 	bool playerLeftOnLadder;
 	bool playerRightOnLadder;
 
@@ -28,8 +32,17 @@ private:
 
 	glHandleMusic musicObject;
 
+	int level;
+
 	enum GAME_STATE {MENU, GAMEPLAY} gameState;
 	bool isMenu, isPlaying;
+
+	const static int bornAge;
+	const static int level1Age;
+	const static int level2Age;
+	const static int level3Age;
+	const static int level4Age;
+	const static int level5Age;
 
 public: 
 	void ShowScores();

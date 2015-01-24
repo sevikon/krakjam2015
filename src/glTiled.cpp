@@ -70,18 +70,18 @@ void glTiled::setPressed(int framesPressed) {
 }
 
 void glTiled::runActionOnAssociated(){
-	if (type%2==0) (*associated).setDefinitelyActive();
+	if (type>=OBJECTS_MIN && type%2==0) (*associated).setDefinitelyActive();
 }
 
 void glTiled::setActive(int framesPressed) {
-	if (type>3){
+	if (type>=OBJECTS_MIN){
 		active=true;
 		framesPressed=30+5;
 	}
 }
 
 void glTiled::setDefinitelyActive() {
-	if (this->type>3){
+	if (type>=OBJECTS_MIN){
 		if (type%2!=0){
 			active=true;
 			framesPressed=0;
