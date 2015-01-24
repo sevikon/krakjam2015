@@ -6,8 +6,9 @@
 #define GROUND_MIN 1
 #define GROUND_MAX 20
 #define LADDER_MIN 21
-#define LADDER_MAX 30
-#define FREE 31
+#define LADDER_MAX 23
+#define OBJECTS_MIN 24
+#define FREE 99
 
 class glTiledLoader
 {	

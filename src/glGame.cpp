@@ -118,6 +118,15 @@ void glGame::Update()
 
 	if (!heroRight.death)
 	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+		{
+			float x = heroRight.position.x+heroRight.getWidth()/2;
+			float y = heroRight.position.y+heroRight.getHeight()/2;
+			int a,b;
+			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
+			gBoard.getTileManager().setActive(a,b);
+		}
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
 			heroRight.Update(glHero::LEFT);
