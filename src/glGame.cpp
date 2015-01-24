@@ -330,10 +330,10 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			}
 
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
-			gProgressBar.DrawLava(graphics,true);
 			for(int i=0; i<10;++i){
 				bulletsLeft[i].Draw(graphics);
 			}
+			gProgressBar.DrawLava(graphics,true);
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
@@ -345,10 +345,10 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			}
 
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false);
-			gProgressBar.DrawLava(graphics,false);
 			for(int i=0; i<10;++i){
 				bulletsLeft[i].Draw(graphics);
 			}
+			gProgressBar.DrawLava(graphics,false);
 			heroRight.Draw(graphics);
 
 			graphics.setView(graphics.getDefaultView());
@@ -398,8 +398,6 @@ void glGame::HandleEvent(sf::Event event)
 
 void glGame::CheckColisions()
 {
-	sf::Vector2f leftHeroPosition =  heroLeft.getSpirte().getPosition();
-	sf::Vector2f rightHeroPosition = heroRight.getSpirte().getPosition();
 	float leftHeroWidth  = heroLeft.getSpirte().getLocalBounds().width;
 	float leftHeroHeight = heroLeft.getSpirte().getLocalBounds().height;
 	float rightHeroWidth  = heroRight.getSpirte().getLocalBounds().width;
@@ -410,14 +408,13 @@ void glGame::CheckColisions()
 
 		if(!bulletsLeft[i].mDying)
 		{
-			sf::Vector2f positions = bulletsLeft[i].bulletSprite.getOrigin();
+			sf::Vector2f bulletCenter = bulletsLeft[i].bulletSprite.getOrigin();
 			float height = bulletsLeft[i].bulletSprite.getLocalBounds().height;
 			float width = bulletsLeft[i].bulletSprite.getLocalBounds().width;
-			float leftHeroCenter = leftHeroPosition.x + leftHeroWidth/2.;
-			float rightHeroCenter = rightHeroPosition.x + rightHeroWidth/2.;
-			sf::Vector2f bulletPosition = bulletsLeft[i].bulletSprite.getPosition();
+			float leftHeroCenter_x = heroLeft.getSpirte().getOrigin().x;
+			float leftHeroCenter_y = heroLeft.getSpirte().getOrigin().y;
 
-			if(std::abs(bulletPosition.y-leftHeroPosition.y) < 50 && std::abs(bulletPosition.x-leftHeroPosition.x) < 50){
+			if(std::abs(bulletCenter.y-leftHeroCenter_y) < 20 && std::abs(bulletCenter.x-leftHeroCenter_x) < 20){
 					heroLeft.death = true;
 			}
 		}
@@ -428,14 +425,11 @@ void glGame::CheckColisions()
 
 		if(!bulletsRight[i].mDying)
 		{
-			sf::Vector2f positions = bulletsRight[i].bulletSprite.getOrigin();
-			float height = bulletsRight[i].bulletSprite.getLocalBounds().height;
-			float width = bulletsRight[i].bulletSprite.getLocalBounds().width;
-			float leftHeroCenter = leftHeroPosition.x + leftHeroWidth/2.;
-			float rightHeroCenter = rightHeroPosition.x + rightHeroWidth/2.;
-			sf::Vector2f bulletPosition = bulletsRight[i].bulletSprite.getPosition();
+			sf::Vector2f bulletCenter = bulletsRight[i].bulletSprite.getOrigin();
+			float rightHeroCenter_x = heroRight.getSpirte().getOrigin().x;
+			float rightHeroCenter_y = heroRight.getSpirte().getOrigin().y;
 
-			if(std::abs(bulletPosition.y-rightHeroPosition.y) < 50 && std::abs(bulletPosition.x-rightHeroPosition.x) < 50){
+			if(std::abs(bulletCenter.y-rightHeroCenter_y) < 20 && std::abs(bulletCenter.x-rightHeroCenter_x) < 20){
 					heroRight.death = true;
 			}
 		}

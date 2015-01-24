@@ -54,7 +54,7 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 	// define a 120x50 rectangle
 
 	if(timer.getElapsedTime().asSeconds() > 3){
-		lava-=0.01+0.0008*timer.getElapsedTime().asSeconds();}
+		lava-=0.015+0.0007*timer.getElapsedTime().asSeconds();}
 
 	if (lava<0){
 		lava=0;}
@@ -85,16 +85,16 @@ void glProgressBar::DrawLava(sf::RenderWindow& graphics,bool left){
 	backgroundSprite[3].setPosition(8*std::sin(0.25*timer.getElapsedTime().asSeconds()),lava+5*std::sin(timer.getElapsedTime().asSeconds()));
 	graphics.draw(backgroundSprite[3]);
 
-	backgroundSprite[4].setColor(sf::Color(255, 255, 255, (0.3*std::sin(4*timer.getElapsedTime().asSeconds()+0.49)+0.7 ) * 255));
+	backgroundSprite[4].setColor(sf::Color(255, 255, 255, (0.25*std::sin(4*timer.getElapsedTime().asSeconds()+0.49)+0.75 ) * 255));
 	backgroundSprite[4].setPosition(3*std::sin(timer.getElapsedTime().asSeconds()+0.75),lava+5*std::sin(timer.getElapsedTime().asSeconds()));
 	graphics.draw(backgroundSprite[4]);
 
-	backgroundSprite[5].setColor(sf::Color(255, 255, 255, (0.3*std::sin(3*timer.getElapsedTime().asSeconds()+0.5)+0.7 ) * 255));
+	backgroundSprite[5].setColor(sf::Color(255, 255, 255, (0.25*std::sin(3*timer.getElapsedTime().asSeconds()-0.51)+0.75 ) * 255));
 	backgroundSprite[5].setPosition(2*std::sin(timer.getElapsedTime().asSeconds()+0.5),lava+5*std::sin(timer.getElapsedTime().asSeconds()));
 	graphics.draw(backgroundSprite[5]);
 
 	backgroundSprite[6].setColor(sf::Color(255, 255, 255, (0.3*std::sin(2*timer.getElapsedTime().asSeconds()+0.51)+0.3 ) * 255));
-	backgroundSprite[6].setPosition(1*std::sin(timer.getElapsedTime().asSeconds()-0.5),10+lava+10*std::sin(timer.getElapsedTime().asSeconds()));
+	backgroundSprite[6].setPosition(10*std::sin(0.1*timer.getElapsedTime().asSeconds()-0.5),30+lava+20*std::sin(timer.getElapsedTime().asSeconds()));
 	graphics.draw(backgroundSprite[6]);
 
 }
