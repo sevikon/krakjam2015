@@ -91,7 +91,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			heroLeft.Update(glHero::LEFT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+			if(gBoard.getTileManager().blockedByObstacleOnLeftSide(heroLeft))
 				heroLeft.UpdateReverse(glHero::LEFT);
 			playerLeftOnLadder = false;
 		}
@@ -103,7 +103,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			heroLeft.Update(glHero::RIGHT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+			if(gBoard.getTileManager().blockedByObstacleOnRightSide(heroLeft))
 				heroLeft.UpdateReverse(glHero::RIGHT);
 			playerLeftOnLadder = false;
 		}
@@ -148,7 +148,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
 			heroRight.Update(glHero::LEFT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+			if(gBoard.getTileManager().blockedByObstacleOnLeftSide(heroRight))
 				heroRight.UpdateReverse(glHero::LEFT);
 			playerRightOnLadder = false;
 		}
@@ -160,7 +160,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
 			heroRight.Update(glHero::RIGHT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+			if(gBoard.getTileManager().blockedByObstacleOnRightSide(heroRight))
 				heroRight.UpdateReverse(glHero::RIGHT);
 			playerRightOnLadder = false;
 		}
@@ -302,34 +302,5 @@ void glGame::HandleEvent(sf::Event event)
 {
 	if(event.type == event.KeyPressed)
 	{
-		/*sf::Keyboard::Key key = event.key.code;
-		if(key == sf::Keyboard::Left)
-		{
-		}
-		else if(key == sf::Keyboard::Up)
-		{
-			player1View.move(0.f, 2.f);
-		}
-		else if(key == sf::Keyboard::Right)
-		{			
-		}
-		else if(key == sf::Keyboard::Down)
-		{
-			player1View.move(0.f, -2.f);
-		}
-		else if(key == sf::Keyboard::A)
-		{
-		}
-		else if(key == sf::Keyboard::W)
-		{
-			player2View.move(0.f, 2.f);
-		}
-		else if(key == sf::Keyboard::D)
-		{
-		}
-		else if(key == sf::Keyboard::S)
-		{
-			player2View.move(0.f, -2.f);
-		}*/
 	}
 }
