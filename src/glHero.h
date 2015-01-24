@@ -49,6 +49,8 @@ public:
 	int side;
 	sf::Vector2f position;
 
+	float opacity;
+
 	int getWidth();
 	int getHeight();
 	sf::Sprite& getSpirte() {return sprite;}

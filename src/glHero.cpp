@@ -72,6 +72,8 @@ void glHero::Init(float x, float y, sf::View View)
 	playerView = View;
 	death = false;
 
+	opacity = 1.0f;
+
 	if (side == 0)
 	{
 		sprite.setTexture(imageWalkingRight[0]);
@@ -212,6 +214,16 @@ void glHero::Update(event _event)
 			sprite.setTexture(imageWalkingLeft[currentFrame]);
 		}
 	}
+
+	// dying
+
+	if (death == 1)
+	{
+		opacity -= 1.0f * DELTA;
+		
+		if (opacity < 0)
+			opacity = 0;
+	}
 }
 
 void glHero::UpdateReverse(event _event)
@@ -225,6 +237,7 @@ void glHero::UpdateReverse(event _event)
 void glHero::Draw(sf::RenderWindow& graphics)
 {
 	sprite.setPosition(position);
+	sprite.setColor(sf::Color(255, 255, 255, opacity * 255));
 	graphics.draw(sprite);
 }
 
