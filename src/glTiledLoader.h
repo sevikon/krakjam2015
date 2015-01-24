@@ -6,8 +6,9 @@
 #define GROUND_MIN 1
 #define GROUND_MAX 20
 #define LADDER_MIN 21
-#define LADDER_MAX 30
-#define FREE 31
+#define LADDER_MAX 23
+#define OBJECTS_MIN 24
+#define FREE 99
 
 class glTiledLoader
 {	
@@ -44,7 +45,9 @@ public:
 	bool intersectsWithLadder(glHero& hero);
 	sf::FloatRect getTileBoundingBox(int row, int col, glHero::PLAYER playerId);
 	void setActive(int x,int y);
-
+	float getLowerOpacity(int x,int y);
+	void callAssociated();
+	glTiled &searchTiled(int c, int type);
 		// returns tile coordinates by position
 	void getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileX, int& tileY);
 };
