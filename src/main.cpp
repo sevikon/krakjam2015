@@ -6,7 +6,6 @@
 #include "glSettings.h"
 #include "glUtils.h"
 #include "glMainMenu.h"
-#include "glTiledLoader.h"
 #include "glGame.h"
 
 
@@ -21,8 +20,7 @@ int main()
 
 	glTiledLoader gTiledLoader;
 	gTiledLoader.loadMap(1);
-	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
-	
+
 	/*
 	// inicjalizacja naszzego widoku (view) i jego rozmiarów
 	float windowHeight = (float)window.getSize().y;

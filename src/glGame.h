@@ -2,12 +2,16 @@
 #include "SFML\Graphics.hpp"
 #include "glMainMenu.h"
 #include "glHero.h"
+#include "glTiledLoader.h"
+#include "glBoard.h"
 
 class glGame
 {
 private:
 	sf::Sprite backgroundSprite;
 	sf::Texture backgroundTexture;
+	glTiledLoader gTiledLoader;
+	glBoard gBoard;
 	sf::View player1View;
 	sf::View player2View;
 	glMainMenu mainMenu;

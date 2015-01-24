@@ -6,28 +6,29 @@
 
 void glGame::Load()
 {
-	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bg.png"));
+	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "back1.png"));
 	backgroundSprite.setTexture(backgroundTexture);
 
 	heroLeft.Load(0);
 	heroRight.Load(1);
+
+	gBoard.Load();
 }
 
 void glGame::Init(sf::RenderWindow& window)
 {
+	//wczytanie mapy
+	gTiledLoader.loadMap(1);
+	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
+
 	printf("-----------------------------------------------------\n");
 	printf("Zaczynamy nowa gre.\n");
 	printf("-----------------------------------------------------\n");
 
-	/*player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y));
-	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y));
-	player1View.setCenter(player1View.getSize().x/2, player1View.getSize().y/2);
-	player2View.setCenter(player2View.getSize().x/2, player2View.getSize().y/2);*/
-
-	player1View.setSize(sf::Vector2f(640, 768));
-	player2View.setSize(sf::Vector2f(640, 768));
-	player1View.setCenter(320, 384);
-	player2View.setCenter(320, 384);
+	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
+	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
+	player1View.setCenter(player1View.getSize().x/2, 6400-384);
+	player2View.setCenter(player2View.getSize().x/2, 6400-384);
 
 	// player 2 (right side of the screen)
 	player2View.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
@@ -104,13 +105,11 @@ void glGame::Draw(sf::RenderWindow& graphics)
 		case GAME_STATE::GAMEPLAY:
 
 			graphics.setView(player1View);
-
-			graphics.draw(backgroundSprite);
+			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), gTiledLoader, true);
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
-
-			graphics.draw(backgroundSprite);
+			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), gTiledLoader, false);
 			heroRight.Draw(graphics);
 
 			break;
