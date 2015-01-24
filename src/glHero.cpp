@@ -217,7 +217,7 @@ void glHero::Update(event _event)
 
 	if (death == 1)
 	{
-		opacity -= 1.0f * DELTA;
+		opacity -= 0.1f * DELTA;
 		
 		if (opacity < 0)
 			opacity = 0;
@@ -235,7 +235,7 @@ void glHero::UpdateReverse(event _event)
 void glHero::Draw(sf::RenderWindow& graphics)
 {
 	sprite.setPosition(position);
-	sprite.setColor(sf::Color(255, 255, 255, opacity * 255));
+	sprite.setColor(sf::Color(255, 255 * opacity, 255 * opacity, opacity * 255));
 	graphics.draw(sprite);
 }
 
