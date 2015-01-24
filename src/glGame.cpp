@@ -266,7 +266,7 @@ void glGame::Update()
 
 	// updating score
 
-	float progress = (float(gBoard.getTileManager().getMapHeight() - player1View.getCenter().y - 384) / float(gBoard.getTileManager().getMapHeight() - 768.0f));
+	float progress = (float(gBoard.getTileManager().getMapHeight() - min(player1View.getCenter().y, player2View.getCenter().y) - 384) / float(gBoard.getTileManager().getMapHeight() - 768.0f));
 	
 	switch (level)
 	{
