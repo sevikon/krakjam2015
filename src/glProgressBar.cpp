@@ -18,11 +18,17 @@ void glProgressBar::Load()
 	backgroundTexture[2].loadFromFile(concat(glSettings::ASSETS_PATH, "pb-z2.png"));
 	backgroundSprite[2].setTexture(backgroundTexture[2]);
 
-	//backgroundTexture[3].loadFromFile(concat(glSettings::ASSETS_PATH, "lava.png"));
-	//backgroundSprite[3].setTexture(backgroundTexture[3]);
+	backgroundTexture[3].loadFromFile(concat(glSettings::ASSETS_PATH, "death-1.png"));
+	backgroundSprite[3].setTexture(backgroundTexture[3]);
 
-	backgroundTexture[4].loadFromFile(concat(glSettings::ASSETS_PATH, "lava.png"));
+	backgroundTexture[4].loadFromFile(concat(glSettings::ASSETS_PATH, "death-2.png"));
 	backgroundSprite[4].setTexture(backgroundTexture[4]);
+
+	backgroundTexture[5].loadFromFile(concat(glSettings::ASSETS_PATH, "death-3.png"));
+	backgroundSprite[5].setTexture(backgroundTexture[5]);
+
+	backgroundTexture[6].loadFromFile(concat(glSettings::ASSETS_PATH, "death-4.png"));
+	backgroundSprite[6].setTexture(backgroundTexture[6]);
 
 	pbTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "pb-bar.png"));
 	pbTexture.setRepeated(true);
@@ -30,7 +36,7 @@ void glProgressBar::Load()
 
 void glProgressBar::Init()
 {
-	lava=6400-10;
+	lava=6400-50;
 	player1=6400-24;
 	player2=6400-24;
 
@@ -75,11 +81,20 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 
 void glProgressBar::DrawLava(sf::RenderWindow& graphics,bool left){
 	
-	//backgroundSprite[3].setPosition(0,lava);
-	//graphics.draw(backgroundSprite[3]);
+	backgroundSprite[3].setScale(sf::Vector2f(1.5f, 1.f));
+	backgroundSprite[3].setPosition(8*std::sin(0.25*timer.getElapsedTime().asSeconds()),lava+5*std::sin(timer.getElapsedTime().asSeconds()));
+	graphics.draw(backgroundSprite[3]);
 
-	backgroundSprite[4].setColor(sf::Color(255, 255, 255, std::abs(0.3* std::sin(0.5*timer.getElapsedTime().asSeconds())+0.7 ) * 255));
-	backgroundSprite[4].setPosition(0,lava+5*std::sin(timer.getElapsedTime().asSeconds()));
+	backgroundSprite[4].setColor(sf::Color(255, 255, 255, (0.3*std::sin(4*timer.getElapsedTime().asSeconds()+0.49)+0.7 ) * 255));
+	backgroundSprite[4].setPosition(3*std::sin(timer.getElapsedTime().asSeconds()+0.75),lava+5*std::sin(timer.getElapsedTime().asSeconds()));
 	graphics.draw(backgroundSprite[4]);
+
+	backgroundSprite[5].setColor(sf::Color(255, 255, 255, (0.3*std::sin(3*timer.getElapsedTime().asSeconds()+0.5)+0.7 ) * 255));
+	backgroundSprite[5].setPosition(2*std::sin(timer.getElapsedTime().asSeconds()+0.5),lava+5*std::sin(timer.getElapsedTime().asSeconds()));
+	graphics.draw(backgroundSprite[5]);
+
+	backgroundSprite[6].setColor(sf::Color(255, 255, 255, (0.3*std::sin(2*timer.getElapsedTime().asSeconds()+0.51)+0.3 ) * 255));
+	backgroundSprite[6].setPosition(1*std::sin(timer.getElapsedTime().asSeconds()-0.5),10+lava+10*std::sin(timer.getElapsedTime().asSeconds()));
+	graphics.draw(backgroundSprite[6]);
 
 }
