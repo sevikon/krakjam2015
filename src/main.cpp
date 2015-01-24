@@ -5,6 +5,7 @@
 #include <iostream>
 #include "glSettings.h"
 #include "glUtils.h"
+#include "seMainMenu.h"
 
 float viewWidth;
 float viewHeight;
@@ -59,6 +60,19 @@ int main()
 				if (width>2*height) 
 					height=1.0f/2.0f*width;
 				window.setSize(sf::Vector2u(width, height));
+			}
+
+			// Pokazywanie menu
+			seMainMenu mainMenu;
+			seMainMenu::MenuResult result = mainMenu.Show(window,viewWidth,viewHeight);
+			switch(result)
+			{
+				case seMainMenu::Exit:
+					window.close();
+					break;
+				case seMainMenu::Play:
+					window.close(); // uwaga!
+					break;
 			}
         }
 
