@@ -65,8 +65,28 @@ int main()
 
 		if(frame_timer.getElapsedTime().asMilliseconds() > DELTA) 
 		{
-			gameObject.Update();
-			frame_timer.restart();
+			if(gameObject.Win()){
+				/*for(int i=0;i < 20./DELTA;++i){
+					if(frame_timer.getElapsedTime().asMilliseconds() > DELTA){
+						gameObject.Update();
+						frame_timer.restart();
+					}
+				}*/
+				gameObject.GameStateWin();
+			}
+			else if(gameObject.GameOver()){
+				/*for(int i=0;i < 20./DELTA;++i){
+					if(frame_timer.getElapsedTime().asMilliseconds() > DELTA){
+						gameObject.Update();
+						frame_timer.restart();
+					}
+				}*/
+				gameObject.GameStateGameOver();
+			}
+			else{
+				gameObject.Update();
+				frame_timer.restart();
+			}
 		}
 
         window.clear();

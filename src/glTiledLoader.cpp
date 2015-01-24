@@ -122,6 +122,14 @@ bool glTiledLoader::isLadder(int x,int y){
 	return false;
 }
 
+bool glTiledLoader::isBlockableObject(int x, int y)
+{
+	if (vecTiled.at(x).at(y).type >= OBJECTS_MIN  && vecTiled.at(x).at(y).type % 2 == 1){
+		return true;
+	}
+	return false;
+}
+
 bool glTiledLoader::isWall(int x,int y){
 
 	if (vecTiled.at(x).at(y).type >= GROUND_MIN && vecTiled.at(x).at(y).type <= GROUND_MAX){
@@ -211,7 +219,7 @@ bool glTiledLoader::intersectsWithWall(glHero& hero)
 	return false;
 }
 
-bool glTiledLoader::intersectsWithWallVertically(glHero& hero)
+bool glTiledLoader::blockedByObstacleOnLeftSide(glHero& hero)
 {
 	int firstTileRow, firstTileColumn;
 	int row, column;
@@ -232,11 +240,47 @@ bool glTiledLoader::intersectsWithWallVertically(glHero& hero)
 
 	for(int i = -1; i <= 1; ++i)
 	{
-		for(int j = -1; j <= 1; ++j)
+		for(int j = -1; j <= 0; ++j)
 		{
 			if(row+i < 0 || column+j < 0 || row+i >= amountOfRows || column+j >= amountOfColumns)
 				continue;
-			if(spriteBB.intersects(getTileBoundingBox(row+i, column+j, hero.playerId)) && isWall(row+i, column+j))
+			if(spriteBB.intersects(getTileBoundingBox(row+i, column+j, hero.playerId)) && (isWall(row+i, column+j) || isBlockableObject(row+i, column+j)))
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+
+bool glTiledLoader::blockedByObstacleOnRightSide(glHero& hero)
+{
+	int firstTileRow, firstTileColumn;
+	int row, column;
+	bool debug = false;
+	sf::Sprite sprite = hero.getSpirte();
+	sf::FloatRect spriteBB = sprite.getGlobalBounds();
+	spriteBB.height -= 2;
+
+	getTileCoords(sprite.getPosition().x+sprite.getTextureRect().width/2, sprite.getPosition().y + sprite.getTextureRect().height/2, hero.playerId, row, column);
+
+	if(debug)
+	{
+		cout << "Sprite position: (" << sprite.getGlobalBounds().left << ", " << sprite.getGlobalBounds().top << ")" << endl; 
+		cout << "Checking tile area for collision: " << row << ", " << column << " Intersects: " << sprite.getGlobalBounds().intersects(getTileBoundingBox(row, column, hero.playerId)) 
+			<< " Is wall: " << isWall(row, column) <<  endl;
+		cout << "Tile position: (" << getTileBoundingBox(row, column, hero.playerId).left << ", " << getTileBoundingBox(row, column, hero.playerId).top << ")" << endl;
+	}
+
+	for(int i = -1; i <= 1; ++i)
+	{
+		for(int j = 0; j <= 1; ++j)
+		{
+			if(row+i < 0 || column+j < 0 || row+i >= amountOfRows || column+j >= amountOfColumns)
+				continue;
+			if(spriteBB.intersects(getTileBoundingBox(row+i, column+j, hero.playerId)) && (isWall(row+i, column+j) || isBlockableObject(row+i, column+j)))
 			{
 				return true;
 			}

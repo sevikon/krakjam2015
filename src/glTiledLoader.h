@@ -36,7 +36,9 @@ public:
 	int getMapWidth();
 	int getMapHeight();
 	bool intersectsWithWall(glHero& hero);
-	bool intersectsWithWallVertically(glHero& hero);
+	bool blockedByObstacleOnRightSide(glHero& hero);
+	bool blockedByObstacleOnLeftSide(glHero& hero);
+	bool isBlockableObject(int x, int y);
 	bool intersectsWithLadder(glHero& hero);
 	sf::FloatRect getTileBoundingBox(int row, int col, glHero::PLAYER playerId);
 	void setActive(int x,int y);

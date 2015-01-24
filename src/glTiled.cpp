@@ -1,5 +1,6 @@
 #include "glTiled.h"
 #include "glSettings.h"
+#include "glTiled.h"
 #include <iostream>
 #include <fstream>
 #include <iostream>     // std::cout

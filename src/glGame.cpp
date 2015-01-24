@@ -3,6 +3,7 @@
 #include "glUtils.h"
 #include "glSettings.h"
 #include <iostream>
+#include <stdlib.h>
 
 // params
 
@@ -16,7 +17,7 @@ const  int glGame::level5Age = 1076;
 void glGame::Load()
 {
 
-	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "back1.png"));
+	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "sky.png"));
 	backgroundSprite.setTexture(backgroundTexture);
 
 	gProgressBar.Load();
@@ -34,7 +35,6 @@ void glGame::Load()
 
 void glGame::Init(sf::RenderWindow& window)
 {
-
 	gProgressBar.Init();
 
 	//wczytanie mapy
@@ -43,6 +43,17 @@ void glGame::Init(sf::RenderWindow& window)
 	printf("-----------------------------------------------------\n");
 
 	gBoard.Init(window);
+
+	bulletsLeft[0].Init(200,6200,0.005);
+	bulletsLeft[1].Init(200,6000,-0.005);
+
+	bulletsRight[0].Init(200,6200,0.005);
+	bulletsRight[1].Init(200,6000,-0.005);
+
+	/*for(int i=0; i<3;++i){
+		glBulletsVec.push_back(glBullet());
+		glBulletsVec.at(i).Init(200,6200,0.01*(i+1));
+	}*/
 
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
@@ -60,14 +71,44 @@ void glGame::Init(sf::RenderWindow& window)
 
 	playerLeftOnLadder = playerRightOnLadder = false;
 
-	// gameState = GAME_STATE::MENU;
-	gameState = GAME_STATE::GAMEPLAY;
+	gameState = GAME_STATE::MENU;
 	musicObject.HandleMusic();
 	isMenu = false;
 	isPlaying = false;
+	isGameOver = false;
+	isWin = false;
 
 	score.Init(0);
+}
 
+bool glGame::Win()
+{	
+	bool win = false;
+
+	if(heroLeft.position.y < 50 && heroRight.position.y < 50){
+		win = true;}
+
+	return win;
+}
+
+bool glGame::GameOver()
+{	
+	bool gameOver = false;
+
+	if(heroLeft.death == true && heroRight.death == true){
+		gameOver = true;}
+
+	return gameOver;
+}
+
+void glGame::GameStateWin()
+{
+	gameState = GAME_STATE::WIN;
+}
+
+void glGame::GameStateGameOver()
+{
+	gameState = GAME_STATE::GAMEOVER;
 }
 
 void glGame::Update()
@@ -91,7 +132,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			heroLeft.Update(glHero::LEFT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+			if(gBoard.getTileManager().blockedByObstacleOnLeftSide(heroLeft))
 				heroLeft.UpdateReverse(glHero::LEFT);
 			playerLeftOnLadder = false;
 		}
@@ -103,7 +144,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			heroLeft.Update(glHero::RIGHT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+			if(gBoard.getTileManager().blockedByObstacleOnRightSide(heroLeft))
 				heroLeft.UpdateReverse(glHero::RIGHT);
 			playerLeftOnLadder = false;
 		}
@@ -148,7 +189,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
 			heroRight.Update(glHero::LEFT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+			if(gBoard.getTileManager().blockedByObstacleOnLeftSide(heroRight))
 				heroRight.UpdateReverse(glHero::LEFT);
 			playerRightOnLadder = false;
 		}
@@ -160,7 +201,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
 			heroRight.Update(glHero::RIGHT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+			if(gBoard.getTileManager().blockedByObstacleOnRightSide(heroRight))
 				heroRight.UpdateReverse(glHero::RIGHT);
 			playerRightOnLadder = false;
 		}
@@ -191,6 +232,12 @@ void glGame::Update()
 
 	// progress bar
 	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
+
+	/*for(int i=0; i<10;++i){
+		bullets[i].Update();
+	}*/
+	CheckColisions();
+	//bullet.Update();
 
 
 	// updating the camera
@@ -251,11 +298,8 @@ void glGame::Draw(sf::RenderWindow& graphics)
 	switch(gameState)
 	{
 		case GAME_STATE::MENU:
-			if(isPlaying){
-				musicObject.MusicLevel1.stop();
-				isPlaying = false;
-			}
-			if(!isMenu){	
+			if(!isMenu){
+				musicObject.StopAll();
 				musicObject.MusicMenu.play();
 				isMenu = true;
 			}
@@ -270,22 +314,41 @@ void glGame::Draw(sf::RenderWindow& graphics)
 					break;
 			}
 		case GAME_STATE::GAMEPLAY:
-			if(isMenu){
-				musicObject.MusicMenu.stop();
-				isMenu = false;
-			}
 			if(!isPlaying){
+				musicObject.StopAll();
 				musicObject.MusicLevel1.play();
 				isPlaying = true;
 			}
+
+
 			graphics.setView(player1View);
+
+			for (int i = 0; i < 15; ++i)
+			{
+				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				graphics.draw(backgroundSprite);
+			}
+
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
 			gProgressBar.DrawLava(graphics,true);
+			for(int i=0; i<10;++i){
+				bulletsLeft[i].Draw(graphics);
+			}
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
+
+			for (int i = 0; i < 15; ++i)
+			{
+				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				graphics.draw(backgroundSprite);
+			}
+
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false);
 			gProgressBar.DrawLava(graphics,false);
+			for(int i=0; i<10;++i){
+				bulletsLeft[i].Draw(graphics);
+			}
 			heroRight.Draw(graphics);
 
 			graphics.setView(graphics.getDefaultView());
@@ -294,42 +357,88 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			score.Draw(graphics);
 
 			break;
+		case GAME_STATE::WIN:
+			if(!isWin){
+				musicObject.StopAll();
+				isWin = true;
+			}
+			break;
+		case GAME_STATE::GAMEOVER:
+			if(!isGameOver){
+				musicObject.StopAll();
+				musicObject.MusicGameOver.play();
+				isGameOver = true;
+			}
+			DrawGameOver(graphics);
+			break;
 	}
 	
+}
+
+void glGame::DrawGameOver(sf::RenderWindow& graphics)
+{
+	gameOverBackground.loadFromFile(concat(glSettings::ASSETS_PATH, "gameOver.jpg"));
+	gameOverBackgroundSprite.setTexture(gameOverBackground);
+	gameOverBackgroundSprite.setOrigin(gameOverBackground.getSize().x/2., gameOverBackground.getSize().y/2.);
+	gameOverBackgroundSprite.setPosition(graphics.getSize().x/2., graphics.getSize().y/2.);
+
+	sf::View view(sf::FloatRect(0, 0, graphics.getSize().x, graphics.getSize().y));
+	graphics.setView(view);
+
+	graphics.clear(sf::Color(0,0,0));
+	graphics.draw(gameOverBackgroundSprite);
 }
 
 void glGame::HandleEvent(sf::Event event)
 {
 	if(event.type == event.KeyPressed)
 	{
-		/*sf::Keyboard::Key key = event.key.code;
-		if(key == sf::Keyboard::Left)
-		{
-		}
-		else if(key == sf::Keyboard::Up)
-		{
-			player1View.move(0.f, 2.f);
-		}
-		else if(key == sf::Keyboard::Right)
-		{			
-		}
-		else if(key == sf::Keyboard::Down)
-		{
-			player1View.move(0.f, -2.f);
-		}
-		else if(key == sf::Keyboard::A)
-		{
-		}
-		else if(key == sf::Keyboard::W)
-		{
-			player2View.move(0.f, 2.f);
-		}
-		else if(key == sf::Keyboard::D)
-		{
-		}
-		else if(key == sf::Keyboard::S)
-		{
-			player2View.move(0.f, -2.f);
-		}*/
 	}
+}
+
+void glGame::CheckColisions()
+{
+	sf::Vector2f leftHeroPosition =  heroLeft.getSpirte().getPosition();
+	sf::Vector2f rightHeroPosition = heroRight.getSpirte().getPosition();
+	float leftHeroWidth  = heroLeft.getSpirte().getLocalBounds().width;
+	float leftHeroHeight = heroLeft.getSpirte().getLocalBounds().height;
+	float rightHeroWidth  = heroRight.getSpirte().getLocalBounds().width;
+	float rightHeroHeight = heroRight.getSpirte().getLocalBounds().height;
+	
+	for (int i = 0; i < 10; ++i) {
+		bulletsLeft[i].Update();
+
+		if(!bulletsLeft[i].mDying)
+		{
+			sf::Vector2f positions = bulletsLeft[i].bulletSprite.getOrigin();
+			float height = bulletsLeft[i].bulletSprite.getLocalBounds().height;
+			float width = bulletsLeft[i].bulletSprite.getLocalBounds().width;
+			float leftHeroCenter = leftHeroPosition.x + leftHeroWidth/2.;
+			float rightHeroCenter = rightHeroPosition.x + rightHeroWidth/2.;
+			sf::Vector2f bulletPosition = bulletsLeft[i].bulletSprite.getPosition();
+
+			if(std::abs(bulletPosition.y-leftHeroPosition.y) < 50 && std::abs(bulletPosition.x-leftHeroPosition.x) < 50){
+					heroLeft.death = true;
+			}
+		}
+	}
+
+	for (int i = 0; i < 10; ++i) {
+		bulletsRight[i].Update();
+
+		if(!bulletsRight[i].mDying)
+		{
+			sf::Vector2f positions = bulletsRight[i].bulletSprite.getOrigin();
+			float height = bulletsRight[i].bulletSprite.getLocalBounds().height;
+			float width = bulletsRight[i].bulletSprite.getLocalBounds().width;
+			float leftHeroCenter = leftHeroPosition.x + leftHeroWidth/2.;
+			float rightHeroCenter = rightHeroPosition.x + rightHeroWidth/2.;
+			sf::Vector2f bulletPosition = bulletsRight[i].bulletSprite.getPosition();
+
+			if(std::abs(bulletPosition.y-rightHeroPosition.y) < 50 && std::abs(bulletPosition.x-rightHeroPosition.x) < 50){
+					heroRight.death = true;
+			}
+		}
+	}
+								
 }
