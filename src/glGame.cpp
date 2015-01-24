@@ -31,7 +31,7 @@ void glGame::Init(sf::RenderWindow& window)
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
 	player1View.setCenter(player1View.getSize().x/2, 6400-384);
-	player2View.setCenter(player2View.getSize().x/2, 6400-784);
+	player2View.setCenter(player2View.getSize().x/2, 6400-384);
 
 	// player 2 (right side of the screen)
 	player2View.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
