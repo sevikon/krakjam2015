@@ -4,7 +4,9 @@
 #include "glHero.h"
 #include "glTiledLoader.h"
 #include "glBoard.h"
+#include "glHandleMusic.h"
 #include "glProgressBar.h"
+
 
 class glGame
 {
@@ -22,7 +24,10 @@ private:
 	glHero heroLeft;
 	glHero heroRight;
 
+	glHandleMusic musicObject;
+
 	enum GAME_STATE {MENU, GAMEPLAY} gameState;
+	bool isMenu, isPlaying;
 
 public: 
 	void ShowScores();
