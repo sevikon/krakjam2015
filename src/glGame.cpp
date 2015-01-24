@@ -106,9 +106,6 @@ void glGame::Update()
 	if (heroRight.position.x > player2View.getSize().x - heroRight.getWidth()){
 		heroRight.Update(glHero::RIGHTBORDER);
 	}
-	
-	int row;
-	int column;
 
 	heroLeft.Update(glHero::FALL);
 	if(gBoard.getTileManager().intersectsWithWall(heroLeft.getSpirte()))
@@ -117,6 +114,25 @@ void glGame::Update()
 	heroRight.Update(glHero::FALL);
 	if(gBoard.getTileManager().intersectsWithWall(heroRight.getSpirte()))
 		heroRight.UpdateReverse(glHero::FALL);
+
+	// updating the camera
+
+	float y1 = heroLeft.position.y + heroLeft.getHeight() / 2;
+	float y2 = heroRight.position.y + heroRight.getHeight() / 2;
+
+	if (y1 > gBoard.getTileManager().getMapHeight() - 384)
+		y1 = gBoard.getTileManager().getMapHeight() - 384;
+	if (y2 > gBoard.getTileManager().getMapHeight() - 384)
+		y2 = gBoard.getTileManager().getMapHeight() - 384;
+
+	if (y1 < 384)
+		y1 = 384;
+	if (y2 < 384)
+		y2 = 384;
+
+	player1View.setCenter(player1View.getCenter().x, y1);
+	player2View.setCenter(player2View.getCenter().x, y2);
+
 }
 
 
