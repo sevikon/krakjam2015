@@ -41,13 +41,15 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 	//graphics.setView(graphics.getDefaultView());
 	for (int a=beginX;a<endX;a++){
 		for (int b=beginY;b<endY;b++){
-			if (act>=0 && act<=10 && a>=0 && b>=0 && b<100 && a<20){
+			if (a>=0 && b>=0 && b<100 && a<20){
 				act = gTiledLoader.getValue(b,a);
-				if (left)
-					backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);
-				else
-					backgroundSprite[act].setPosition((a-10)*tiledSize,(b)*tiledSize);
-				graphics.draw(backgroundSprite[act]);
+				if(act>=2 && act<=10){
+					if (left)
+						backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);
+					else
+						backgroundSprite[act].setPosition((a-10)*tiledSize,(b)*tiledSize);
+					graphics.draw(backgroundSprite[act]);
+				}
 			}
 			
 		}
