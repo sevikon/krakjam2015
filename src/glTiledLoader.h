@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "glHero.h"
 
 class glTiledLoader
 {	
@@ -29,9 +30,11 @@ public:
 	int getValue(int x,int y);
 	int getMapWidth();
 	int getMapHeight();
-	bool intersectsWithWall(sf::Sprite& sprite);
-	sf::FloatRect getTileBoundingBox(int row, int col);
+	bool intersectsWithWall(glHero& hero);
+	bool intersectsWithWallVertically(glHero& hero);
+	bool intersectsWithLadder(glHero& hero);
+	sf::FloatRect getTileBoundingBox(int row, int col, glHero::PLAYER playerId);
 
 	// retrns tile coordinates by position
-	void getTileCoords(float posX, float posY, int& tileX, int& tileY);
+	void getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileX, int& tileY);
 };

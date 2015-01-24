@@ -40,13 +40,14 @@ void glGame::Init(sf::RenderWindow& window)
 	// player 1 (left side of the screen)
 	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
 
-	heroLeft.Init(100, gBoard.getTileManager().getMapHeight() - 64 - heroLeft.getHeight(), player1View);
-	heroRight.Init(500, gBoard.getTileManager().getMapHeight() - 64 - heroRight.getHeight(), player2View);
+	heroLeft.Init(100, gBoard.getTileManager().getMapHeight() - 64 - heroLeft.getHeight(), player1View, glHero::PLAYER::FST);
+	heroRight.Init(500, gBoard.getTileManager().getMapHeight() - 64 - heroRight.getHeight(), player2View, glHero::PLAYER::SND);
+
+	playerLeftOnLadder = playerRightOnLadder = false;
 
 	// gameState = GAME_STATE::MENU;
 	gameState = GAME_STATE::GAMEPLAY;
 	musicObject.HandleMusic();
-	gameState = GAME_STATE::MENU;
 	isMenu = false;
 	isPlaying = false;
 }
@@ -54,23 +55,32 @@ void glGame::Init(sf::RenderWindow& window)
 void glGame::Update()
 {	
 
-	// player 1 movement
+	glTiledLoader& tileManager = gBoard.getTileManager();
 
+	// player 1 movement
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		heroLeft.Update(glHero::LEFT);
+		if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+			heroLeft.UpdateReverse(glHero::LEFT);
+		playerLeftOnLadder = false;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && tileManager.intersectsWithLadder(heroLeft) )
 	{
 		heroLeft.Update(glHero::CLIMBUP);
+		playerLeftOnLadder = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		heroLeft.Update(glHero::RIGHT);
+		if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+			heroLeft.UpdateReverse(glHero::RIGHT);
+		playerLeftOnLadder = false;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && tileManager.intersectsWithLadder(heroLeft))
 	{
 		heroLeft.Update(glHero::CLIMBDOWN);
+		playerLeftOnLadder = true;
 	}
 	
 	if (heroLeft.position.x < 0){
@@ -80,24 +90,51 @@ void glGame::Update()
 		heroLeft.Update(glHero::RIGHTBORDER);
 	}
 
+	if(!playerLeftOnLadder)
+	{
+		// gravity
+		heroLeft.Update(glHero::FALL);
+		if(gBoard.getTileManager().intersectsWithWall(heroLeft))
+			heroLeft.UpdateReverse(glHero::FALL);
+	}
+
 	// player 2 movement
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		heroRight.Update(glHero::LEFT);
+		if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+			heroRight.UpdateReverse(glHero::LEFT);
+		playerRightOnLadder = false;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && tileManager.intersectsWithLadder(heroRight))
 	{
+		
 		heroRight.Update(glHero::CLIMBUP);
+		playerRightOnLadder = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		heroRight.Update(glHero::RIGHT);
+		if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+			heroRight.UpdateReverse(glHero::RIGHT);
+		playerRightOnLadder = false;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && tileManager.intersectsWithLadder(heroRight))
 	{
 		heroRight.Update(glHero::CLIMBDOWN);
+		playerRightOnLadder = true;
 	}
+	
+	if(!playerRightOnLadder)
+	{
+		// gravity
+		heroRight.Update(glHero::FALL);
+		if(gBoard.getTileManager().intersectsWithWall(heroRight))
+			heroRight.UpdateReverse(glHero::FALL);
+	}
+
+	// progress bar
 	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
 
 	if (heroRight.position.x < 0){
@@ -106,19 +143,8 @@ void glGame::Update()
 	if (heroRight.position.x > player2View.getSize().x - heroRight.getWidth()){
 		heroRight.Update(glHero::RIGHTBORDER);
 	}
-	
-	int row;
-	int column;
 
-	heroLeft.Update(glHero::FALL);
-	if(gBoard.getTileManager().intersectsWithWall(heroLeft.getSpirte()))
-		heroLeft.UpdateReverse(glHero::FALL);
-
-	heroRight.Update(glHero::FALL);
-	if(gBoard.getTileManager().intersectsWithWall(heroRight.getSpirte()))
-		heroRight.UpdateReverse(glHero::FALL);
 }
-
 
 void glGame::Draw(sf::RenderWindow& graphics)
 {		
