@@ -20,29 +20,38 @@ void glBoard::Load()
 
 void glBoard::Init(sf::RenderWindow& window)
 {
+	mTileManager.loadMap(1);
 }
 
-void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size,glTiledLoader &gTiledLoader,bool left)
+glTiledLoader& glBoard::getTileManager()
+{
+	return this->mTileManager;
+}
+
+void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size,bool left)
 {		
-	cout<<"saf"<<endl;
 	int beginX;
 	int endX;
-	if (left){
+	if (left) {
 		beginX=0;
 		endX=10;
-	}else{
+	} else{
 		beginX=10;
 		endX=20;
 	};
-	int tiledSize =64;
+
+	int tiledSize = 64;
 	int beginY= floor((pos.y-384)/tiledSize);
 	int endY= floor(((pos.y-384+size.y))/tiledSize)+1;
 	int act=0;
+
 	//graphics.setView(graphics.getDefaultView());
-	for (int a=beginX;a<endX;a++){
-		for (int b=beginY;b<endY;b++){
-			if (a>=0 && b>=0 && b<100 && a<20){
-				act = gTiledLoader.getValue(b,a);
+	for (int a=beginX;a<endX;a++) {
+		for (int b=beginY;b<endY;b++) {
+
+			if (a>=0 && b>=0 && b<100 && a<20) {
+				act = mTileManager.getValue(b, a);
+
 				if(act>=2 && act<=10){
 					if (left)
 						backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);

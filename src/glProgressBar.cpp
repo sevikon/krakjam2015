@@ -75,9 +75,8 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 }
 
 void glProgressBar::DrawLava(sf::RenderWindow& graphics,bool left){
-	if (left)
-		backgroundSprite[3].setPosition(0,lava);
-	else
-		backgroundSprite[3].setPosition(0,lava);
+	
+	backgroundSprite[3].setPosition(0,lava);
 	graphics.draw(backgroundSprite[3]);
+
 }
