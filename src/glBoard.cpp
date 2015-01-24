@@ -9,7 +9,7 @@
 
 void glBoard::Load()
 {
-	for (int a=0;a<SPRITES;a++){
+	for (int a=1;a<SPRITES;a++){
 		ostringstream ss2;
 		ss2 << a;
 		string str = ss2.str();
@@ -22,7 +22,6 @@ void glBoard::Init(sf::RenderWindow& window)
 {
 	mTileManager.loadMap(1);
 }
-
 
 void glBoard::Update()
 {
@@ -57,7 +56,7 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 
 			if (a>=0 && b>=0 && b<100 && a<20) {
 				act = mTileManager.getValue(b, a);
-				if(act>=2 && act<=10 && !mTileManager.isActive(b,a)){
+				if(act>=1 && act<=SPRITES && !mTileManager.isActive(b,a)){
 					if (left)
 						backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);
 					else

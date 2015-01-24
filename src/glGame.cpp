@@ -124,6 +124,8 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && tileManager.intersectsWithLadder(heroLeft))
 		{
 			heroLeft.Update(glHero::CLIMBDOWN);
+			if(gBoard.getTileManager().intersectsWithWall(heroLeft))
+				heroLeft.UpdateReverse(glHero::CLIMBDOWN);
 			playerLeftOnLadder = true;
 		}
 	
@@ -170,7 +172,16 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && tileManager.intersectsWithLadder(heroRight))
 		{
 			heroRight.Update(glHero::CLIMBDOWN);
+			if(gBoard.getTileManager().intersectsWithWall(heroRight))
+				heroRight.UpdateReverse(glHero::CLIMBDOWN);
 			playerRightOnLadder = true;
+		}
+
+		if (heroRight.position.x < 0){
+			heroRight.Update(glHero::LEFTBORDER);
+		}
+		if (heroRight.position.x > player1View.getSize().x - heroRight.getWidth()){
+			heroRight.Update(glHero::RIGHTBORDER);
 		}
 	
 		if(!playerRightOnLadder)

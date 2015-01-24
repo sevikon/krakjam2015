@@ -3,7 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include "glHero.h"
 #include "glTiled.h"
-
+#define GROUND_MIN 1
+#define GROUND_MAX 20
+#define LADDER_MIN 21
+#define LADDER_MAX 30
+#define FREE 31
 
 class glTiledLoader
 {	
