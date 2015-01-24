@@ -40,7 +40,9 @@ public:
 	bool intersectsWithLadder(glHero& hero);
 	sf::FloatRect getTileBoundingBox(int row, int col, glHero::PLAYER playerId);
 	void setActive(int x,int y);
-
+	float getLowerOpacity(int x,int y);
+	void callAssociated();
+	glTiled &searchTiled(int c, int type);
 		// returns tile coordinates by position
 	void getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileX, int& tileY);
 };

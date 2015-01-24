@@ -16,6 +16,20 @@ glTiledLoader::glTiledLoader()
 
 }
 
+glTiled &glTiledLoader::searchTiled(int c, int type){
+	int d=c+6;
+	c-=6;
+	if (c<0) c=0;
+	if (d>=100) d=99;
+	for (int a=c; a<=d;a++){
+		for (int b=0; b<vecTiled.at(0).size();b++){
+			if (vecTiled.at(a).at(b).type == type+1) 
+				return (vecTiled.at(a).at(b));
+		}
+	}
+
+}
+
 void glTiledLoader::loadMap(int number) {
 	ostringstream ss2;
 	ss2 << number;
@@ -62,8 +76,15 @@ void glTiledLoader::loadMap(int number) {
 			++i;
 		}
 		myfile.close();
+
+		for (int a=0; a<vecTiled.size();a++){
+			for (int b=0; b<vecTiled.at(0).size();b++){
+				if (vecTiled.at(a).at(b).type>3){
+					vecTiled.at(a).at(b).associated = &searchTiled(a,vecTiled.at(a).at(b).type);
+				}
+			}
 		}
-	else {
+	}else {
 		cout << "Unable to open file"; 
 	}
 }
@@ -83,6 +104,10 @@ void glTiledLoader::Update(){
 
 void glTiledLoader::setActive(int x,int y){
 	vecTiled.at(x).at(y).setDefinitelyActive();
+}
+
+float glTiledLoader::getLowerOpacity(int x,int y){
+	return vecTiled.at(x).at(y).getLowerOpacity();
 }
 
 bool glTiledLoader::isLadder(int x,int y){
