@@ -131,8 +131,6 @@ void glHero::Update(event _event)
 			position.x = 0; 
 	}
 	
-	// Collision with borders
-	
 	// animacje
 
 	if (_event & CLIMBUP)
