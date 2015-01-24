@@ -23,6 +23,12 @@ void glBoard::Init(sf::RenderWindow& window)
 	mTileManager.loadMap(1);
 }
 
+
+void glBoard::Update()
+{
+	mTileManager.Update();
+}
+
 glTiledLoader& glBoard::getTileManager()
 {
 	return this->mTileManager;

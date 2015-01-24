@@ -1,5 +1,5 @@
 #include "glTiledLoader.h"
-#include "glTiledLoader.h"
+#include "glTiled.h"
 #include "glSettings.h"
 #include <iostream>
 #include <fstream>
@@ -50,11 +50,13 @@ void glTiledLoader::loadMap(int number) {
 			std::string delimiter = ",";
 
 			vec.push_back ( vector<int>() );
+			vecTiled.push_back(vector<glTiled>() );
 
 			while ((pos = s.find(delimiter)) != std::string::npos) {
 				token = s.substr(0, pos);	
 				vec.at(i).push_back( atoi(token.c_str()) );
-				s.erase(0, pos + delimiter.length());			
+				vecTiled.at(i).push_back(glTiled(atoi(token.c_str())));
+				s.erase(0, pos + delimiter.length());		
 			}
 			++i;
 		}
@@ -65,9 +67,26 @@ void glTiledLoader::loadMap(int number) {
 	}
 }
 
+bool glTiledLoader::isActive(int x,int y){
+	return vecTiled[x][y].isActive();
+}
+
+void glTiledLoader::Update(){
+	for (int a=0; a<vecTiled.size();a++){
+		for (int b=0; a<vecTiled.at(0).size();b++){
+			vecTiled.at(a).at(b).Update();
+		}
+	}
+
+}
+
+void glTiledLoader::setActive(int x,int y){
+	vecTiled.at(x).at(y).setDefinitelyActive();
+}
+
 bool glTiledLoader::isLadder(int x,int y){
 
-	if (vec[x][y]==3){
+	if (vecTiled[x][y].type==3){
 		return true;
 	}
 	return false;
@@ -75,7 +94,7 @@ bool glTiledLoader::isLadder(int x,int y){
 
 bool glTiledLoader::isWall(int x,int y){
 
-	if (vec[x][y]==2){
+	if (vecTiled[x][y].type==2){
 		return true;
 	}
 	return false;
@@ -83,7 +102,7 @@ bool glTiledLoader::isWall(int x,int y){
 
 bool glTiledLoader::isFree(int x,int y){
 
-	if (vec[x][y]==1){
+	if (vecTiled[x][y].type==1){
 		return true;
 	}
 	return false;
@@ -91,7 +110,7 @@ bool glTiledLoader::isFree(int x,int y){
 
 int glTiledLoader::getValue(int x,int y){
 
-	return vec[x][y];
+	return vecTiled[x][y].type;
 }
 
 int glTiledLoader::getMapWidth()
