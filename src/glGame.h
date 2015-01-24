@@ -24,7 +24,7 @@ private:
 	glHandleMusic musicObject;
 
 	enum GAME_STATE {MENU, GAMEPLAY} gameState;
-	bool isMenu;
+	bool isMenu, isPlaying;
 
 public: 
 	void ShowScores();

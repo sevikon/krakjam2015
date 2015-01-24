@@ -15,12 +15,10 @@ void glHandleMusic::HandleMusic()
 	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"Door"));
 	if (!Sounds.back().first.loadFromFile("data/music/Door.ogg")) return false;*/
 
-	//Music1.openFromFile("data/music/sad.ogg");
-	//Music2.openFromFile("data/music/happy.ogg");
+	MusicLevel1.openFromFile("assets/music/level1.ogg");
 	MusicMenu.openFromFile("assets/music/menu.ogg");
 
-	Music1.setLoop(true);
-	Music1.setLoop(true);
+	MusicLevel1.setLoop(true);
 	MusicMenu.setLoop(true);
 
 	Players.resize(Sounds.size());
