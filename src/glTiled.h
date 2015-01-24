@@ -4,8 +4,6 @@
 class glTiled
 {
 private:
-	int posX;
-	int posY;
 	bool active;
 	bool used;
 	bool pressed;

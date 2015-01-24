@@ -57,8 +57,9 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 
 			if (a>=0 && b>=0 && b<100 && a<20) {
 				act = mTileManager.getValue(b, a);
-
-				if(act>=2 && act<=10){
+				int x,y;
+				mTileManager.getTileCoords(b,a,x,y);
+				if(act>=2 && act<=10 && !mTileManager.isActive(x,y)){
 					if (left)
 						backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);
 					else

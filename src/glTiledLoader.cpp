@@ -68,7 +68,7 @@ void glTiledLoader::loadMap(int number) {
 }
 
 bool glTiledLoader::isActive(int x,int y){
-	return vecTiled[x][y].isActive();
+	return vecTiled.at(x).at(y).isActive();
 }
 
 void glTiledLoader::Update(){
@@ -86,7 +86,7 @@ void glTiledLoader::setActive(int x,int y){
 
 bool glTiledLoader::isLadder(int x,int y){
 
-	if (vecTiled[x][y].type==3){
+	if (vecTiled.at(x).at(y).type==3){
 		return true;
 	}
 	return false;
@@ -94,7 +94,7 @@ bool glTiledLoader::isLadder(int x,int y){
 
 bool glTiledLoader::isWall(int x,int y){
 
-	if (vecTiled[x][y].type==2){
+	if (vecTiled.at(x).at(y).type==2){
 		return true;
 	}
 	return false;
@@ -102,7 +102,7 @@ bool glTiledLoader::isWall(int x,int y){
 
 bool glTiledLoader::isFree(int x,int y){
 
-	if (vecTiled[x][y].type==1){
+	if (vecTiled.at(x).at(y).type==1){
 		return true;
 	}
 	return false;
@@ -110,7 +110,7 @@ bool glTiledLoader::isFree(int x,int y){
 
 int glTiledLoader::getValue(int x,int y){
 
-	return vecTiled[x][y].type;
+	return vecTiled.at(x).at(y).type;
 }
 
 int glTiledLoader::getMapWidth()
