@@ -210,3 +210,14 @@ void glHero::Draw(sf::RenderWindow& graphics)
 	graphics.draw(sprite);
 
 }
+
+int glHero::getWidth()
+{
+	return imageWalkingLeft[0].getSize().x;
+}
+
+int glHero::getHeight()
+{
+	return imageWalkingLeft[0].getSize().y;
+
+}

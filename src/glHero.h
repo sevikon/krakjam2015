@@ -43,6 +43,9 @@ public:
 	int side;
 	sf::Vector2f position;
 
+	int getWidth();
+	int getHeight();
+
 	void Load(int _side);
 	void Init(float x, float y);
 	void Update(event _event);

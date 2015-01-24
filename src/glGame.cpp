@@ -36,8 +36,8 @@ void glGame::Init(sf::RenderWindow& window)
 	// player 1 (left side of the screen)
 	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
 
-	heroLeft.Init(300,300);
-	heroRight.Init(300,300);
+	heroLeft.Init(100, 6400 - 64 - heroLeft.getHeight());
+	heroRight.Init(500, 6400 - 64 - heroRight.getHeight());
 
 	gameState = GAME_STATE::MENU;
 }
