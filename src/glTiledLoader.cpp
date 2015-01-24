@@ -106,6 +106,10 @@ void glTiledLoader::setActive(int x,int y){
 	vecTiled.at(x).at(y).setDefinitelyActive();
 }
 
+void glTiledLoader::runActionOnAssociated(int x,int y){
+	vecTiled.at(x).at(y).runActionOnAssociated();
+}
+
 float glTiledLoader::getLowerOpacity(int x,int y){
 	return vecTiled.at(x).at(y).getLowerOpacity();
 }
