@@ -9,6 +9,8 @@ private:
 	sf::Texture backgroundTexture[SPRITES];
 	sf::Texture pbTexture;
 
+	sf::Clock timer;
+
 public: 
 	float lava;
 	float player1;

@@ -14,6 +14,7 @@ private:
 
 public: 
 	void Load();
+	void Update();
 	void Init(sf::RenderWindow& window);
 
 	/**
