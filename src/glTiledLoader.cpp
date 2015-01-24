@@ -1,4 +1,6 @@
 #include "glTiledLoader.h"
+#include "glTiledLoader.h"
+#include "glSettings.h"
 #include <iostream>
 #include <fstream>
 #include <iostream>     // std::cout
@@ -13,68 +15,59 @@ glTiledLoader::glTiledLoader()
 
 }
 
-void glTiledLoader::loadMap(int number){
+void glTiledLoader::loadMap(int number) {
 	ostringstream ss2;
 	ss2 << number;
 	string str = ss2.str();
 	string line;
+	int i = 0;
+	size_t pos = 0;
+	std::string token;
+	std::string a ("assets/maps/");
+	std::string b (".txt");
+	std::string path;
+	path = a+str+b;
 
-	int N = WIDTH;
-	int M = HEIGHT;
+	ifstream myfile (path);
+	std::stringstream ss;
 
-	  int** ary = new int*[N];
-	  for(int i = 0; i < N; ++i)
-		  ary[i] = new int[M];
+	// parsing file
+	getline(myfile, line);
+	pos =  line.find(",");
+	std::string rows = line.substr(0, pos);
+	std::string cols = line.substr(pos+1);
+	  
+	this->amountOfRows = atoi(rows.c_str());
+	this->amountOfColumns = atoi(cols.c_str());
 
-  std::string a ("assets/maps/");
-  std::string b (".txt");
-  std::string path;
-  path = a+str+b;
-  ifstream myfile (path);
-  std::stringstream ss;
-  if (myfile.is_open())
-  {
-	int iterator=0,iterator2=0; 
-    while ( getline (myfile,line) )
-    {
-		std::string s = line;
-		std::string delimiter = ",";
+	cout << "Map size: (" << amountOfRows << ", " << amountOfColumns << ")" << endl;
 
-		size_t pos = 0;
-		std::string token;
-		iterator2=0;
-		while ((pos = s.find(delimiter)) != std::string::npos) {
-			token = s.substr(0, pos);
-			ary[iterator][iterator2]=atoi( token.c_str() ); 
-			iterator2++;
+	if (myfile.is_open())
+	{
+		while ( getline (myfile, line) )
+		{
+			std::string s = line;
+			std::string delimiter = ",";
 
-			s.erase(0, pos + delimiter.length());
+			vec.push_back ( vector<int>() );
+
+			while ((pos = s.find(delimiter)) != std::string::npos) {
+				token = s.substr(0, pos);	
+				vec.at(i).push_back( atoi(token.c_str()) );
+				s.erase(0, pos + delimiter.length());			
+			}
+			++i;
 		}
-		iterator++;
-    }
-    myfile.close();
-
-
-	vector<vector<int> > items;
-	vec = items;
-
-	for ( int i = 0; i < WIDTH; i++ ) {
-		vec.push_back ( vector<int>() );
-		for ( int j = 0; j < HEIGHT; j++ )
-			vec[i].push_back (ary[i][j]);
+		myfile.close();
+		}
+	else {
+		cout << "Unable to open file"; 
 	}
-
-  }
-  else {
-	cout << "Unable to open file"; 
-  }
-   
-
 }
 
 bool glTiledLoader::isLadder(int x,int y){
 
-	if (vec[x][y]==2){
+	if (vec[x][y]==3){
 		return true;
 	}
 	return false;
@@ -82,7 +75,7 @@ bool glTiledLoader::isLadder(int x,int y){
 
 bool glTiledLoader::isWall(int x,int y){
 
-	if (vec[x][y]==1){
+	if (vec[x][y]==2){
 		return true;
 	}
 	return false;
@@ -90,7 +83,7 @@ bool glTiledLoader::isWall(int x,int y){
 
 bool glTiledLoader::isFree(int x,int y){
 
-	if (vec[x][y]==0){
+	if (vec[x][y]==1){
 		return true;
 	}
 	return false;
@@ -99,4 +92,61 @@ bool glTiledLoader::isFree(int x,int y){
 int glTiledLoader::getValue(int x,int y){
 
 	return vec[x][y];
+}
+
+int glTiledLoader::getMapWidth()
+{
+	return glSettings::TILE_WIDTH*amountOfColumns;
+}
+
+int glTiledLoader::getMapHeight()
+{
+	return glSettings::TILE_HEIGHT*amountOfRows;
+}
+
+///////////////
+// (0,0)
+//
+//
+//
+// (TILE_HEIGHT*iloœæ, 0) -> HEROES
+void glTiledLoader::getTileCoords(float posX, float posY, int& tileRow, int& tileColumn)
+{
+	tileRow = (int)posY/glSettings::TILE_HEIGHT;
+	tileColumn = (int)posX/glSettings::TILE_WIDTH;
+}
+
+sf::FloatRect glTiledLoader::getTileBoundingBox(int row, int col)
+{
+	return sf::FloatRect(col*glSettings::TILE_WIDTH, row*glSettings::TILE_HEIGHT, glSettings::TILE_HEIGHT,  glSettings::TILE_WIDTH);
+}
+
+bool glTiledLoader::intersectsWithWall(sf::Sprite& sprite)
+{
+	int firstTileRow, firstTileColumn;
+	int row, column;
+	bool debug = false;
+
+	getTileCoords(sprite.getPosition().x+sprite.getTextureRect().width/2, sprite.getPosition().y + sprite.getTextureRect().height/2, row, column);
+
+	if(debug)
+	{
+		cout << "Sprite position: (" << sprite.getGlobalBounds().left << ", " << sprite.getGlobalBounds().top << ")" << endl; 
+		cout << "Checking tile area for collision: " << row << ", " << column << " Intersects: " << sprite.getGlobalBounds().intersects(getTileBoundingBox(row, column)) 
+			<< " Is wall: " << isWall(row, column) <<  endl;
+		cout << "Tile position: (" << getTileBoundingBox(row, column).left << ", " << getTileBoundingBox(row, column).top << ")" << endl;
+	}
+
+	for(int i = -1; i <= 1; ++i)
+	{
+		for(int j = -1; j <= 1; ++j)
+		{
+			if(row+i < 0 || column+j < 0 || row+i >= amountOfRows || column+j >= amountOfColumns)
+				continue;
+			if(sprite.getGlobalBounds().intersects(getTileBoundingBox(row+i, column+j)) && isWall(row+i, column+j))
+				return true;
+		}
+	}
+	
+	return false;
 }

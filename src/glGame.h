@@ -7,19 +7,20 @@
 #include "glHandleMusic.h"
 #include "glProgressBar.h"
 
+#define GRAVITY 10.f
 
 class glGame
 {
 private:
 	sf::Sprite backgroundSprite;
 	sf::Texture backgroundTexture;
-	glTiledLoader gTiledLoader;
 	glBoard gBoard;
 	glProgressBar gProgressBar;
 	sf::View player1View;
 	sf::View player2View;
 	glMainMenu mainMenu;
 	glMainMenu::MenuResult chosenOption;
+	
 
 	glHero heroLeft;
 	glHero heroRight;

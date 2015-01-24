@@ -10,6 +10,7 @@ class glBoard
 private:
 	sf::Sprite backgroundSprite[SPRITES];
 	sf::Texture backgroundTexture[SPRITES];
+	glTiledLoader mTileManager;
 
 public: 
 	void Load();
@@ -18,5 +19,7 @@ public:
 	/**
 	* Draw game on the main window object
 	*/
-	void Draw(sf::RenderWindow& graphics, sf::Vector2f pos,sf::Vector2f size,glTiledLoader &gTiledLoader, bool left);
+	void Draw(sf::RenderWindow& graphics, sf::Vector2f pos,sf::Vector2f size, bool left);
+
+	glTiledLoader& getTileManager();
 };

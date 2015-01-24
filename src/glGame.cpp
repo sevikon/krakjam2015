@@ -19,19 +19,20 @@ void glGame::Load()
 
 void glGame::Init(sf::RenderWindow& window)
 {
-	//wczytanie mapy
-	gTiledLoader.loadMap(1);
-	gProgressBar.Init();
-	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
 
+	gProgressBar.Init();
+
+	//wczytanie mapy
 	printf("-----------------------------------------------------\n");
 	printf("Zaczynamy nowa gre.\n");
 	printf("-----------------------------------------------------\n");
 
+	gBoard.Init(window);
+
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
-	player1View.setCenter(player1View.getSize().x/2, 6400-384);
-	player2View.setCenter(player2View.getSize().x/2, 6400-384);
+	player1View.setCenter(player1View.getSize().x/2.f, gBoard.getTileManager().getMapHeight()-384);
+	player2View.setCenter(player2View.getSize().x/2.f, gBoard.getTileManager().getMapHeight()-384);
 
 	// player 2 (right side of the screen)
 	player2View.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
@@ -39,11 +40,12 @@ void glGame::Init(sf::RenderWindow& window)
 	// player 1 (left side of the screen)
 	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
 
-	heroLeft.Init(100, 6400 - 64 - heroLeft.getHeight(),player1View);
-	heroRight.Init(500, 6400 - 64 - heroRight.getHeight(),player2View);
+	heroLeft.Init(100, gBoard.getTileManager().getMapHeight() - 64 - heroLeft.getHeight(), player1View);
+	heroRight.Init(500, gBoard.getTileManager().getMapHeight() - 64 - heroRight.getHeight(), player2View);
 
+	// gameState = GAME_STATE::MENU;
+	gameState = GAME_STATE::GAMEPLAY;
 	musicObject.HandleMusic();
-
 	gameState = GAME_STATE::MENU;
 	isMenu = false;
 	isPlaying = false;
@@ -105,6 +107,16 @@ void glGame::Update()
 		heroRight.Update(glHero::RIGHTBORDER);
 	}
 	
+	int row;
+	int column;
+
+	heroLeft.Update(glHero::FALL);
+	if(gBoard.getTileManager().intersectsWithWall(heroLeft.getSpirte()))
+		heroLeft.UpdateReverse(glHero::FALL);
+
+	heroRight.Update(glHero::FALL);
+	if(gBoard.getTileManager().intersectsWithWall(heroRight.getSpirte()))
+		heroRight.UpdateReverse(glHero::FALL);
 }
 
 
@@ -143,12 +155,12 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				isPlaying = true;
 			}
 			graphics.setView(player1View);
-			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), gTiledLoader, true);
+			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
 			gProgressBar.DrawLava(graphics,true);
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
-			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), gTiledLoader, false);
+			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false);
 			gProgressBar.DrawLava(graphics,false);
 			heroRight.Draw(graphics);
 
