@@ -54,96 +54,118 @@ void glGame::Init(sf::RenderWindow& window)
 
 void glGame::Update()
 {	
-
 	glTiledLoader& tileManager = gBoard.getTileManager();
 
-	// player 1 movement
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (!heroLeft.death)
 	{
-		heroLeft.Update(glHero::LEFT);
-		if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
-			heroLeft.UpdateReverse(glHero::LEFT);
-		playerLeftOnLadder = false;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && tileManager.intersectsWithLadder(heroLeft) )
-	{
-		heroLeft.Update(glHero::CLIMBUP);
-		playerLeftOnLadder = true;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		heroLeft.Update(glHero::RIGHT);
-		if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
-			heroLeft.UpdateReverse(glHero::RIGHT);
-		playerLeftOnLadder = false;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && tileManager.intersectsWithLadder(heroLeft))
-	{
-		heroLeft.Update(glHero::CLIMBDOWN);
-		playerLeftOnLadder = true;
-	}
+		// player 1 movement
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			heroLeft.Update(glHero::LEFT);
+			if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+				heroLeft.UpdateReverse(glHero::LEFT);
+			playerLeftOnLadder = false;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && tileManager.intersectsWithLadder(heroLeft) )
+		{
+			heroLeft.Update(glHero::CLIMBUP);
+			playerLeftOnLadder = true;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			heroLeft.Update(glHero::RIGHT);
+			if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+				heroLeft.UpdateReverse(glHero::RIGHT);
+			playerLeftOnLadder = false;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && tileManager.intersectsWithLadder(heroLeft))
+		{
+			heroLeft.Update(glHero::CLIMBDOWN);
+			playerLeftOnLadder = true;
+		}
 	
-	if (heroLeft.position.x < 0){
-		heroLeft.Update(glHero::LEFTBORDER);
-	}
-	if (heroLeft.position.x > player1View.getSize().x - heroLeft.getWidth()){
-		heroLeft.Update(glHero::RIGHTBORDER);
-	}
+		if (heroLeft.position.x < 0){
+			heroLeft.Update(glHero::LEFTBORDER);
+		}
+		if (heroLeft.position.x > player1View.getSize().x - heroLeft.getWidth()){
+			heroLeft.Update(glHero::RIGHTBORDER);
+		}
 
-	if(!playerLeftOnLadder)
-	{
-		// gravity
-		heroLeft.Update(glHero::FALL);
-		if(gBoard.getTileManager().intersectsWithWall(heroLeft))
-			heroLeft.UpdateReverse(glHero::FALL);
-	}
+		if(!playerLeftOnLadder)
+		{
+			// gravity
+			heroLeft.Update(glHero::FALL);
+			if(gBoard.getTileManager().intersectsWithWall(heroLeft))
+				heroLeft.UpdateReverse(glHero::FALL);
+		}
+	} else
+		heroLeft.Update(glHero::NONE);
 
 	// player 2 movement
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	if (!heroRight.death)
 	{
-		heroRight.Update(glHero::LEFT);
-		if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
-			heroRight.UpdateReverse(glHero::LEFT);
-		playerRightOnLadder = false;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && tileManager.intersectsWithLadder(heroRight))
-	{
-		
-		heroRight.Update(glHero::CLIMBUP);
-		playerRightOnLadder = true;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		heroRight.Update(glHero::RIGHT);
-		if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
-			heroRight.UpdateReverse(glHero::RIGHT);
-		playerRightOnLadder = false;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && tileManager.intersectsWithLadder(heroRight))
-	{
-		heroRight.Update(glHero::CLIMBDOWN);
-		playerRightOnLadder = true;
-	}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			heroRight.Update(glHero::LEFT);
+			if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+				heroRight.UpdateReverse(glHero::LEFT);
+			playerRightOnLadder = false;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && tileManager.intersectsWithLadder(heroRight))
+		{
+			heroRight.Update(glHero::CLIMBUP);
+			playerRightOnLadder = true;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			heroRight.Update(glHero::RIGHT);
+			if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+				heroRight.UpdateReverse(glHero::RIGHT);
+			playerRightOnLadder = false;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && tileManager.intersectsWithLadder(heroRight))
+		{
+			heroRight.Update(glHero::CLIMBDOWN);
+			playerRightOnLadder = true;
+		}
 	
-	if(!playerRightOnLadder)
-	{
-		// gravity
-		heroRight.Update(glHero::FALL);
-		if(gBoard.getTileManager().intersectsWithWall(heroRight))
-			heroRight.UpdateReverse(glHero::FALL);
-	}
+		if(!playerRightOnLadder)
+		{
+			// gravity
+			heroRight.Update(glHero::FALL);
+			if(gBoard.getTileManager().intersectsWithWall(heroRight))
+				heroRight.UpdateReverse(glHero::FALL);
+		}
+	} else
+		heroRight.Update(glHero::NONE);
 
 	// progress bar
 	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
 
-	if (heroRight.position.x < 0){
-		heroRight.Update(glHero::LEFTBORDER);
-	}
-	if (heroRight.position.x > player2View.getSize().x - heroRight.getWidth()){
-		heroRight.Update(glHero::RIGHTBORDER);
-	}
 
+	// updating the camera
+	float y1 = heroLeft.position.y + heroLeft.getHeight() / 2;
+	float y2 = heroRight.position.y + heroRight.getHeight() / 2;
+
+	if (y1 > gBoard.getTileManager().getMapHeight() - 384)
+		y1 = gBoard.getTileManager().getMapHeight() - 384;
+	if (y2 > gBoard.getTileManager().getMapHeight() - 384)
+		y2 = gBoard.getTileManager().getMapHeight() - 384;
+
+	if (y1 < 384)
+		y1 = 384;
+	if (y2 < 384)
+		y2 = 384;
+
+	player1View.setCenter(player1View.getCenter().x, y1);
+	player2View.setCenter(player2View.getCenter().x, y2);
+
+	// Death in lava
+	if(heroRight.position.y + heroRight.getHeight() > gProgressBar.lava){
+		heroRight.death = true;}
+	if(heroLeft.position.y + heroLeft.getHeight() > gProgressBar.lava){
+		heroLeft.death = true;}
 }
 
 void glGame::Draw(sf::RenderWindow& graphics)

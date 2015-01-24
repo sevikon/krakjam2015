@@ -73,6 +73,8 @@ void glHero::Init(float x, float y, sf::View View, glHero::PLAYER _playerId)
 	playerView = View;
 	death = false;
 
+	opacity = 1.0f;
+
 	if (side == 0)
 	{
 		sprite.setTexture(imageWalkingRight[0]);
@@ -131,8 +133,6 @@ void glHero::Update(event _event)
 	if (_event & LEFTBORDER){
 			position.x = 0; 
 	}
-	
-	// Collision with borders
 	
 	// animacje
 
@@ -213,6 +213,16 @@ void glHero::Update(event _event)
 			sprite.setTexture(imageWalkingLeft[currentFrame]);
 		}
 	}
+
+	// dying
+
+	if (death == 1)
+	{
+		opacity -= 0.1f * DELTA;
+		
+		if (opacity < 0)
+			opacity = 0;
+	}
 }
 
 void glHero::UpdateReverse(event _event)
@@ -234,6 +244,7 @@ void glHero::UpdateReverse(event _event)
 void glHero::Draw(sf::RenderWindow& graphics)
 {
 	sprite.setPosition(position);
+	sprite.setColor(sf::Color(255, 255 * opacity, 255 * opacity, opacity * 255));
 	graphics.draw(sprite);
 }
 
