@@ -1,13 +1,15 @@
 //#include "pch.h"
-#include "seMainMenu.h"
+#include "glMainMenu.h"
+#include "glUtils.h"
+#include "glSettings.h"
 
 
 seMainMenu::MenuResult seMainMenu::Show(sf::RenderWindow& window, float viewWidth, float viewHeight)
 {
-	mBackgroundMenu.loadFromFile("data/BG-menu-bez3.png");
+	mBackgroundMenu.loadFromFile(concat(glSettings::ASSETS_PATH, "menuBg.png"));
 
-	mStart.loadFromFile("data/start.png");
-	mExit.loadFromFile("data/exit.png");
+	mStart.loadFromFile(concat(glSettings::ASSETS_PATH, "start.png"));
+	mExit.loadFromFile(concat(glSettings::ASSETS_PATH, "exit.png"));
 
 	mBackgroundSpriteMenu.setTexture(mBackgroundMenu);
 	mBackgroundSpriteMenu.setOrigin(mBackgroundMenu.getSize().x, 0);
@@ -21,13 +23,6 @@ seMainMenu::MenuResult seMainMenu::Show(sf::RenderWindow& window, float viewWidt
 
 	mStartSprite.setPosition(viewWidth/2, viewHeight/2 - 50);
 	mExitSprite.setPosition(viewWidth/2, viewHeight/2 + 120);
-
-	//heroes
-	mBackFront1.loadFromFile("data/heroM1_front.png");
-	mBackFront2.loadFromFile("data/heroM2_front.png");
-
-	mActiveSprite1.setTexture(mBackFront1);
-	mActiveSprite2.setTexture(mBackFront2);
 
 	sf::Vector2f v1(viewWidth/2-500.0f,viewHeight- mActiveSprite1.getLocalBounds().height -25.0f);
 	mActiveSprite1.setPosition(v1);

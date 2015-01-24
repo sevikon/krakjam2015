@@ -28,10 +28,13 @@ void glGame::Init(sf::RenderWindow& window)
 	player2View.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
 
 	cout << "Viewport for player1 center: " <<  player1View.getCenter().x << ", " << player1View.getCenter().y << endl;
+
+	gameState = GAME_STATE::MENU;
 }
 
 void glGame::Update()
 {	
+	// player 1 movment
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 	}
@@ -47,6 +50,8 @@ void glGame::Update()
 		player1View.move(0.f, -0.05f);
 	}
 
+
+	// player 2 movement
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 	}
@@ -67,17 +72,27 @@ void glGame::Update()
 void glGame::Draw(sf::RenderWindow& graphics)
 {		
 	graphics.setView(graphics.getDefaultView());
-	seMainMenu::MenuResult result = mainMenu.Show(graphics,graphics.getSize().x, graphics.getSize().y);
-	switch(result)
+	
+	
+
+	switch(gameState)
 	{
-		case seMainMenu::Exit:
-			graphics.close();
-			break;
-		case seMainMenu::Play:
+		case GAME_STATE::MENU:
+			chosenOption = mainMenu.Show(graphics, graphics.getSize().x, graphics.getSize().y);
+			switch(chosenOption) 
+			{
+				case seMainMenu::Exit:
+					graphics.close();
+					break;
+				case seMainMenu::Play:
+					gameState = GAME_STATE::GAMEPLAY;
+					break;
+			}
+		case GAME_STATE::GAMEPLAY:
 			graphics.setView(player1View);
 			graphics.draw(backgroundSprite);
 			graphics.setView(player2View);
-			graphics.draw(backgroundSprite);
+			graphics.draw(backgroundSprite);	
 			break;
 	}
 	

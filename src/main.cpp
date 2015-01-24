@@ -5,7 +5,7 @@
 #include <iostream>
 #include "glSettings.h"
 #include "glUtils.h"
-#include "seMainMenu.h"
+#include "glMainMenu.h"
 #include "glGame.h"
 
 float viewWidth;

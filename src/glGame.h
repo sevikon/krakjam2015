@@ -1,6 +1,6 @@
 #pragma once
 #include "SFML\Graphics.hpp"
-#include "seMainMenu.h"
+#include "glMainMenu.h"
 
 class glGame
 {
@@ -10,6 +10,8 @@ private:
 	sf::View player1View;
 	sf::View player2View;
 	seMainMenu mainMenu;
+	seMainMenu::MenuResult chosenOption;
+	enum GAME_STATE {MENU, GAMEPLAY} gameState;
 
 public: 
 	void ShowScores();
