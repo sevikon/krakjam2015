@@ -42,12 +42,9 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 {	
 	// define a 120x50 rectangle
 
-	lava-=1.3;
+	lava-=0.05;
 	if (lava<0){
 		lava=0;
-	}
-	if (lava<player1-50){
-		lava=player1-50;
 	}
 
 	backgroundSprite[0].setPosition(620,0);
@@ -71,9 +68,8 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 }
 
 void glProgressBar::DrawLava(sf::RenderWindow& graphics,bool left){
-	if (left)
-		backgroundSprite[3].setPosition(0,lava);
-	else
-		backgroundSprite[3].setPosition(0,lava);
+	
+	backgroundSprite[3].setPosition(0,lava);
 	graphics.draw(backgroundSprite[3]);
+
 }
