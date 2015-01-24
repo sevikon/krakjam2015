@@ -19,7 +19,6 @@ void glGame::Load()
 
 void glGame::Init(sf::RenderWindow& window)
 {
-
 	gProgressBar.Init();
 
 	//wczytanie mapy
@@ -44,11 +43,12 @@ void glGame::Init(sf::RenderWindow& window)
 	heroRight.Init(500, gBoard.getTileManager().getMapHeight() - 64 - heroRight.getHeight(), player2View);
 
 	// gameState = GAME_STATE::MENU;
-	gameState = GAME_STATE::GAMEPLAY;
 	musicObject.HandleMusic();
 	gameState = GAME_STATE::MENU;
 	isMenu = false;
 	isPlaying = false;
+	isGameOver = false;
+	isWin = false;
 }
 
 bool glGame::Win()
@@ -69,6 +69,16 @@ bool glGame::GameOver()
 		gameOver = true;}
 
 	return gameOver;
+}
+
+void glGame::GameStateWin()
+{
+	gameState = GAME_STATE::WIN;
+}
+
+void glGame::GameStateGameOver()
+{
+	gameState = GAME_STATE::GAMEOVER;
 }
 
 void glGame::Update()
@@ -186,11 +196,8 @@ void glGame::Draw(sf::RenderWindow& graphics)
 	switch(gameState)
 	{
 		case GAME_STATE::MENU:
-			if(isPlaying){
-				musicObject.MusicLevel1.stop();
-				isPlaying = false;
-			}
-			if(!isMenu){	
+			if(!isMenu){
+				musicObject.StopAll();
 				musicObject.MusicMenu.play();
 				isMenu = true;
 			}
@@ -205,11 +212,8 @@ void glGame::Draw(sf::RenderWindow& graphics)
 					break;
 			}
 		case GAME_STATE::GAMEPLAY:
-			if(isMenu){
-				musicObject.MusicMenu.stop();
-				isMenu = false;
-			}
 			if(!isPlaying){
+				musicObject.StopAll();
 				musicObject.MusicLevel1.play();
 				isPlaying = true;
 			}
@@ -227,8 +231,36 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			gProgressBar.Draw(graphics);
 
 			break;
+		case GAME_STATE::WIN:
+			if(!isWin){
+				musicObject.StopAll();
+				isWin = true;
+			}
+			break;
+		case GAME_STATE::GAMEOVER:
+			if(!isGameOver){
+				musicObject.StopAll();
+				musicObject.MusicGameOver.play();
+				isGameOver = true;
+			}
+			DrawGameOver(graphics);
+			break;
 	}
 	
+}
+
+void glGame::DrawGameOver(sf::RenderWindow& graphics)
+{
+	gameOverBackground.loadFromFile(concat(glSettings::ASSETS_PATH, "gameOver.jpg"));
+	gameOverBackgroundSprite.setTexture(gameOverBackground);
+	gameOverBackgroundSprite.setOrigin(gameOverBackground.getSize().x/2., gameOverBackground.getSize().y/2.);
+	gameOverBackgroundSprite.setPosition(graphics.getSize().x/2., graphics.getSize().y/2.);
+
+	sf::View view(sf::FloatRect(0, 0, graphics.getSize().x, graphics.getSize().y));
+	graphics.setView(view);
+
+	graphics.clear(sf::Color(0,0,0));
+	graphics.draw(gameOverBackgroundSprite);
 }
 
 void glGame::HandleEvent(sf::Event event)

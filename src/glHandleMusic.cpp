@@ -17,6 +17,7 @@ void glHandleMusic::HandleMusic()
 
 	MusicLevel1.openFromFile("assets/music/level1.ogg");
 	MusicMenu.openFromFile("assets/music/menu.ogg");
+	MusicGameOver.openFromFile("assets/music/gameOver.ogg");
 
 	MusicLevel1.setLoop(true);
 	MusicMenu.setLoop(true);
@@ -35,4 +36,11 @@ void glHandleMusic::PlaySound(std::string name)
 
 	Players[i].setBuffer(Sounds[i].first);
 	Players[i].play();
+}
+
+void glHandleMusic::StopAll()
+{
+	MusicLevel1.stop();
+	MusicMenu.stop();
+	MusicGameOver.stop();
 }

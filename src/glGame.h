@@ -13,22 +13,24 @@ class glGame
 {
 private:
 	sf::Sprite backgroundSprite;
+	sf::Sprite gameOverBackgroundSprite;
 	sf::Texture backgroundTexture;
+	sf::Texture gameOverBackground;
 	glBoard gBoard;
 	glProgressBar gProgressBar;
 	sf::View player1View;
 	sf::View player2View;
 	glMainMenu mainMenu;
 	glMainMenu::MenuResult chosenOption;
-	
 
 	glHero heroLeft;
 	glHero heroRight;
 
 	glHandleMusic musicObject;
 
-	enum GAME_STATE {MENU, GAMEPLAY} gameState;
-	bool isMenu, isPlaying;
+	enum GAME_STATE {MENU, GAMEPLAY, GAMEOVER, WIN} gameState;
+	bool isMenu, isPlaying, isGameOver, isWin;
+	void DrawGameOver(sf::RenderWindow& graphics);
 
 public: 
 	void ShowScores();
@@ -39,6 +41,9 @@ public:
 	void CheckCollisionBorder();
 	bool Win();
 	bool GameOver();
+
+	void GameStateWin();
+	void GameStateGameOver();
 
 	/**
 	* Draw game on the main window object
