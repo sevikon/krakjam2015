@@ -20,12 +20,14 @@ glTiled::glTiled(int type){
 	this->framesActive=false;
 	this->opacity=1;
 	this->associated = NULL;
+	this->together=false;
 }
 
 float glTiled::getLowerOpacity(){
 	opacity -= 0.001f;
 	if (opacity < 0.3){
 		opacity = 0.3;
+		this->type =0;
 	}
 	return opacity;
 }
@@ -78,7 +80,6 @@ void glTiled::runActionOnAssociated() {
 
 	for(vector<glTiled*>::iterator tile_it = actionAssociated.begin(); tile_it < actionAssociated.end(); ++tile_it)
 	{
-		cout << "Showing" << endl;
 		(*tile_it)->showLadder();
 	}
 }

@@ -62,7 +62,7 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 					else
 						backgroundSprite[act].setPosition((a-10)*tiledSize,(b)*tiledSize);
 					graphics.draw(backgroundSprite[act]);
-				}else if (act>=2 && act<=10 && mTileManager.isActive(b,a)){
+				}else if ((act==FREE || (act>=OBJECTS_MIN && act<=OBJECTS_MAX)) && mTileManager.isActive(b,a)){
 					float opacity = mTileManager.getLowerOpacity(b,a);
 					if (left)
 						backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);

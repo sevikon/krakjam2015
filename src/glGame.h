@@ -6,6 +6,7 @@
 #include "glBoard.h"
 #include "glHandleMusic.h"
 #include "glProgressBar.h"
+#include "glBullet.h"
 #include "glScore.h"
 
 #define GRAVITY 10.f
@@ -14,7 +15,9 @@ class glGame
 {
 private:
 	sf::Sprite backgroundSprite;
+	sf::Sprite gameOverBackgroundSprite;
 	sf::Texture backgroundTexture;
+	sf::Texture gameOverBackground;
 	glBoard gBoard;
 	glProgressBar gProgressBar;
 	sf::View player1View;
@@ -24,18 +27,27 @@ private:
 	
 	glScore score;
 
+
 	bool playerLeftOnLadder;
 	bool playerRightOnLadder;
+
 
 	glHero heroLeft;
 	glHero heroRight;
 
 	glHandleMusic musicObject;
+	//glBullet bullet;
+
+	glBullet bulletsLeft[10];
+	glBullet bulletsRight[10];
+	//std::vector<glBullet> glBulletsVec;
+
+	enum GAME_STATE {MENU, GAMEPLAY, GAMEOVER, WIN} gameState;
+	bool isMenu, isPlaying, isGameOver, isWin;
+	void DrawGameOver(sf::RenderWindow& graphics);
 
 	int level;
 
-	enum GAME_STATE {MENU, GAMEPLAY} gameState;
-	bool isMenu, isPlaying;
 
 	const static int bornAge;
 	const static int level1Age;
@@ -51,6 +63,12 @@ public:
 	void Init(sf::RenderWindow& window);
 	void Update();
 	void CheckCollisionBorder();
+	bool Win();
+	bool GameOver();
+
+	void GameStateWin();
+	void GameStateGameOver();
+	void CheckColisions();
 
 	/**
 	* Draw game on the main window object

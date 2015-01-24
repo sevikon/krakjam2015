@@ -13,6 +13,8 @@
 #define LEVER_LEFT 32
 #define LEVER_RIGHT 33
 #define INVISIBLE_LADDER 34
+#define INVISIBLE_POSX 50
+#define INVISIBLE_POSY 51
 #define FREE 99
 
 class glAction;
@@ -27,6 +29,7 @@ private:
 	int framesPressed;
 	int framesActive;
 public: 
+	bool together;
 	glTiled *associated;
 	vector<glTiled*> actionAssociated;
 	float opacity;

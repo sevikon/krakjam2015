@@ -41,11 +41,11 @@ vector<glTiled*> glTiledLoader::searchTilesAssociatedForAction(int scope, int se
 
 	for (int row = lowerBound; row <= upperBound; row++){
 		for (int column = 0; column < vecTiled.at(0).size(); column++) {
-			cout << vecTiled.at(row).at(column).type << ", ";
+			//cout << vecTiled.at(row).at(column).type << ", ";
 			if (vecTiled.at(row).at(column).type == search_type) 
 				result.push_back(&vecTiled.at(row).at(column));
 		}
-		cout << endl;
+		//cout << endl;
 	}
 
 	return result;
@@ -141,7 +141,11 @@ void glTiledLoader::runActionOnAssociated(int x,int y){
 }
 
 float glTiledLoader::getLowerOpacity(int x,int y){
-	return vecTiled.at(x).at(y).getLowerOpacity();
+	float opacity = vecTiled.at(x).at(y).getLowerOpacity();
+	if (opacity < 0.3){ 
+		vecTiled.at(x).at(y).type=0;
+	}
+	return opacity;
 }
 
 bool glTiledLoader::isLadder(int x,int y){
