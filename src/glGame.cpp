@@ -74,65 +74,97 @@ bool glGame::GameOver()
 void glGame::Update()
 {	
 
-	// player 1 movement
+	if (!heroLeft.death)
+	{
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		heroLeft.Update(glHero::LEFT);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
-		heroLeft.Update(glHero::CLIMBUP);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		heroLeft.Update(glHero::RIGHT);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
-		heroLeft.Update(glHero::CLIMBDOWN);
-	}
-	
-	if (heroLeft.position.x < 0){
-		heroLeft.Update(glHero::LEFTBORDER);
-	}
-	if (heroLeft.position.x > player1View.getSize().x - heroLeft.getWidth()){
-		heroLeft.Update(glHero::RIGHTBORDER);
-	}
+		// player 1 movement
 
-	// player 2 movement
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			heroLeft.Update(glHero::LEFT);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		{
+			heroLeft.Update(glHero::CLIMBUP);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			heroLeft.Update(glHero::RIGHT);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			heroLeft.Update(glHero::CLIMBDOWN);
+		}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		heroRight.Update(glHero::LEFT);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		heroRight.Update(glHero::CLIMBUP);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		heroRight.Update(glHero::RIGHT);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		heroRight.Update(glHero::CLIMBDOWN);
-	}
-	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
+		if (heroLeft.position.x < 0){
+			heroLeft.Update(glHero::LEFTBORDER);
+		}
+		if (heroLeft.position.x > player1View.getSize().x - heroLeft.getWidth()){
+			heroLeft.Update(glHero::RIGHTBORDER);
+		}
 
-	if (heroRight.position.x < 0){
-		heroRight.Update(glHero::LEFTBORDER);
-	}
-	if (heroRight.position.x > player2View.getSize().x - heroRight.getWidth()){
-		heroRight.Update(glHero::RIGHTBORDER);
-	}
-	
-	int row;
-	int column;
+		heroLeft.Update(glHero::FALL);
+		if (gBoard.getTileManager().intersectsWithWall(heroLeft.getSpirte()))
+			heroLeft.UpdateReverse(glHero::FALL);
 
-	heroLeft.Update(glHero::FALL);
-	if(gBoard.getTileManager().intersectsWithWall(heroLeft.getSpirte()))
-		heroLeft.UpdateReverse(glHero::FALL);
+	}
+	else
+		heroLeft.Update(glHero::NONE);
+
+	if (!heroRight.death)
+	{
+
+		// player 2 movement
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			heroRight.Update(glHero::LEFT);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			heroRight.Update(glHero::CLIMBUP);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			heroRight.Update(glHero::RIGHT);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			heroRight.Update(glHero::CLIMBDOWN);
+		}
+		gProgressBar.Update(heroLeft.position.y, heroRight.position.y);
+
+		if (heroRight.position.x < 0){
+			heroRight.Update(glHero::LEFTBORDER);
+		}
+		if (heroRight.position.x > player2View.getSize().x - heroRight.getWidth()){
+			heroRight.Update(glHero::RIGHTBORDER);
+		}
+
+		heroRight.Update(glHero::FALL);
+		if (gBoard.getTileManager().intersectsWithWall(heroRight.getSpirte()))
+			heroRight.UpdateReverse(glHero::FALL);
+	}
+	else
+		heroRight.Update(glHero::NONE);
+
+	// updating the camera
+
+	float y1 = heroLeft.position.y + heroLeft.getHeight() / 2;
+	float y2 = heroRight.position.y + heroRight.getHeight() / 2;
+
+	if (y1 > gBoard.getTileManager().getMapHeight() - 384)
+		y1 = gBoard.getTileManager().getMapHeight() - 384;
+	if (y2 > gBoard.getTileManager().getMapHeight() - 384)
+		y2 = gBoard.getTileManager().getMapHeight() - 384;
+
+	if (y1 < 384)
+		y1 = 384;
+	if (y2 < 384)
+		y2 = 384;
+
+	player1View.setCenter(player1View.getCenter().x, y1);
+	player2View.setCenter(player2View.getCenter().x, y2);
 
 	heroRight.Update(glHero::FALL);
 	if(gBoard.getTileManager().intersectsWithWall(heroRight.getSpirte()))
@@ -143,6 +175,7 @@ void glGame::Update()
 		heroRight.death = true;}
 	if(heroLeft.position.y + heroLeft.getHeight() > gProgressBar.lava){
 		heroLeft.death = true;}
+
 }
 
 
