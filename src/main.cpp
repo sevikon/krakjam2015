@@ -2,6 +2,7 @@
 #include <iostream>
 #include "glSettings.h"
 #include "glUtils.h"
+#include "glTiledLoader.h"
 
 int main()
 {
@@ -12,6 +13,10 @@ int main()
 	sf::Sprite sprite;
 
 	std::cout << "The Game has started! :)";
+
+	glTiledLoader gTiledLoader;
+	gTiledLoader.loadMap(1);
+	cout<<gTiledLoader.getValue(3,1)<<endl;
 
 	if(!texture.loadFromFile(concat(glSettings::ASSETS_PATH, "bg.png")));
 
