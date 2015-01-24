@@ -37,6 +37,8 @@ public:
 	void Init(sf::RenderWindow& window);
 	void Update();
 	void CheckCollisionBorder();
+	bool Win();
+	bool GameOver();
 
 	/**
 	* Draw game on the main window object

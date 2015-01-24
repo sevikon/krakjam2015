@@ -51,6 +51,26 @@ void glGame::Init(sf::RenderWindow& window)
 	isPlaying = false;
 }
 
+bool glGame::Win()
+{	
+	bool win = false;
+
+	if(heroLeft.position.y < 50 && heroRight.position.y < 50){
+		win = true;}
+
+	return win;
+}
+
+bool glGame::GameOver()
+{	
+	bool gameOver = false;
+
+	if(heroLeft.death == true && heroRight.death == true){
+		gameOver = true;}
+
+	return gameOver;
+}
+
 void glGame::Update()
 {	
 

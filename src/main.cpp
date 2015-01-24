@@ -65,8 +65,14 @@ int main()
 
 		if(frame_timer.getElapsedTime().asMilliseconds() > DELTA) 
 		{
-			gameObject.Update();
-			frame_timer.restart();
+			if(gameObject.Win()){
+			}
+			else if(gameObject.GameOver()){
+			}
+			else{
+				gameObject.Update();
+				frame_timer.restart();
+			}
 		}
 
         window.clear();
