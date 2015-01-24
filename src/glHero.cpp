@@ -213,12 +213,18 @@ void glHero::Update(event _event)
 	}
 }
 
+void glHero::UpdateReverse(event _event)
+{
+	if (_event & FALL)
+	{
+		position.y -= fallingSpeed * DELTA;
+	}
+}
+
 void glHero::Draw(sf::RenderWindow& graphics)
 {
-
 	sprite.setPosition(position);
 	graphics.draw(sprite);
-
 }
 
 int glHero::getWidth()
@@ -229,5 +235,4 @@ int glHero::getWidth()
 int glHero::getHeight()
 {
 	return imageWalkingLeft[0].getSize().y;
-
 }
