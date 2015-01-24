@@ -13,7 +13,7 @@ public:
 	void ShowScores();
 	void ShowDemo();
 	void Load();
-	void Init();
+	void Init(sf::RenderWindow& window);
 	void Update();
 
 	/**

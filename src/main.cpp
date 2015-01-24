@@ -16,7 +16,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(glSettings::WINDOW_WIDTH, glSettings::WINDOW_HEIGHT), "The everlasting race!"/*, sf::Style::Fullscreen*/);
 	glGame gameObject;
 	gameObject.Load();
-	gameObject.Init();
+	gameObject.Init(window);
 
 	/*
 	// inicjalizacja naszzego widoku (view) i jego rozmiarów
@@ -61,6 +61,12 @@ int main()
 			else
 				gameObject.HandleEvent(event);
         }
+
+		if(frame_timer.getElapsedTime().asMilliseconds() > DELTA) 
+		{
+			gameObject.Update();
+			frame_timer.restart();
+		}
 
         window.clear();
 		gameObject.Draw(window);
