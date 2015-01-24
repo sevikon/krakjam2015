@@ -9,24 +9,20 @@
 #include "glTiledLoader.h"
 #include "glGame.h"
 
-float viewWidth;
-float viewHeight;
 
 int main()
 {
 
     sf::RenderWindow window(sf::VideoMode(glSettings::WINDOW_WIDTH, glSettings::WINDOW_HEIGHT), "The everlasting race!"/*, sf::Style::Fullscreen*/);
+	
 	glGame gameObject;
 	gameObject.Load();
 	gameObject.Init(window);
 
-
 	glTiledLoader gTiledLoader;
 	gTiledLoader.loadMap(1);
 	cout<<"Na pozycji [3][1] jest: "<<gTiledLoader.getValue(3,1)<<endl;
-	sf::Texture texture;
-	if(!texture.loadFromFile(concat(glSettings::ASSETS_PATH, "bg.png")));
-
+	
 	/*
 	// inicjalizacja naszzego widoku (view) i jego rozmiarów
 	float windowHeight = (float)window.getSize().y;
@@ -69,7 +65,6 @@ int main()
 			*/
 			else
 				gameObject.HandleEvent(event);
-
 			
         }
 

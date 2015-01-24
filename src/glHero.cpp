@@ -1,6 +1,7 @@
 #include <string>
 #include <cstring>
 #include <sstream>
+#include <iostream>
 
 #include "glHero.h"
 #include "glSettings.h"
@@ -12,8 +13,8 @@ using namespace std;
 // how many frames for particular animations
 
 const int glHero::walkingFrames = 6;
-const int glHero::climbingFrames = 6;
-const float glHero::frameDuration = 0.3f;
+const int glHero::climbingFrames = 1;
+const float glHero::frameDuration = 0.5f;
 const float glHero::climbingSpeed = 20.0f;
 const float glHero::walkingSpeed = 30.0f;
 const float glHero::fallingSpeed = 40.0f;
@@ -27,42 +28,56 @@ void glHero::Load(int _side)
 
 	side = _side;
 
+	ostringstream oss;
+
 	for (int a = 0; a < walkingFrames; a++) {
 
-		ostringstream oss;
-		oss << "hero" << side << "_left_" << a << ".png";
-
+		oss.str(string());
+		oss.clear();
+		oss << "hero" << side + 1 << "_left_" << a << ".png";
 		imageWalkingLeft[a].loadFromFile(concat(glSettings::ASSETS_PATH, oss.str()));
 
+		oss.str(string());
 		oss.clear();
-		oss << "hero" << side << "_right_" << a << ".png";
-
+		oss << "hero" << side + 1 << "_right_" << a << ".png";
 		imageWalkingRight[a].loadFromFile(concat(glSettings::ASSETS_PATH, oss.str()));
 
 	}
 
 	for (int a = 0; a < climbingFrames; a++) {
 
-		ostringstream oss;
-		oss << "hero" << side << "_up_" << a << ".png";
-
+		oss.str(string());
+		oss.clear();
+		oss << "hero" << side + 1 << "_up_" << a << ".png";
 		imageClimbingUp[a].loadFromFile(concat(glSettings::ASSETS_PATH, oss.str()));
 
+		oss.str(string());
 		oss.clear();
-		oss << "hero" << side << "_down_" << a << ".png";
+		oss << "hero" << side + 1 << "_down_" << a << ".png";
 		imageClimbingDown[a].loadFromFile(concat(glSettings::ASSETS_PATH, oss.str()));
 
 	}
 
-	imageIdle.loadFromFile(concat(glSettings::ASSETS_PATH, "hero_front.png"));
-
 }
 
-void glHero::Init()
+void glHero::Init(float x, float y)
 {
+
+	position.x = x;
+	position.y = y;
 
 	currentFrame = 0;
 	lastEvent = NONE;
+
+	if (side == 0)
+	{
+		sprite.setTexture(imageWalkingRight[0]);
+	}
+
+	if (side == 1)
+	{
+		sprite.setTexture(imageWalkingLeft[0]);
+	}
 
 }
 
@@ -75,32 +90,32 @@ void glHero::Update(event _event)
 
 	// ruch
 
-	if (_event | CLIMBUP)
+	if (_event & CLIMBUP)
 	{
 		position.y -= climbingSpeed * DELTA;
 	}
 
-	if (_event | CLIMBDOWN)
+	if (_event & CLIMBDOWN)
 	{
 		position.y += climbingSpeed * DELTA;
 	}
 
-	if (_event | RIGHT)
+	if (_event & RIGHT)
 	{
 		position.x += walkingSpeed * DELTA;
 	}
 
-	if (_event | LEFT)
+	if (_event & LEFT)
 	{
 		position.x -= walkingSpeed * DELTA;
 	}
 
-	if (_event | FALL)
+	if (_event & FALL)
 	{
 		position.y += fallingSpeed * DELTA;
 	}
 
-	if (_event | NONE)
+	if (_event & NONE)
 	{
 		animationTimer = 0;
 		currentFrame;
@@ -108,12 +123,15 @@ void glHero::Update(event _event)
 	
 	// animacje
 
-	if (_event | CLIMBUP)
+	if (_event & CLIMBUP)
 	{
 		animationTimer += DELTA;
 
 		if (animationTimer > frameDuration)
+		{
 			currentFrame++;
+			animationTimer = 0;
+		}
 
 		if (currentFrame >= climbingFrames)
 			currentFrame = 0;
@@ -121,12 +139,15 @@ void glHero::Update(event _event)
 		sprite.setTexture(imageClimbingUp[currentFrame]);
 	}
 
-	if (_event | CLIMBUP)
+	if (_event & CLIMBDOWN)
 	{
 		animationTimer += DELTA;
 
 		if (animationTimer > frameDuration)
+		{
 			currentFrame++;
+			animationTimer = 0;
+		}
 
 		if (currentFrame >= climbingFrames)
 			currentFrame = 0;
@@ -134,9 +155,9 @@ void glHero::Update(event _event)
 		sprite.setTexture(imageClimbingDown[currentFrame]);
 	}
 
-	if (_event | RIGHT)
+	if (_event & RIGHT)
 	{
-		if (_event | FALL)
+		if (_event & FALL)
 		{
 			sprite.setTexture(imageWalkingRight[3]);
 		}
@@ -145,7 +166,10 @@ void glHero::Update(event _event)
 			animationTimer += DELTA;
 
 			if (animationTimer > frameDuration)
+			{
 				currentFrame++;
+				animationTimer = 0;
+			}
 
 			if (currentFrame >= walkingFrames)
 				currentFrame = 0;
@@ -154,9 +178,9 @@ void glHero::Update(event _event)
 		}
 	}
 
-	if (_event | LEFT)
+	if (_event & LEFT)
 	{
-		if (_event | FALL)
+		if (_event & FALL)
 		{
 			sprite.setTexture(imageWalkingLeft[3]);
 		}
@@ -165,7 +189,10 @@ void glHero::Update(event _event)
 			animationTimer += DELTA;
 
 			if (animationTimer > frameDuration)
+			{
 				currentFrame++;
+				animationTimer = 0;
+			}
 
 			if (currentFrame >= walkingFrames)
 				currentFrame = 0;

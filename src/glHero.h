@@ -12,7 +12,6 @@ private:
 	sf::Texture imageWalkingRight[7];
 	sf::Texture imageClimbingDown[7];
 	sf::Texture imageClimbingUp[7];
-	sf::Texture imageIdle;
 
 	sf::Sprite sprite;
 
@@ -32,12 +31,12 @@ private:
 public:
 	
 	enum event {
-		CLIMBUP = 0,
-		CLIMBDOWN = 1,
-		RIGHT = 2,
-		LEFT = 4,
-		FALL = 8,
-		NONE = 16
+		CLIMBUP = 1,
+		CLIMBDOWN = 2,
+		RIGHT = 4,
+		LEFT = 8,
+		FALL = 16,
+		NONE = 32
 	};
 
 	event lastEvent;
@@ -45,7 +44,7 @@ public:
 	sf::Vector2f position;
 
 	void Load(int _side);
-	void Init();
+	void Init(float x, float y);
 	void Update(event _event);
 	void Draw(sf::RenderWindow& graphics);
 };

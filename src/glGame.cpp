@@ -8,6 +8,9 @@ void glGame::Load()
 {
 	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bg.png"));
 	backgroundSprite.setTexture(backgroundTexture);
+
+	heroLeft.Load(0);
+	heroRight.Load(1);
 }
 
 void glGame::Init(sf::RenderWindow& window)
@@ -16,55 +19,67 @@ void glGame::Init(sf::RenderWindow& window)
 	printf("Zaczynamy nowa gre.\n");
 	printf("-----------------------------------------------------\n");
 
-	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
-	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
+	/*player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y));
+	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y));
 	player1View.setCenter(player1View.getSize().x/2, player1View.getSize().y/2);
-	player2View.setCenter(player2View.getSize().x/2, player2View.getSize().y/2);
+	player2View.setCenter(player2View.getSize().x/2, player2View.getSize().y/2);*/
 
-	// player 1 (left side of the screen)
-	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
+	player1View.setSize(sf::Vector2f(640, 768));
+	player2View.setSize(sf::Vector2f(640, 768));
+	player1View.setCenter(320, 384);
+	player2View.setCenter(320, 384);
 
 	// player 2 (right side of the screen)
 	player2View.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
 
-	cout << "Viewport for player1 center: " <<  player1View.getCenter().x << ", " << player1View.getCenter().y << endl;
+	// player 1 (left side of the screen)
+	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
+
+	heroLeft.Init(300,300);
+	heroRight.Init(300,300);
 
 	gameState = GAME_STATE::MENU;
 }
 
 void glGame::Update()
 {	
-	// player 1 movment
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		player1View.move(0.f, 0.05f);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		player1View.move(0.f, -0.05f);
-	}
 
+	// player 1 movement
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		heroLeft.Update(glHero::LEFT);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		heroLeft.Update(glHero::CLIMBUP);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		heroLeft.Update(glHero::RIGHT);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		heroLeft.Update(glHero::CLIMBDOWN);
+	}
 
 	// player 2 movement
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
+		heroRight.Update(glHero::LEFT);
 	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		player2View.move(0.f, 0.05f);
+		heroRight.Update(glHero::CLIMBUP);
 	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
+		heroRight.Update(glHero::RIGHT);
 	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		player2View.move(0.f, -0.05f);
+		heroRight.Update(glHero::CLIMBDOWN);
 	}
 	
 }
@@ -72,8 +87,6 @@ void glGame::Update()
 void glGame::Draw(sf::RenderWindow& graphics)
 {		
 	graphics.setView(graphics.getDefaultView());
-	
-	
 
 	switch(gameState)
 	{
@@ -89,10 +102,17 @@ void glGame::Draw(sf::RenderWindow& graphics)
 					break;
 			}
 		case GAME_STATE::GAMEPLAY:
+
 			graphics.setView(player1View);
+
 			graphics.draw(backgroundSprite);
+			heroLeft.Draw(graphics);
+
 			graphics.setView(player2View);
-			graphics.draw(backgroundSprite);	
+
+			graphics.draw(backgroundSprite);
+			heroRight.Draw(graphics);
+
 			break;
 	}
 	

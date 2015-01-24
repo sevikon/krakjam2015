@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML\Graphics.hpp"
 #include "glMainMenu.h"
+#include "glHero.h"
 
 class glGame
 {
@@ -11,6 +12,10 @@ private:
 	sf::View player2View;
 	glMainMenu mainMenu;
 	glMainMenu::MenuResult chosenOption;
+
+	glHero heroLeft;
+	glHero heroRight;
+
 	enum GAME_STATE {MENU, GAMEPLAY} gameState;
 
 public: 
