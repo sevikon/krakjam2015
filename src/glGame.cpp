@@ -5,8 +5,18 @@
 #include <iostream>
 #include <stdlib.h>
 
+// params
+
+const  int glGame::bornAge = 36;
+const  int glGame::level1Age = 147;
+const  int glGame::level2Age = 231;
+const  int glGame::level3Age = 302;
+const  int glGame::level4Age = 733;
+const  int glGame::level5Age = 1076;
+
 void glGame::Load()
 {
+
 	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "back1.png"));
 	backgroundSprite.setTexture(backgroundTexture);
 
@@ -16,6 +26,11 @@ void glGame::Load()
 	heroRight.Load(1);
 
 	gBoard.Load();
+
+	score.Load();
+
+	level = 1;
+
 }
 
 void glGame::Init(sf::RenderWindow& window)
@@ -62,6 +77,8 @@ void glGame::Init(sf::RenderWindow& window)
 	isPlaying = false;
 	isGameOver = false;
 	isWin = false;
+
+	score.Init(0);
 }
 
 bool glGame::Win()
@@ -109,13 +126,13 @@ void glGame::Update()
 			float y = heroLeft.position.y+heroLeft.getHeight()/2;
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId,a,b);
-			gBoard.getTileManager().setActive(a,b);
+			gBoard.getTileManager().runActionOnAssociated(a,b);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			heroLeft.Update(glHero::LEFT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+			if(gBoard.getTileManager().blockedByObstacleOnLeftSide(heroLeft))
 				heroLeft.UpdateReverse(glHero::LEFT);
 			playerLeftOnLadder = false;
 		}
@@ -127,7 +144,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			heroLeft.Update(glHero::RIGHT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroLeft))
+			if(gBoard.getTileManager().blockedByObstacleOnRightSide(heroLeft))
 				heroLeft.UpdateReverse(glHero::RIGHT);
 			playerLeftOnLadder = false;
 		}
@@ -166,13 +183,13 @@ void glGame::Update()
 			float y = heroRight.position.y+heroRight.getHeight()/2;
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
-			gBoard.getTileManager().setActive(a,b);
+			gBoard.getTileManager().runActionOnAssociated(a,b);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
 			heroRight.Update(glHero::LEFT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+			if(gBoard.getTileManager().blockedByObstacleOnLeftSide(heroRight))
 				heroRight.UpdateReverse(glHero::LEFT);
 			playerRightOnLadder = false;
 		}
@@ -184,7 +201,7 @@ void glGame::Update()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
 			heroRight.Update(glHero::RIGHT);
-			if(gBoard.getTileManager().intersectsWithWallVertically(heroRight))
+			if(gBoard.getTileManager().blockedByObstacleOnRightSide(heroRight))
 				heroRight.UpdateReverse(glHero::RIGHT);
 			playerRightOnLadder = false;
 		}
@@ -241,10 +258,37 @@ void glGame::Update()
 	player2View.setCenter(player2View.getCenter().x, y2);
 
 	// Death in lava
+
 	if(heroRight.position.y + heroRight.getHeight() > gProgressBar.lava){
 		heroRight.death = true;}
 	if(heroLeft.position.y + heroLeft.getHeight() > gProgressBar.lava){
 		heroLeft.death = true;}
+
+	// updating score
+
+	float progress = (float(gBoard.getTileManager().getMapHeight() - player1View.getCenter().y - 384) / float(gBoard.getTileManager().getMapHeight() - 768.0f));
+	
+	switch (level)
+	{
+	
+	case 1:
+		score.SetCurrentScore(bornAge + progress * (level1Age - bornAge));
+		break;
+	case 2:
+		score.SetCurrentScore(level1Age + progress * (level2Age - level1Age));
+		break;
+	case 3:
+		score.SetCurrentScore(level2Age + progress * (level3Age - level2Age));
+		break;
+	case 4:
+		score.SetCurrentScore(level3Age + progress * (level4Age - level3Age));
+		break;
+	case 5:
+		score.SetCurrentScore(level4Age + progress * (level5Age - level4Age));
+		break;
+		
+	}
+
 }
 
 void glGame::Draw(sf::RenderWindow& graphics)
@@ -294,6 +338,8 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			graphics.setView(graphics.getDefaultView());
 			gProgressBar.Draw(graphics);
 
+			score.Draw(graphics);
+
 			break;
 		case GAME_STATE::WIN:
 			if(!isWin){
@@ -331,35 +377,6 @@ void glGame::HandleEvent(sf::Event event)
 {
 	if(event.type == event.KeyPressed)
 	{
-		/*sf::Keyboard::Key key = event.key.code;
-		if(key == sf::Keyboard::Left)
-		{
-		}
-		else if(key == sf::Keyboard::Up)
-		{
-			player1View.move(0.f, 2.f);
-		}
-		else if(key == sf::Keyboard::Right)
-		{			
-		}
-		else if(key == sf::Keyboard::Down)
-		{
-			player1View.move(0.f, -2.f);
-		}
-		else if(key == sf::Keyboard::A)
-		{
-		}
-		else if(key == sf::Keyboard::W)
-		{
-			player2View.move(0.f, 2.f);
-		}
-		else if(key == sf::Keyboard::D)
-		{
-		}
-		else if(key == sf::Keyboard::S)
-		{
-			player2View.move(0.f, -2.f);
-		}*/
 	}
 }
 

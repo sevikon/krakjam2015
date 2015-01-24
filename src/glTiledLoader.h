@@ -3,12 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include "glHero.h"
 #include "glTiled.h"
-#define GROUND_MIN 1
-#define GROUND_MAX 20
-#define LADDER_MIN 21
-#define LADDER_MAX 23
-#define OBJECTS_MIN 24
-#define FREE 99
 
 class glTiledLoader
 {	
@@ -33,6 +27,7 @@ public:
 	void UpdateHighscore(int score);
 	void loadMap(int number);
 	void getTiledValue(int x,int y);
+	void callAssociated(int x,int y);
 	bool isLadder(int x,int y);
 	bool isActive(int x,int y);
 	bool isWall(int x,int y);
@@ -41,12 +36,14 @@ public:
 	int getMapWidth();
 	int getMapHeight();
 	bool intersectsWithWall(glHero& hero);
-	bool intersectsWithWallVertically(glHero& hero);
+	bool blockedByObstacleOnRightSide(glHero& hero);
+	bool blockedByObstacleOnLeftSide(glHero& hero);
+	bool isBlockableObject(int x, int y);
 	bool intersectsWithLadder(glHero& hero);
 	sf::FloatRect getTileBoundingBox(int row, int col, glHero::PLAYER playerId);
 	void setActive(int x,int y);
 	float getLowerOpacity(int x,int y);
-	void callAssociated();
+	void runActionOnAssociated(int x,int y);
 	glTiled &searchTiled(int c, int type);
 		// returns tile coordinates by position
 	void getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileX, int& tileY);

@@ -7,6 +7,7 @@
 #include "glHandleMusic.h"
 #include "glProgressBar.h"
 #include "glBullet.h"
+#include "glScore.h"
 
 #define GRAVITY 10.f
 
@@ -23,6 +24,9 @@ private:
 	sf::View player2View;
 	glMainMenu mainMenu;
 	glMainMenu::MenuResult chosenOption;
+	
+	glScore score;
+
 
 	bool playerLeftOnLadder;
 	bool playerRightOnLadder;
@@ -41,6 +45,16 @@ private:
 	enum GAME_STATE {MENU, GAMEPLAY, GAMEOVER, WIN} gameState;
 	bool isMenu, isPlaying, isGameOver, isWin;
 	void DrawGameOver(sf::RenderWindow& graphics);
+
+	int level;
+
+
+	const static int bornAge;
+	const static int level1Age;
+	const static int level2Age;
+	const static int level3Age;
+	const static int level4Age;
+	const static int level5Age;
 
 public: 
 	void ShowScores();
