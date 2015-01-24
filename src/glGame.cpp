@@ -96,7 +96,7 @@ void glGame::Update()
 			float x = heroLeft.position.x+heroLeft.getWidth()/2;
 			float y = heroLeft.position.y+heroLeft.getHeight()/2;
 			int a,b;
-			gBoard.getTileManager().getTileCoords(x,y,a,b);
+			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId,a,b);
 			gBoard.getTileManager().setActive(a,b);
 		}
 
