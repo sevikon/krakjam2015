@@ -43,6 +43,8 @@ public:
 		LEFTBORDER = 128
 	};
 
+	bool death;
+
 	event lastEvent;
 	int side;
 	sf::Vector2f position;
