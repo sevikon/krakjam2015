@@ -57,11 +57,11 @@ seMainMenu::MenuResult seMainMenu::Show(sf::RenderWindow& window, float viewWidt
 	seMainMenu::MenuResult result;
 	while(true)
 	{
-		// inicjalizacja naszzego widoku (view) i jego rozmiarów
+		/*// inicjalizacja naszzego widoku (view) i jego rozmiarów
 		float windowHeight = (float)window.getSize().y;
 		float viewScale = 768.0f/windowHeight;
 		viewWidth = window.getSize().x*viewScale;
-		viewHeight = 768;
+		viewHeight = 768;*/
 		sf::View view(sf::FloatRect(0, 0, viewWidth, viewHeight));
 		window.setView(view);
 

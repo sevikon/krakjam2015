@@ -6,14 +6,20 @@
 #include "glSettings.h"
 #include "glUtils.h"
 #include "seMainMenu.h"
+#include "glGame.h"
 
 float viewWidth;
 float viewHeight;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "KrakJam 2015"/*, sf::Style::Fullscreen*/);
 
+    sf::RenderWindow window(sf::VideoMode(glSettings::WINDOW_WIDTH, glSettings::WINDOW_HEIGHT), "The everlasting race!"/*, sf::Style::Fullscreen*/);
+	glGame gameObject;
+	gameObject.Load();
+	gameObject.Init(window);
+
+	/*
 	// inicjalizacja naszzego widoku (view) i jego rozmiarów
 	float windowHeight = (float)window.getSize().y;
 	float viewScale = 768.0f/windowHeight;
@@ -21,21 +27,13 @@ int main()
 	viewHeight = 768;
 	sf::View view(sf::FloatRect(0, 0, viewWidth, viewHeight));
 	window.setView(view);
+	*/
     
 	// uruchom generator liczb losowych
 	srand((unsigned)time(NULL));
 
 	sf::Clock frame_timer;
 	const float DELTA = 1.0f/60.0f;
-
-	sf::Texture texture;
-	sf::Sprite sprite;
-
-	std::cout << "The Game has started! :)";
-
-	if(!texture.loadFromFile(concat(glSettings::ASSETS_PATH, "bg.png")));
-
-	sprite.setTexture(texture);
 
     while (window.isOpen())
     {
@@ -44,7 +42,7 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-			if (event.type == sf::Event::Resized)
+			/*else if (event.type == sf::Event::Resized)
 			{
 				float width = window.getSize().x;
 				float height = window.getSize().y;
@@ -60,24 +58,21 @@ int main()
 				if (width>2*height) 
 					height=1.0f/2.0f*width;
 				window.setSize(sf::Vector2u(width, height));
-			}
+			*/
+			else
+				gameObject.HandleEvent(event);
 
-			// Pokazywanie menu
-			seMainMenu mainMenu;
-			seMainMenu::MenuResult result = mainMenu.Show(window,viewWidth,viewHeight);
-			switch(result)
-			{
-				case seMainMenu::Exit:
-					window.close();
-					break;
-				case seMainMenu::Play:
-					window.close(); // uwaga!
-					break;
-			}
+			
         }
 
+		if(frame_timer.getElapsedTime().asMilliseconds() > DELTA) 
+		{
+			gameObject.Update();
+			frame_timer.restart();
+		}
+
         window.clear();
-        window.draw(sprite);
+		gameObject.Draw(window);
         window.display();
     }
 
