@@ -43,9 +43,15 @@ public:
 		LEFTBORDER = 128
 	};
 
+	enum PLAYER {
+		FST,
+		SND
+	};
+
 	bool death;
 
 	event lastEvent;
+	PLAYER playerId;
 	int side;
 	sf::Vector2f position;
 
@@ -56,7 +62,7 @@ public:
 	sf::Sprite& getSpirte() {return sprite;}
 
 	void Load(int _side);
-	void Init(float x, float y, sf::View View);
+	void Init(float x, float y, sf::View View, glHero::PLAYER _playerId);
 	void Update(event _event);
 	void UpdateReverse(event _event);
 	void Draw(sf::RenderWindow& graphics);

@@ -20,7 +20,8 @@ private:
 	sf::View player2View;
 	glMainMenu mainMenu;
 	glMainMenu::MenuResult chosenOption;
-	
+	bool playerLeftOnLadder;
+	bool playerRightOnLadder;
 
 	glHero heroLeft;
 	glHero heroRight;
