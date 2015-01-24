@@ -9,6 +9,8 @@ void glGame::Load()
 	backgroundTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "back1.png"));
 	backgroundSprite.setTexture(backgroundTexture);
 
+	gProgressBar.Load();
+
 	heroLeft.Load(0);
 	heroRight.Load(1);
 
@@ -17,6 +19,8 @@ void glGame::Load()
 
 void glGame::Init(sf::RenderWindow& window)
 {
+
+	gProgressBar.Init();
 
 	//wczytanie mapy
 	printf("-----------------------------------------------------\n");
@@ -36,8 +40,8 @@ void glGame::Init(sf::RenderWindow& window)
 	// player 1 (left side of the screen)
 	player1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
 
-	heroLeft.Init(100, gBoard.getTileManager().getMapHeight() - 64 - heroLeft.getHeight());
-	heroRight.Init(500, gBoard.getTileManager().getMapHeight() - 64 - heroRight.getHeight());
+	heroLeft.Init(100, gBoard.getTileManager().getMapHeight() - 64 - heroLeft.getHeight(), player1View);
+	heroRight.Init(500, gBoard.getTileManager().getMapHeight() - 64 - heroRight.getHeight(), player2View);
 
 	// gameState = GAME_STATE::MENU;
 	gameState = GAME_STATE::GAMEPLAY;
@@ -64,6 +68,13 @@ void glGame::Update()
 	{
 		heroLeft.Update(glHero::CLIMBDOWN);
 	}
+	
+	if (heroLeft.position.x < 0){
+		heroLeft.Update(glHero::LEFTBORDER);
+	}
+	if (heroLeft.position.x > player1View.getSize().x - heroLeft.getWidth()){
+		heroLeft.Update(glHero::RIGHTBORDER);
+	}
 
 	// player 2 movement
 
@@ -83,6 +94,14 @@ void glGame::Update()
 	{
 		heroRight.Update(glHero::CLIMBDOWN);
 	}
+	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
+
+	if (heroRight.position.x < 0){
+		heroRight.Update(glHero::LEFTBORDER);
+	}
+	if (heroRight.position.x > player2View.getSize().x - heroRight.getWidth()){
+		heroRight.Update(glHero::RIGHTBORDER);
+	}
 	
 	int row;
 	int column;
@@ -95,6 +114,7 @@ void glGame::Update()
 	if(gBoard.getTileManager().intersectsWithWall(heroRight.getSpirte()))
 		heroRight.UpdateReverse(glHero::FALL);
 }
+
 
 void glGame::Draw(sf::RenderWindow& graphics)
 {		
@@ -117,11 +137,16 @@ void glGame::Draw(sf::RenderWindow& graphics)
 
 			graphics.setView(player1View);
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
+			gProgressBar.DrawLava(graphics,true);
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false);
+			gProgressBar.DrawLava(graphics,false);
 			heroRight.Draw(graphics);
+
+			graphics.setView(graphics.getDefaultView());
+			gProgressBar.Draw(graphics);
 
 			break;
 	}

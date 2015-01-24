@@ -4,6 +4,7 @@
 #include "glHero.h"
 #include "glTiledLoader.h"
 #include "glBoard.h"
+#include "glProgressBar.h"
 
 #define GRAVITY 10.f
 
@@ -13,6 +14,7 @@ private:
 	sf::Sprite backgroundSprite;
 	sf::Texture backgroundTexture;
 	glBoard gBoard;
+	glProgressBar gProgressBar;
 	sf::View player1View;
 	sf::View player2View;
 	glMainMenu mainMenu;
@@ -30,6 +32,7 @@ public:
 	void Load();
 	void Init(sf::RenderWindow& window);
 	void Update();
+	void CheckCollisionBorder();
 
 	/**
 	* Draw game on the main window object

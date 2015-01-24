@@ -13,6 +13,8 @@ private:
 	sf::Texture imageClimbingDown[7];
 	sf::Texture imageClimbingUp[7];
 
+	sf::View playerView;
+
 	sf::Sprite sprite;
 
 	int currentFrame;
@@ -36,7 +38,9 @@ public:
 		RIGHT = 4,
 		LEFT = 8,
 		FALL = 16,
-		NONE = 32
+		NONE = 32,
+		RIGHTBORDER = 64,
+		LEFTBORDER = 128
 	};
 
 	event lastEvent;
@@ -48,7 +52,7 @@ public:
 	sf::Sprite& getSpirte() {return sprite;}
 
 	void Load(int _side);
-	void Init(float x, float y);
+	void Init(float x, float y, sf::View View);
 	void Update(event _event);
 	void UpdateReverse(event _event);
 	void Draw(sf::RenderWindow& graphics);
