@@ -21,4 +21,6 @@ public:
 	* Draw game on the main window object
 	*/
 	void Draw(sf::RenderWindow& graphics);
+
+	void DrawLava(sf::RenderWindow& graphics,bool left);
 };

@@ -92,7 +92,7 @@ void glGame::Update()
 	{
 		heroRight.Update(glHero::CLIMBDOWN);
 	}
-	gProgressBar.Update();
+	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
 
 	if (heroRight.position.x < 0){
 		heroRight.Update(glHero::LEFTBORDER);
@@ -125,10 +125,12 @@ void glGame::Draw(sf::RenderWindow& graphics)
 
 			graphics.setView(player1View);
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), gTiledLoader, true);
+			gProgressBar.DrawLava(graphics,true);
 			heroLeft.Draw(graphics);
 
 			graphics.setView(player2View);
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), gTiledLoader, false);
+			gProgressBar.DrawLava(graphics,false);
 			heroRight.Draw(graphics);
 
 			graphics.setView(graphics.getDefaultView());
