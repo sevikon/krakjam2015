@@ -19,6 +19,7 @@ private:
 	sf::Texture backgroundTexture;
 	sf::Texture gameOverBackground;
 	sf::Texture bulletTexture;
+	sf::Texture warningTexture;
 
 	glBoard gBoard;
 	glProgressBar gProgressBar;
