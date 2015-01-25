@@ -20,6 +20,7 @@ private:
 	int framesPressed;
 	int framesActive;
 public: 
+	sf::Color color;
 	bool together;
 	glTiled *associated;
 	float opacity;

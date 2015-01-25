@@ -19,6 +19,7 @@ glTiled::glTiled(int type){
 	this->framesActive=false;
 	this->opacity=1;
 	this->together=false;
+	this->color = sf::Color(255, 255, 255,255);
 }
 
 float glTiled::getLowerOpacity(){

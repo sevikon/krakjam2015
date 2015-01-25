@@ -5,7 +5,7 @@
 #include <iostream>     // std::cout
 #include <sstream>
 #include <string>
-#include <math.h>       /* floor */
+#include <cmath>
 
 void glBoard::Load()
 {
@@ -33,7 +33,7 @@ glTiledLoader& glBoard::getTileManager()
 	return this->mTileManager;
 }
 
-void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size,bool left)
+void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size,bool left,sf::Vector2f leftHero,sf::Vector2f rightHero)
 {		
 	int beginX;
 	int endX;
@@ -49,19 +49,30 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 	int beginY= floor((pos.y-384)/tiledSize);
 	int endY= floor(((pos.y-384+size.y))/tiledSize)+1;
 	int act=0;
+	bool draw = false; int p,r;
 
 	//graphics.setView(graphics.getDefaultView());
 	for (int a=beginX;a<endX;a++) {
 		for (int b=beginY;b<endY;b++) {
-
 			if (a>=0 && b>=0 && b<100 && a<20) {
 				act = mTileManager.getValue(b, a);
-				if(act>=1 && act<=SPRITES && !mTileManager.isActive(b,a)){
+				if (act==INVISIBLE_POSX){
+					draw = true;
+					p=a;
+					r=b;
+				}
+				else if(act>=1 && act<=SPRITES && !mTileManager.isActive(b,a)){
 					if (left)
 						backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);
 					else
 						backgroundSprite[act].setPosition((a-10)*tiledSize,(b)*tiledSize);
-					graphics.draw(backgroundSprite[act]);
+					backgroundSprite[act].setColor(mTileManager.getColor(b,a));
+					float opacity = mTileManager.getOpacity(b,a);
+					if (std::abs(leftHero.y-rightHero.y)<=4*64){
+						backgroundSprite[act].setColor(sf::Color(255, 255, 255,255));
+					}
+					graphics.draw(backgroundSprite[act]);// define a 120x50 rectangle
+					backgroundSprite[act].setColor(sf::Color(255, 255, 255,255));
 				}else if ((act==FREE || (act>=OBJECTS_MIN && act<=OBJECTS_MAX)) && mTileManager.isActive(b,a)){
 					float opacity = mTileManager.getLowerOpacity(b,a);
 					if (left)
@@ -74,5 +85,12 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 			}
 			
 		}
+	}
+	if (draw){
+		// define a 120x50 rectangle
+	/*	sf::RectangleShape rectangle(sf::Vector2f(640, 4*64));
+		rectangle.setPosition(p*tiledSize,(r-3)*tiledSize);
+		rectangle.setFillColor(sf::Color(110, 110, 110, 250));
+		graphics.draw(rectangle);*/
 	}
 }

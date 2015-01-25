@@ -30,6 +30,7 @@ public:
 	void callAssociated(int x,int y);
 	bool isLadder(int x,int y);
 	bool isActive(int x,int y);
+	float getOpacity(int x,int y);
 	bool isWall(int x,int y);
 	bool isFree(int x,int y);
 	int getValue(int x,int y);
@@ -43,7 +44,9 @@ public:
 	sf::FloatRect getTileBoundingBox(int row, int col, glHero::PLAYER playerId);
 	void setActive(int x,int y);
 	float getLowerOpacity(int x,int y);
+	sf::Color getColor(int x, int y);
 	void runActionOnAssociated(int x,int y);
+	void setInvisibleRoom(int x);
 	glTiled &searchTiled(int c, int type);
 		// returns tile coordinates by position
 	void getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileX, int& tileY);

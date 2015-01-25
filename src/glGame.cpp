@@ -329,7 +329,7 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				graphics.draw(backgroundSprite);
 			}
 
-			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true);
+			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true,heroLeft.position,heroRight.position);
 			gProgressBar.DrawLava(graphics,true);
 			for(int i=0; i<10;++i){
 				bulletsLeft[i].Draw(graphics);
@@ -344,7 +344,7 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				graphics.draw(backgroundSprite);
 			}
 
-			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false);
+			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false,heroLeft.position,heroRight.position);
 			gProgressBar.DrawLava(graphics,false);
 			for(int i=0; i<10;++i){
 				bulletsLeft[i].Draw(graphics);

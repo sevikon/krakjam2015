@@ -27,7 +27,30 @@ glTiled &glTiledLoader::searchTiled(int c, int type){
 				return (vecTiled.at(a).at(b));
 		}
 	}
+}
 
+void glTiledLoader::setInvisibleRoom(int c){
+	int d=c-3;
+	for (int a=c; a<=d;a++){
+		for (int b=0; b<vecTiled.at(0).size()/2;b++){
+			vecTiled.at(a).at(b).opacity=0;
+			vecTiled.at(a).at(b).together=true;
+			vecTiled.at(a).at(b).color=sf::Color(128, 128, 128,255);
+		}
+		for (int b=vecTiled.at(0).size()/2; b<vecTiled.at(0).size();b++){
+			vecTiled.at(a).at(b).opacity=0;
+			vecTiled.at(a).at(b).together=true;
+			vecTiled.at(a).at(b).color=sf::Color(128, 128, 128,0);
+		}
+	}
+}
+
+float glTiledLoader::getOpacity(int x, int y){
+	return vecTiled.at(x).at(y).opacity;
+}
+
+sf::Color glTiledLoader::getColor(int x, int y){
+	return vecTiled.at(x).at(y).color;
 }
 
 void glTiledLoader::loadMap(int number) {
@@ -82,6 +105,8 @@ void glTiledLoader::loadMap(int number) {
 				if (vecTiled.at(a).at(b).type >= OBJECTS_MIN){
 					vecTiled.at(a).at(b).associated = &searchTiled(a, vecTiled.at(a).at(b).type);
 				}
+				if (vecTiled.at(a).at(b).type==INVISIBLE_POSX) 
+					this->setInvisibleRoom(a);
 			}
 		}
 	}else {
