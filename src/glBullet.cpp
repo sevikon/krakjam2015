@@ -2,6 +2,11 @@
 #include "glSettings.h"
 #include "glUtils.h"
 
+// how much time passes between frames
+
+const float DELTA = 1.0f / 60.0f;
+const float glBullet::acceleration = 5.0f;
+
 sf::Texture glBullet::bulletTexture;
 
 void glBullet::Load()
@@ -9,34 +14,39 @@ void glBullet::Load()
 	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
 }
 
-void glBullet::Init(float x, float y, float velocity)
-{	
-	bulletSprite.setOrigin(bulletTexture.getSize().x/2., bulletTexture.getSize().y/2.);
+void glBullet::Init(int bottomEdge)
+{
 
-	bulletSprite.setPosition(x,y);
-	mVelocity = velocity;
+	bulletSprite.setPosition(20 + rand() % 600 - bulletTexture.getSize().x, bottomEdge + 10);
+
+	bulletSprite.setTexture(bulletTexture);
+
+	mVelocity = - (rand() % 80 + 60); // 60 - 140 px/sec
 	mDying = false;
+
+	mOpacity = 1.0f;
+
 }
 
 void glBullet::Update()
 {
-	bulletSprite.setTexture(bulletTexture);
 
 	if(!mDying)
 	{
 		float x = bulletSprite.getPosition().x;
 		float y = bulletSprite.getPosition().y;
-		bulletSprite.setPosition(x+mVelocity,y);
+		bulletSprite.setPosition(x, y + mVelocity * DELTA);
+
+		mVelocity += acceleration * DELTA;
+	}
+	else
+	{
+		mOpacity -= DELTA;
+
+		if (mOpacity < 0)
+			mOpacity = 0;
 	}
 
-	if (bulletSprite.getPosition().x < -50){
-		bulletSprite.setPosition(-50,bulletSprite.getPosition().y);
-		mDying = true;
-	}
-	if (bulletSprite.getPosition().x > 2000){
-		bulletSprite.setPosition(2000,bulletSprite.getPosition().y);
-		mDying = true;
-	}
 }
 
 void glBullet::Draw(sf::RenderWindow& graphics)
