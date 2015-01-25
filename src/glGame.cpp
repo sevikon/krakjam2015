@@ -32,6 +32,7 @@ void glGame::Load()
 	score.Load();
 
 	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
+	warningTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "warning.png"));
 
 	level = 1;
 
@@ -77,8 +78,8 @@ void glGame::Init(sf::RenderWindow& window)
 	bulletsTimerLeft = 0.0f;
 	bulletsTimerRight = 0.0f;
 
-	bulletsBoundLeft = rand() % 10 + 15;
-	bulletsBoundRight = rand() % 10 + 15;
+	bulletsBoundLeft = rand() % 15 + 20;
+	bulletsBoundRight = rand() % 15 + 20;
 
 	score.Init(0);
 }
@@ -276,10 +277,10 @@ void glGame::Update()
 	if (bulletsTimerLeft > bulletsBoundLeft)
 	{
 		bulletsVecLeft.push_back(glBullet());
-		bulletsVecLeft.at(bulletsVecLeft.size() - 1).Init(player1View.getCenter().y + 384, &bulletTexture);
+		bulletsVecLeft.at(bulletsVecLeft.size() - 1).Init(player1View.getCenter().y + 384, &bulletTexture, &warningTexture);
 
 		bulletsTimerLeft = 0.0f;
-		bulletsBoundLeft = rand() % 10 + 15;
+		bulletsBoundLeft = rand() % 15 + 20;
 	}
 
 	bulletsTimerRight += DELTA;
@@ -287,10 +288,10 @@ void glGame::Update()
 	if (bulletsTimerRight > bulletsBoundRight)
 	{
 		bulletsVecRight.push_back(glBullet());
-		bulletsVecRight.at(bulletsVecRight.size() - 1).Init(player2View.getCenter().y + 384, &bulletTexture);
+		bulletsVecRight.at(bulletsVecRight.size() - 1).Init(player2View.getCenter().y + 384, &bulletTexture, &warningTexture);
 
 		bulletsTimerRight = 0.0f;
-		bulletsBoundRight = rand() % 10 + 15;
+		bulletsBoundRight = rand() % 15 + 20;
 	}
 
 	CheckColisions();
@@ -395,15 +396,16 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
-			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true,heroLeft.position,heroRight.position);
-			gProgressBar.DrawLava(graphics,true);
 			
-			for(int i = 0; i < bulletsVecLeft.size(); ++i) {
+			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true,heroLeft.position,heroRight.position);
+			
+			heroLeft.Draw(graphics);
+			
+			gProgressBar.DrawLava(graphics, true);
+
+			for (int i = 0; i < bulletsVecLeft.size(); ++i) {
 				bulletsVecLeft.at(i).Draw(graphics);
 			}
-
-			heroLeft.Draw(graphics);
-			gProgressBar.DrawLava(graphics, true);
 
 			graphics.setView(player2View);
 
@@ -416,20 +418,33 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
-			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false,heroLeft.position,heroRight.position);
-			gProgressBar.DrawLava(graphics,false);
 			
+			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false,heroLeft.position,heroRight.position);
+			
+			heroRight.Draw(graphics);
+			
+			gProgressBar.DrawLava(graphics, false);
+
 			for (int i = 0; i < bulletsVecRight.size(); ++i) {
 				bulletsVecRight.at(i).Draw(graphics);
 			}
-
-			heroRight.Draw(graphics);
-			gProgressBar.DrawLava(graphics, false);
 
 			graphics.setView(graphics.getDefaultView());
 			gProgressBar.Draw(graphics);
 
 			score.Draw(graphics);
+
+			graphics.setView(player1View);
+
+			for (int i = 0; i < bulletsVecLeft.size(); ++i) {
+				bulletsVecLeft.at(i).DrawWarning(graphics, player1View.getCenter().y + 384);
+			}
+
+			graphics.setView(player2View);
+
+			for (int i = 0; i < bulletsVecRight.size(); ++i) {
+				bulletsVecRight.at(i).DrawWarning(graphics, player2View.getCenter().y + 384);
+			}
 
 			break;
 		case GAME_STATE::WIN:
