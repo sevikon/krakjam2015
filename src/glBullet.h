@@ -5,8 +5,7 @@ class glBullet
 {	
 public:
 
-	static sf::Texture bulletTexture;
-
+	sf::Texture *bulletTexture;
 	sf::Sprite bulletSprite;
 
 	const static float acceleration;
@@ -16,7 +15,7 @@ public:
 	bool mDying;
 
 	static void Load();
-	void Init(int bottomEdge);
+	void Init(int bottomEdge, sf::Texture * texture);
 	void Update();
 	void Draw(sf::RenderWindow& graphics);
 };
