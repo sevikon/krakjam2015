@@ -12,7 +12,8 @@ using namespace std;
 // PARAMS
 // how many frames for particular animations
 
-const int glHero::walkingFrames = 5;
+const int glHero::leftWalkingFrames = 4;
+const int glHero::rightWalkingFrames = 5;
 const int glHero::climbingFrames = 1;
 const float glHero::frameDuration = 0.4f;
 const float glHero::climbingSpeed = 120.0f;
@@ -25,6 +26,8 @@ const float DELTA = 1.0f / 60.0f;
 
 void glHero::Load(int _side)
 {
+
+	walkingFrames = (_side == 0 ? leftWalkingFrames : rightWalkingFrames);
 
 	side = _side;
 
