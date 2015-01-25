@@ -21,6 +21,8 @@ void glBoard::Load()
 		backgroundTexture[a].loadFromFile(concat(glSettings::ASSETS_PATH, "bg"+str+".png"));
 		backgroundSprite[a].setTexture(backgroundTexture[a]);
 	}
+
+	progressBarTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "progress-bar-texture.png"));
 }
 
 void glBoard::Init(sf::RenderWindow& window)
@@ -60,6 +62,8 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 	bool draw = false; int p,r;
 	int offset = 0;
 
+	offset = (left) ? 0 : -tiledSize*10;
+
 	//graphics.setView(graphics.getDefaultView());
 	for (int a=beginX;a<endX;a++) {
 		for (int b=beginY;b<endY;b++) {
@@ -80,8 +84,23 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 					if (std::abs(leftHero.y-rightHero.y)<=4*64){
 						backgroundSprite[act].setColor(sf::Color(255, 255, 255,255));
 					}
+					
+
+					// draw picking progress bar
+					int pressesAmount = getTileManager().getTile(b, a).amountOfPresses;
+					if(pressesAmount && pressesAmount <= glTiled::MAX_AMOUNT_OF_PRESSES)
+					{
+						DrawPressStackProgressBar(graphics, pressesAmount/(float)glTiled::MAX_AMOUNT_OF_PRESSES, a*tiledSize + offset, (b)*tiledSize);
+						if(pressesAmount == glTiled::MAX_AMOUNT_OF_PRESSES)
+						{
+							// set nice transparency effect
+							backgroundSprite[act].setColor(sf::Color(255, 255, 255, 100));
+						}
+					} 
+					
 					graphics.draw(backgroundSprite[act]);// define a 120x50 rectangle
 					backgroundSprite[act].setColor(sf::Color(255, 255, 255,255));
+
 				} else if ((act==FREE || (act>=OBJECTS_MIN && act<=OBJECTS_MAX)) && mTileManager.isActive(b,a)) {
 					float opacity = mTileManager.getLowerOpacity(b,a);
 					if (left)
@@ -91,12 +110,10 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 						
 					backgroundSprite[act].setColor(sf::Color(255* opacity, 255, 255 * opacity, opacity * 255));
 					graphics.draw(backgroundSprite[act]);
-				/*
-				if(left)
-					offset = 0;
-				else 
-					offset = -10*tiledSize;
+				
+				}
 
+				/*
 				if(act>=1 && act<=SPRITES && !mTileManager.isActive(b,a)){
 					backgroundSprite[act].setPosition(a*tiledSize + offset,(b)*tiledSize);
 					graphics.draw(backgroundSprite[act]);
@@ -111,7 +128,6 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 					float opacity = mTileManager.getLowerOpacity(b,a);
 					backgroundSprite[act].setPosition(a*tiledSize + offset,(b)*tiledSize);
 				*/
-				}
 			}
 		}
 	}
@@ -128,10 +144,8 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 
 void glBoard::DrawPressStackProgressBar(sf::RenderWindow& graphics, float progress, float posx, float posy)
 {
-	cout << progress*glSettings::TILE_HEIGHT << endl;
-	// if was pressed, draw press progress bar
 	sf::RectangleShape bar = sf::RectangleShape(sf::Vector2f(6.f, progress*glSettings::TILE_HEIGHT));
-	bar.setFillColor(sf::Color(30, 65, 31));
+	bar.setTexture(&progressBarTexture);
 	bar.setPosition(posx, posy + glSettings::TILE_HEIGHT - progress*glSettings::TILE_HEIGHT);
 	graphics.draw(bar);
 }

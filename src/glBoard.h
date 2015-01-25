@@ -10,6 +10,7 @@ class glBoard
 private:
 	sf::Sprite backgroundSprite[SPRITES];
 	sf::Texture backgroundTexture[SPRITES];
+	sf::Texture progressBarTexture;
 	glTiledLoader mTileManager;
 
 	float mAngle;

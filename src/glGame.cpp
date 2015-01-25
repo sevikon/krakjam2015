@@ -90,7 +90,7 @@ bool glGame::Win()
 	return win;
 }
 
-void glGame::GetReleasedLeft(){
+void glGame::GetReleasedLeft() {
 	cout<<"KONIEC"<<endl;
 	float x = heroLeft.position.x+heroLeft.getWidth()/2;
 	float y = heroLeft.position.y+heroLeft.getHeight()/2;
@@ -194,7 +194,7 @@ void glGame::Update()
 
 	if (!heroRight.death)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
 		{
 			float x = heroRight.position.x+heroRight.getWidth()/2;
 			float y = heroRight.position.y+heroRight.getHeight()/2;
@@ -202,7 +202,7 @@ void glGame::Update()
 			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
 			gBoard.getTileManager().runActionOnAssociated(a,b);
 			gBoard.getTileManager().runActionOnAssociatedLasers(a,b);
-		}
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
@@ -431,11 +431,32 @@ void glGame::HandleEvent(sf::Event event)
 			int row, column;
 			tileManager.getTileCoords(x, y, heroLeft.playerId, row, column);
 
-			glTiled& tile = tileManager.getTile(row, column);
+			glTiled& tile = gBoard.getTileManager().getTile(row, column);
 			tile.press();
 
 			if(tile.readyToExecAssociatedAction)
-				tileManager.runActionOnAssociated(row, column);
+			{
+				gBoard.getTileManager().runActionOnAssociated(row, column);
+				gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+			}
+		}
+
+		if (event.key.code == sf::Keyboard::RShift)
+		{
+			float x = heroRight.position.x+heroRight.getWidth()/2;
+			float y = heroRight.position.y+heroRight.getHeight()/2;
+			glTiledLoader tileManager = gBoard.getTileManager();
+			int row, column;
+			tileManager.getTileCoords(x, y, heroRight.playerId, row, column);
+
+			glTiled& tile = gBoard.getTileManager().getTile(row, column);
+			tile.press();
+
+			if(tile.readyToExecAssociatedAction)
+			{
+				gBoard.getTileManager().runActionOnAssociated(row, column);
+				gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+			}
 		}
 	}
 }

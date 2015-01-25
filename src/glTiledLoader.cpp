@@ -192,7 +192,10 @@ void glTiledLoader::runActionOnAssociated(int x,int y){
 	if(vecTiled.at(x).at(y).type == LEVER_LEFT)
 		// change lever sprite
 		vecTiled.at(x).at(y).type = LEVER_RIGHT;
-	vecTiled.at(x).at(y).runActionOnAssociated();
+	else
+	{
+		vecTiled.at(x).at(y).runActionOnAssociated();
+	}
 }
 
 void glTiledLoader::runActionOnAssociatedLasers(int x,int y){
@@ -201,7 +204,7 @@ void glTiledLoader::runActionOnAssociatedLasers(int x,int y){
 	vecTiled.at(x).at(y).runActionOnAssociatedLaser();
 }
 
-void glTiledLoader::runActionOnAssociatedLasersShowAgain(int x,int y){	
+void glTiledLoader::runActionOnAssociatedLasersShowAgain(int x,int y) {	
 	if(vecTiled.at(x).at(y).originalType == LASER)
 		vecTiled.at(x).at(y).type=LASER;
 	vecTiled.at(x).at(y).runActionOnAssociatedLaserShow();
