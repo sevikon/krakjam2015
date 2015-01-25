@@ -18,7 +18,8 @@ private:
 public: 
 	void Load();
 	void Update();
-	void Init(sf::RenderWindow& window);
+	void Init(int level);
+	void ChangeLevel(int level);
 
 	/**
 	* Draw game on the main window object

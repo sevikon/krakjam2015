@@ -112,6 +112,9 @@ void glTiledLoader::loadMap(int number) {
 	ifstream myfile (path);
 	std::stringstream ss;
 
+	vecTiled.clear();
+	vec.clear();
+
 	// parsing file
 	getline(myfile, line);
 	pos =  line.find(",");
