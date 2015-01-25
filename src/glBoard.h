@@ -12,6 +12,8 @@ private:
 	sf::Texture backgroundTexture[SPRITES];
 	glTiledLoader mTileManager;
 
+	float mAngle;
+
 public: 
 	void Load();
 	void Update();
@@ -20,7 +22,7 @@ public:
 	/**
 	* Draw game on the main window object
 	*/
-	void Draw(sf::RenderWindow& graphics, sf::Vector2f pos,sf::Vector2f size, bool left);
+	void Draw(sf::RenderWindow& graphics, sf::Vector2f pos,sf::Vector2f size, bool left,sf::Vector2f herol,sf::Vector2f heror);
 
 	glTiledLoader& getTileManager();
 };
