@@ -80,15 +80,8 @@ void glGame::Init(sf::RenderWindow& window)
 	bulletsTimerLeft =  0.0f;
 	bulletsTimerRight = 0.0f;
 
-<<<<<<< HEAD
-
-
-	bulletsBoundLeft = rand() % 10 + 20;
-	bulletsBoundRight = rand() % 10 + 20;
-=======
 	bulletsBoundLeft = rand() % 15 + 20;
 	bulletsBoundRight = rand() % 15 + 20;
->>>>>>> 48701f15889ae0afbcdfafbda010c872dfbb3818
 
 	score.Init(0);
 }
@@ -510,7 +503,7 @@ void glGame::HandleEvent(sf::Event event)
 					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
 				} else 
 				{
-					musicObject.PlaySound("press" + to_string(rand()%4+1));
+					musicObject.PlaySound("press" + std::to_string(rand()%4+1));
 				}
 			}
 		}

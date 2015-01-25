@@ -6,7 +6,7 @@
 
 glMainMenu::MenuResult glMainMenu::Show(sf::RenderWindow& window, float viewWidth, float viewHeight)
 {
-	mBackgroundMenu.loadFromFile(concat(glSettings::ASSETS_PATH, "menuBg.png"));
+	mBackgroundMenu.loadFromFile(concat(glSettings::ASSETS_PATH, "titlepage.png"));
 
 	mStart.loadFromFile(concat(glSettings::ASSETS_PATH, "start.png"));
 	mExit.loadFromFile(concat(glSettings::ASSETS_PATH, "exit.png"));
