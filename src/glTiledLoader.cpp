@@ -2,6 +2,7 @@
 #include "glTiled.h"
 #include "glSettings.h"
 #include "glHero.h"
+#include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <iostream>     // std::cout
@@ -135,7 +136,7 @@ void glTiledLoader::loadMap(int number) {
 			while ((pos = s.find(delimiter)) != std::string::npos) {
 				token = s.substr(0, pos);	
 				vec.at(i).push_back( atoi(token.c_str()) );
-				vecTiled.at(i).push_back(glTiled(atoi(token.c_str())));
+				vecTiled.at(i).push_back(glTiled(atoi(token.c_str()), 0, 0));
 				s.erase(0, pos + delimiter.length());		
 			}
 			++i;
@@ -174,8 +175,14 @@ void glTiledLoader::Update(){
 			vecTiled.at(a).at(b).Update();
 		}
 	}
-
 }
+
+glTiled& glTiledLoader::getTile(int row , int column)
+{
+	assert (row >= 0 || column >= 0 || row < 100 || column < 20);
+	return vecTiled.at(row).at(column);
+}
+
 
 void glTiledLoader::setActive(int x,int y){
 	vecTiled.at(x).at(y).setDefinitelyActive();

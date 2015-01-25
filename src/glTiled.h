@@ -25,20 +25,27 @@ using namespace std;
 class glTiled
 {
 private:
+	
+public: 
 	bool active;
 	bool used;
 	bool pressed;
+	bool readyToExecAssociatedAction;
 	int framesPressed;
 	int framesActive;
 public: 
 	sf::Color color;
+	int amountOfPresses;
+	int row, column;
+	static const int MAX_AMOUNT_OF_PRESSES = 10;
+	glTiled(int type, int row, int column);
 	bool together;
 	glTiled *associated;
 	vector<glTiled*> actionAssociated;
 	float opacity;
 	int type;
 	int originalType;
-	glTiled(int type);
+	
 	void Load();
 	void Init(sf::RenderWindow& window);
 	bool isActive();
@@ -58,6 +65,9 @@ public:
 	void showLadder();
 	void showLasers();
 	void hideLasers();
+	void press();
+	void resetPresses();
+
 protected:
 	void executeAction(glAction& action);
 };

@@ -4,7 +4,7 @@
 class glBullet
 {	
 public:
-	static sf::Texture bulletTexture;
+	sf::Texture bulletTexture;
 
 	sf::Sprite bulletSprite;
 	float mVelocity;

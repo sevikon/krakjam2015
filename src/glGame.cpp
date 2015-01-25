@@ -136,8 +136,7 @@ void glGame::Update()
 	{
 		// player 1 movement
 
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{
 			float x = heroLeft.position.x+heroLeft.getWidth()/2;
 			float y = heroLeft.position.y+heroLeft.getHeight()/2;
@@ -145,7 +144,7 @@ void glGame::Update()
 			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId, a, b);
 			gBoard.getTileManager().runActionOnAssociated(a, b);
 			gBoard.getTileManager().runActionOnAssociatedLasers(a, b);
-		}
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
@@ -424,6 +423,20 @@ void glGame::HandleEvent(sf::Event event)
 {
 	if(event.type == event.KeyPressed)
 	{
+		if(event.key.code == sf::Keyboard::E)
+		{
+			float x = heroLeft.position.x+heroLeft.getWidth()/2;
+			float y = heroLeft.position.y+heroLeft.getHeight()/2;
+			glTiledLoader tileManager = gBoard.getTileManager();
+			int row, column;
+			tileManager.getTileCoords(x, y, heroLeft.playerId, row, column);
+
+			glTiled& tile = tileManager.getTile(row, column);
+			tile.press();
+
+			if(tile.readyToExecAssociatedAction)
+				tileManager.runActionOnAssociated(row, column);
+		}
 	}
 }
 

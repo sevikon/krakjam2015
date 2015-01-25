@@ -25,6 +25,7 @@ public:
 	void Draw();
 	void Update();
 	void UpdateHighscore(int score);
+	glTiled& getTile(int row ,int column);
 	void loadMap(int number);
 	void getTiledValue(int x,int y);
 	void callAssociated(int x,int y);

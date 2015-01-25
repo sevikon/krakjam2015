@@ -24,5 +24,7 @@ public:
 	*/
 	void Draw(sf::RenderWindow& graphics, sf::Vector2f pos,sf::Vector2f size, bool left,sf::Vector2f herol,sf::Vector2f heror);
 
+	void DrawPressStackProgressBar(sf::RenderWindow& graphics, float progress, float posx, float posy);
+
 	glTiledLoader& getTileManager();
 };
