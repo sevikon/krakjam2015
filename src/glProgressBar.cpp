@@ -9,7 +9,7 @@
 
 void glProgressBar::Load()
 {
-	backgroundTexture[0].loadFromFile(concat(glSettings::ASSETS_PATH, "pb0.png"));
+	backgroundTexture[0].loadFromFile(concat(glSettings::ASSETS_PATH, "progress-bar.png"));
 	backgroundSprite[0].setTexture(backgroundTexture[0]);
 
 	backgroundTexture[1].loadFromFile(concat(glSettings::ASSETS_PATH, "pb-z1.png"));
@@ -30,8 +30,9 @@ void glProgressBar::Load()
 	backgroundTexture[6].loadFromFile(concat(glSettings::ASSETS_PATH, "death-4.png"));
 	backgroundSprite[6].setTexture(backgroundTexture[6]);
 
-	pbTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "pb-bar.png"));
-	pbTexture.setRepeated(true);
+	pbTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "progress-level.png"));
+	pbSprite.setTexture(pbTexture);
+
 }
 
 void glProgressBar::Init()
@@ -59,18 +60,15 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 	if (lava<0){
 		lava=0;}
 
-	backgroundSprite[0].setPosition(620,0);
+	backgroundSprite[0].setPosition(625,0);
 	graphics.draw(backgroundSprite[0]);
 
 	float actual = ((1-(lava/6400))*754);
 	float actualPlayer1 = ((1-(player1/6400))*754);
 	float actualPlayer2 = ((1-(player2/6400))*754);
 
-	sf::RectangleShape rectangle(sf::Vector2f(13, actual));
-	rectangle.setTexture(&pbTexture,true); // texture is a sf::Texture
-	rectangle.setTextureRect(sf::IntRect(0,0,50,actual));
-	rectangle.setPosition(639,763-actual);
-	graphics.draw(rectangle);
+	pbSprite.setPosition(626,763-actual);
+	graphics.draw(pbSprite);
 
 	backgroundSprite[1].setPosition(592,763-actualPlayer1);
 	graphics.draw(backgroundSprite[1]);

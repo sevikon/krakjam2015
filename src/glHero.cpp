@@ -12,9 +12,9 @@ using namespace std;
 // PARAMS
 // how many frames for particular animations
 
-const int glHero::walkingFrames = 1;
+const int glHero::walkingFrames = 5;
 const int glHero::climbingFrames = 1;
-const float glHero::frameDuration = 0.5f;
+const float glHero::frameDuration = 0.4f;
 const float glHero::climbingSpeed = 20.0f;
 const float glHero::walkingSpeed = 30.0f;
 const float glHero::fallingSpeed = 40.0f;
@@ -247,9 +247,10 @@ void glHero::UpdateReverse(event _event)
 
 void glHero::Draw(sf::RenderWindow& graphics)
 {
-	sprite.setPosition(position);
 	sprite.setColor(sf::Color(255, 255 * opacity, 255 * opacity, opacity * 255));
+	sprite.setPosition(position + sf::Vector2f(0,4.0f));
 	graphics.draw(sprite);
+	sprite.setPosition(position);
 }
 
 int glHero::getWidth()
