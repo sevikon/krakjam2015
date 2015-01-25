@@ -277,9 +277,9 @@ void glGame::Update()
 
 	// Death in lava
 
-	if(heroRight.position.y + heroRight.getHeight() - 140 > gProgressBar.lava){
+	if(heroRight.position.y + heroRight.getHeight() - 170 > gProgressBar.lava){
 		heroRight.death = true;}
-	if(heroLeft.position.y + heroLeft.getHeight() - 140 > gProgressBar.lava){
+	if(heroLeft.position.y + heroLeft.getHeight() - 170 > gProgressBar.lava){
 		heroLeft.death = true;}
 
 	// updating score
