@@ -221,7 +221,7 @@ void glHero::Update(event _event)
 
 	if (death == 1)
 	{
-		opacity -= 0.1f * DELTA;
+		opacity -= 0.3f * DELTA;
 		
 		if (opacity < 0)
 			opacity = 0;
