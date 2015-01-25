@@ -15,9 +15,9 @@ using namespace std;
 const int glHero::walkingFrames = 5;
 const int glHero::climbingFrames = 1;
 const float glHero::frameDuration = 0.4f;
-const float glHero::climbingSpeed = 20.0f;
-const float glHero::walkingSpeed = 30.0f;
-const float glHero::fallingSpeed = 40.0f;
+const float glHero::climbingSpeed = 120.0f;
+const float glHero::walkingSpeed = 160.0f;
+const float glHero::fallingSpeed = 250.0f;
 
 // how much time passes between frames
 

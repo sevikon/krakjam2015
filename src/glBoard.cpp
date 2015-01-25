@@ -34,7 +34,7 @@ void glBoard::Init(int level)
 void glBoard::Update()
 {
 
-	mAngle += DELTA * 0.25f;
+	mAngle += DELTA * 2.f;
 	if (mAngle > 360.0f) mAngle = 0.0f;
 
 }

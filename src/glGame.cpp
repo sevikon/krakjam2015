@@ -77,7 +77,7 @@ void glGame::Init(sf::RenderWindow& window)
 	isGameOver = false;
 	isWin = false;
 
-	bulletsTimerLeft = 0.0f;
+	bulletsTimerLeft =  0.0f;
 	bulletsTimerRight = 0.0f;
 
 	bulletsBoundLeft = rand() % 15 + 20;
@@ -503,7 +503,7 @@ void glGame::HandleEvent(sf::Event event)
 					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
 				} else 
 				{
-					musicObject.PlaySound("press" + to_string(rand()%4+1));
+					//musicObject.PlaySound("press" + std::to_string(rand()%4+1));
 				}
 			}
 		}
@@ -527,7 +527,7 @@ void glGame::HandleEvent(sf::Event event)
 					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
 				} else 
 				{
-					musicObject.PlaySound("press" + to_string(rand()%4+1));
+					//musicObject.PlaySound("press" + to_string(rand()%4+1));
 				}
 			}
 		}

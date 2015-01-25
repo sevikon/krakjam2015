@@ -333,7 +333,7 @@ bool glTiledLoader::blockedByObstacleOnLeftSide(glHero& hero)
 	bool debug = false;
 	sf::Sprite sprite = hero.getSpirte();
 	sf::FloatRect spriteBB = sprite.getGlobalBounds();
-	spriteBB.height -= 2;
+	spriteBB.height -= 5.f;
 
 	getTileCoords(sprite.getPosition().x+sprite.getTextureRect().width/2, sprite.getPosition().y + sprite.getTextureRect().height/2, hero.playerId, row, column);
 
@@ -369,7 +369,7 @@ bool glTiledLoader::blockedByObstacleOnRightSide(glHero& hero)
 	bool debug = false;
 	sf::Sprite sprite = hero.getSpirte();
 	sf::FloatRect spriteBB = sprite.getGlobalBounds();
-	spriteBB.height -= 2;
+	spriteBB.height -= 5.f;
 
 	getTileCoords(sprite.getPosition().x+sprite.getTextureRect().width/2, sprite.getPosition().y + sprite.getTextureRect().height/2, hero.playerId, row, column);
 
