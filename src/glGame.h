@@ -65,6 +65,8 @@ public:
 	void CheckCollisionBorder();
 	bool Win();
 	bool GameOver();
+	void GetReleasedLeft();
+	void GetReleasedRight();
 
 	void GameStateWin();
 	void GameStateGameOver();

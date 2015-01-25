@@ -77,7 +77,6 @@ void glGame::Init(sf::RenderWindow& window)
 	isPlaying = false;
 	isGameOver = false;
 	isWin = false;
-
 	score.Init(0);
 }
 
@@ -89,6 +88,24 @@ bool glGame::Win()
 		win = true;}
 
 	return win;
+}
+
+void glGame::GetReleasedLeft(){
+	cout<<"KONIEC"<<endl;
+	float x = heroLeft.position.x+heroLeft.getWidth()/2;
+	float y = heroLeft.position.y+heroLeft.getHeight()/2;
+	int a,b;
+	gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId, a, b);
+	gBoard.getTileManager().runActionOnAssociatedLasersShowAgain(a, b);
+}
+
+void glGame::GetReleasedRight(){
+	cout<<"KONIEC"<<endl;
+	float x = heroRight.position.x+heroRight.getWidth()/2;
+	float y = heroRight.position.y+heroRight.getHeight()/2;
+	int a,b;
+	gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId, a, b);
+	gBoard.getTileManager().runActionOnAssociatedLasersShowAgain(a, b);
 }
 
 bool glGame::GameOver()
@@ -127,6 +144,7 @@ void glGame::Update()
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId, a, b);
 			gBoard.getTileManager().runActionOnAssociated(a, b);
+			gBoard.getTileManager().runActionOnAssociatedLasers(a, b);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -184,6 +202,7 @@ void glGame::Update()
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
 			gBoard.getTileManager().runActionOnAssociated(a,b);
+			gBoard.getTileManager().runActionOnAssociatedLasers(a,b);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))

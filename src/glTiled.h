@@ -13,6 +13,8 @@
 #define LEVER_LEFT 32
 #define LEVER_RIGHT 33
 #define INVISIBLE_LADDER 34
+#define LASER 35
+#define ELEBOX 36
 #define INVISIBLE_POSX 50
 #define INVISIBLE_POSY 51
 #define FREE 99
@@ -51,7 +53,11 @@ public:
 	void setActive(int framesPressed);
 	void callAssociated();
 	void runActionOnAssociated();
+	void runActionOnAssociatedLaser();
+	void runActionOnAssociatedLaserShow();
 	void showLadder();
+	void showLasers();
+	void hideLasers();
 protected:
 	void executeAction(glAction& action);
 };

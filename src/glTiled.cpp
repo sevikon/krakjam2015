@@ -85,6 +85,25 @@ void glTiled::runActionOnAssociated() {
 	}
 }
 
+void glTiled::runActionOnAssociatedLaser() {
+	if (this->associated != NULL && type>=OBJECTS_MIN && type%2==0) 
+		(*associated).setDefinitelyActive();
+
+	for(vector<glTiled*>::iterator tile_it = actionAssociated.begin(); tile_it < actionAssociated.end(); ++tile_it)
+	{
+		(*tile_it)->hideLasers();
+	}
+}
+
+void glTiled::runActionOnAssociatedLaserShow() {
+
+	this->actionAssociated;
+	for(vector<glTiled*>::iterator tile_it = actionAssociated.begin(); tile_it < actionAssociated.end(); ++tile_it)
+	{
+		(*tile_it)->showLasers();
+	}
+}
+
 void glTiled::setActive(int framesPressed) {
 	if (type>=OBJECTS_MIN){
 		active=true;
@@ -95,6 +114,17 @@ void glTiled::setActive(int framesPressed) {
 void glTiled::showLadder()
 {
 	type = LADDER_INNER;
+}
+
+void glTiled::hideLasers()
+{
+	type = 0;
+}
+
+void glTiled::showLasers()
+{
+	cout<<"zmin"<<endl;
+	type = LASER;
 }
 
 void glTiled::setDefinitelyActive() {

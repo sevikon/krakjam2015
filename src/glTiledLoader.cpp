@@ -74,6 +74,27 @@ vector<glTiled*> glTiledLoader::searchTilesAssociatedForAction(int scope, int se
 	return result;
 }
 
+vector<glTiled*> glTiledLoader::searchTilesAssociatedForActionOrigin(int scope, int search_type) 
+{
+	
+	int upperBound = scope + 10;
+	int lowerBound = scope - 10;
+	lowerBound = (lowerBound < 0) ? 0 : lowerBound;
+	upperBound = (upperBound > 99) ? 99 : upperBound;
+	vector<glTiled*> result;
+
+	for (int row = lowerBound; row <= upperBound; row++){
+		for (int column = 0; column < vecTiled.at(0).size(); column++) {
+			//cout << vecTiled.at(row).at(column).type << ", ";
+			if (vecTiled.at(row).at(column).originalType == search_type) 
+				result.push_back(&vecTiled.at(row).at(column));
+		}
+		//cout << endl;
+	}
+
+	return result;
+}
+
 void glTiledLoader::loadMap(int number) {
 	ostringstream ss2;
 	ss2 << number;
@@ -131,6 +152,8 @@ void glTiledLoader::loadMap(int number) {
 					vecTiled.at(a).at(b).associated = &searchTiled(a, type+1);
 				} else if(type == LEVER_LEFT) {
 					vecTiled.at(a).at(b).actionAssociated = searchTilesAssociatedForAction(a, INVISIBLE_LADDER);
+				}else if(type == ELEBOX) {
+					vecTiled.at(a).at(b).actionAssociated = searchTilesAssociatedForAction(a, LASER);
 				}
 				if (vecTiled.at(a).at(b).type==INVISIBLE_POSX) 
 					this->setInvisibleRoom(a);
@@ -163,6 +186,18 @@ void glTiledLoader::runActionOnAssociated(int x,int y){
 		// change lever sprite
 		vecTiled.at(x).at(y).type = LEVER_RIGHT;
 	vecTiled.at(x).at(y).runActionOnAssociated();
+}
+
+void glTiledLoader::runActionOnAssociatedLasers(int x,int y){
+	if(vecTiled.at(x).at(y).type == LASER)
+		vecTiled.at(x).at(y).type=0;
+	vecTiled.at(x).at(y).runActionOnAssociatedLaser();
+}
+
+void glTiledLoader::runActionOnAssociatedLasersShowAgain(int x,int y){	
+	if(vecTiled.at(x).at(y).originalType == LASER)
+		vecTiled.at(x).at(y).type=LASER;
+	vecTiled.at(x).at(y).runActionOnAssociatedLaserShow();
 }
 
 float glTiledLoader::getLowerOpacity(int x,int y){

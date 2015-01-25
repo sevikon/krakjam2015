@@ -46,9 +46,12 @@ public:
 	float getLowerOpacity(int x,int y);
 	sf::Color getColor(int x, int y);
 	void runActionOnAssociated(int x,int y);
+	void runActionOnAssociatedLasers(int x,int y);
+	void runActionOnAssociatedLasersShowAgain(int x,int y);
 	void setInvisibleRoom(int x);
 	glTiled &searchTiled(int c, int type);
 	vector<glTiled*> searchTilesAssociatedForAction(int scope, int search_type);
+	vector<glTiled*> searchTilesAssociatedForActionOrigin(int scope, int search_type);
 		// returns tile coordinates by position
 	void getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileX, int& tileY);
 };
