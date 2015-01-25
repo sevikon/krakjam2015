@@ -44,7 +44,7 @@ int main()
 				gameObject.GetReleasedLeft();
 			}
 
-			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::RShift)
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::RControl)
 			{
 				gameObject.GetReleasedRight();
 			}

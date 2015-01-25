@@ -230,7 +230,7 @@ void glGame::Update()
 
 	if (!heroRight.death)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
 		{	
 			if (pressTimer>=0.36){
 				float x = heroRight.position.x+heroRight.getWidth()/2;
