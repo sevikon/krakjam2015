@@ -25,7 +25,7 @@ void glBoard::Load()
 
 void glBoard::Init(sf::RenderWindow& window)
 {
-	mTileManager.loadMap(1);
+	mTileManager.loadMap(2);
 }
 
 void glBoard::Update()

@@ -74,11 +74,13 @@ void glGame::Init(sf::RenderWindow& window)
 	isGameOver = false;
 	isWin = false;
 
-	bulletsTimerLeft = 0.0f;
+	bulletsTimerLeft =  0.0f;
 	bulletsTimerRight = 0.0f;
 
-	bulletsBoundLeft = rand() % 10 + 15;
-	bulletsBoundRight = rand() % 10 + 15;
+
+
+	bulletsBoundLeft = rand() % 10 + 20;
+	bulletsBoundRight = rand() % 10 + 20;
 
 	score.Init(0);
 }
