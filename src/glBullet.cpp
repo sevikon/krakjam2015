@@ -24,6 +24,8 @@ void glBullet::Init(int bottomEdge, sf::Texture * texture, sf::Texture * warning
 
 	warningTexture = warning;
 	warningSprite.setTexture(*warningTexture);
+	
+	mPlayed = false;
 
 }
 
@@ -36,11 +38,22 @@ void glBullet::Update()
 	{
 		if (mTimer > 2.2f)
 		{
+			
+
 			float x = bulletSprite.getPosition().x;
 			float y = bulletSprite.getPosition().y;
 
 			bulletSprite.setPosition(x, y + mVelocity * DELTA);
 			mVelocity += acceleration * DELTA;
+		}
+
+		if (mTimer > 2.0f)
+		{
+			if (!mPlayed)
+			{
+				mPlayed = true;
+				musicObject.PlaySound("bullet");
+			}
 		}
 	}
 	else
