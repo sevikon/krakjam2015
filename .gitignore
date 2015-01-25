@@ -12,6 +12,7 @@ ipch/
 *.dll
 *.user
 *.psd
+*.ptg
 graphics/pic
 graphics/big
 krakjam2015
