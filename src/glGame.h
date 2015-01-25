@@ -43,6 +43,7 @@ private:
 
 	float bulletsTimerLeft;
 	float bulletsTimerRight;
+	float pressTimer;
 
 	float bulletsBoundLeft;
 	float bulletsBoundRight;
