@@ -18,6 +18,8 @@ private:
 	sf::Sprite gameOverBackgroundSprite;
 	sf::Texture backgroundTexture;
 	sf::Texture gameOverBackground;
+	sf::Texture bulletTexture;
+
 	glBoard gBoard;
 	glProgressBar gProgressBar;
 	sf::View player1View;

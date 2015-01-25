@@ -31,7 +31,7 @@ void glGame::Load()
 
 	score.Load();
 
-	glBullet::Load();
+	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
 
 	level = 1;
 
@@ -276,7 +276,7 @@ void glGame::Update()
 	if (bulletsTimerLeft > bulletsBoundLeft)
 	{
 		bulletsVecLeft.push_back(glBullet());
-		bulletsVecLeft.at(bulletsVecLeft.size() - 1).Init(player1View.getCenter().y + 384);
+		bulletsVecLeft.at(bulletsVecLeft.size() - 1).Init(player1View.getCenter().y + 384, &bulletTexture);
 
 		bulletsTimerLeft = 0.0f;
 		bulletsBoundLeft = rand() % 10 + 15;
@@ -287,7 +287,7 @@ void glGame::Update()
 	if (bulletsTimerRight > bulletsBoundRight)
 	{
 		bulletsVecRight.push_back(glBullet());
-		bulletsVecRight.at(bulletsVecRight.size() - 1).Init(player2View.getCenter().y + 384);
+		bulletsVecRight.at(bulletsVecRight.size() - 1).Init(player2View.getCenter().y + 384, &bulletTexture);
 
 		bulletsTimerRight = 0.0f;
 		bulletsBoundRight = rand() % 10 + 15;
@@ -491,7 +491,7 @@ void glGame::CheckColisions()
 	for (int i = 0; i < bulletsVecLeft.size(); ++i)
 	{
 		sf::Vector2f bulletPosition = bulletsVecLeft.at(i).bulletSprite.getPosition();
-		sf::Vector2u bulletSize = bulletsVecLeft.at(i).bulletTexture.getSize();
+		sf::Vector2u bulletSize = bulletTexture.getSize();
 
 		if (!bulletsVecLeft.at(i).mDying)
 		{
@@ -507,7 +507,7 @@ void glGame::CheckColisions()
 	for (int i = 0; i < bulletsVecRight.size(); ++i)
 	{
 		sf::Vector2f bulletPosition = bulletsVecRight.at(i).bulletSprite.getPosition();
-		sf::Vector2u bulletSize = bulletsVecRight.at(i).bulletTexture.getSize();
+		sf::Vector2u bulletSize = bulletTexture.getSize();
 
 		if (!bulletsVecRight.at(i).mDying)
 		{

@@ -7,19 +7,13 @@
 const float DELTA = 1.0f / 60.0f;
 const float glBullet::acceleration = 5.0f;
 
-sf::Texture glBullet::bulletTexture;
-
-void glBullet::Load()
+void glBullet::Init(int bottomEdge, sf::Texture * texture)
 {
-	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
-}
+	bulletTexture = texture;
 
-void glBullet::Init(int bottomEdge)
-{
+	bulletSprite.setPosition(20 + rand() % 600 - bulletTexture->getSize().x, bottomEdge + 10);
 
-	bulletSprite.setPosition(20 + rand() % 600 - bulletTexture.getSize().x, bottomEdge + 10);
-
-	bulletSprite.setTexture(bulletTexture);
+	bulletSprite.setTexture(*bulletTexture);
 
 	mVelocity = - (rand() % 80 + 60); // 60 - 140 px/sec
 	mDying = false;
