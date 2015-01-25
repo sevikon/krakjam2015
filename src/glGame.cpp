@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "glUtils.h"
 #include "glSettings.h"
+#include "glTiled.h"
 #include <iostream>
 #include <stdlib.h>
 
@@ -31,7 +32,9 @@ void glGame::Load()
 
 	score.Load();
 
+
 	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
+	warningTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "warning.png"));
 
 	level = 1;
 
@@ -77,10 +80,15 @@ void glGame::Init(sf::RenderWindow& window)
 	bulletsTimerLeft =  0.0f;
 	bulletsTimerRight = 0.0f;
 
+<<<<<<< HEAD
 
 
 	bulletsBoundLeft = rand() % 10 + 20;
 	bulletsBoundRight = rand() % 10 + 20;
+=======
+	bulletsBoundLeft = rand() % 15 + 20;
+	bulletsBoundRight = rand() % 15 + 20;
+>>>>>>> 48701f15889ae0afbcdfafbda010c872dfbb3818
 
 	score.Init(0);
 }
@@ -95,7 +103,7 @@ bool glGame::Win()
 	return win;
 }
 
-void glGame::GetReleasedLeft(){
+void glGame::GetReleasedLeft() {
 	cout<<"KONIEC"<<endl;
 	float x = heroLeft.position.x+heroLeft.getWidth()/2;
 	float y = heroLeft.position.y+heroLeft.getHeight()/2;
@@ -136,6 +144,7 @@ void glGame::GameStateGameOver()
 void glGame::Update()
 {	
 	glTiledLoader& tileManager = gBoard.getTileManager();
+	gBoard.Update();
 
 	if (!heroLeft.death)
 	{
@@ -199,7 +208,7 @@ void glGame::Update()
 
 	if (!heroRight.death)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
 		{
 			float x = heroRight.position.x+heroRight.getWidth()/2;
 			float y = heroRight.position.y+heroRight.getHeight()/2;
@@ -207,7 +216,7 @@ void glGame::Update()
 			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
 			gBoard.getTileManager().runActionOnAssociated(a,b);
 			gBoard.getTileManager().runActionOnAssociatedLasers(a,b);
-		}
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
@@ -278,10 +287,10 @@ void glGame::Update()
 	if (bulletsTimerLeft > bulletsBoundLeft)
 	{
 		bulletsVecLeft.push_back(glBullet());
-		bulletsVecLeft.at(bulletsVecLeft.size() - 1).Init(player1View.getCenter().y + 384, &bulletTexture);
+		bulletsVecLeft.at(bulletsVecLeft.size() - 1).Init(player1View.getCenter().y + 384, &bulletTexture, &warningTexture);
 
 		bulletsTimerLeft = 0.0f;
-		bulletsBoundLeft = rand() % 10 + 15;
+		bulletsBoundLeft = rand() % 15 + 20;
 	}
 
 	bulletsTimerRight += DELTA;
@@ -289,10 +298,10 @@ void glGame::Update()
 	if (bulletsTimerRight > bulletsBoundRight)
 	{
 		bulletsVecRight.push_back(glBullet());
-		bulletsVecRight.at(bulletsVecRight.size() - 1).Init(player2View.getCenter().y + 384, &bulletTexture);
+		bulletsVecRight.at(bulletsVecRight.size() - 1).Init(player2View.getCenter().y + 384, &bulletTexture, &warningTexture);
 
 		bulletsTimerRight = 0.0f;
-		bulletsBoundRight = rand() % 10 + 15;
+		bulletsBoundRight = rand() % 15 + 20;
 	}
 
 	CheckColisions();
@@ -384,8 +393,6 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				isPlaying = true;
 			}
 
-			gBoard.Update();
-
 			graphics.setView(player1View);
 
 			// for parallax-scrolling
@@ -397,15 +404,16 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
-			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true,heroLeft.position,heroRight.position);
-			gProgressBar.DrawLava(graphics,true);
 			
-			for(int i = 0; i < bulletsVecLeft.size(); ++i) {
+			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true,heroLeft.position,heroRight.position);
+			
+			heroLeft.Draw(graphics);
+			
+			gProgressBar.DrawLava(graphics, true);
+
+			for (int i = 0; i < bulletsVecLeft.size(); ++i) {
 				bulletsVecLeft.at(i).Draw(graphics);
 			}
-
-			heroLeft.Draw(graphics);
-			gProgressBar.DrawLava(graphics, true);
 
 			graphics.setView(player2View);
 
@@ -418,20 +426,33 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
-			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false,heroLeft.position,heroRight.position);
-			gProgressBar.DrawLava(graphics,false);
 			
+			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false,heroLeft.position,heroRight.position);
+			
+			heroRight.Draw(graphics);
+			
+			gProgressBar.DrawLava(graphics, false);
+
 			for (int i = 0; i < bulletsVecRight.size(); ++i) {
 				bulletsVecRight.at(i).Draw(graphics);
 			}
-
-			heroRight.Draw(graphics);
-			gProgressBar.DrawLava(graphics, false);
 
 			graphics.setView(graphics.getDefaultView());
 			gProgressBar.Draw(graphics);
 
 			score.Draw(graphics);
+
+			graphics.setView(player1View);
+
+			for (int i = 0; i < bulletsVecLeft.size(); ++i) {
+				bulletsVecLeft.at(i).DrawWarning(graphics, player1View.getCenter().y + 384);
+			}
+
+			graphics.setView(player2View);
+
+			for (int i = 0; i < bulletsVecRight.size(); ++i) {
+				bulletsVecRight.at(i).DrawWarning(graphics, player2View.getCenter().y + 384);
+			}
 
 			break;
 		case GAME_STATE::WIN:
@@ -468,7 +489,7 @@ void glGame::DrawGameOver(sf::RenderWindow& graphics)
 
 void glGame::HandleEvent(sf::Event event)
 {
-	if(event.type == event.KeyPressed)
+	if(event.type == event.KeyReleased)
 	{
 		if(event.key.code == sf::Keyboard::E)
 		{
@@ -478,11 +499,44 @@ void glGame::HandleEvent(sf::Event event)
 			int row, column;
 			tileManager.getTileCoords(x, y, heroLeft.playerId, row, column);
 
-			glTiled& tile = tileManager.getTile(row, column);
-			tile.press();
+			glTiled& tile = gBoard.getTileManager().getTile(row, column);
+			
+			if(tile.type >= OBJECTS_MIN)
+			{
+				tile.press();	
+				if(tile.readyToExecAssociatedAction)
+				{
+					gBoard.getTileManager().runActionOnAssociated(row, column);
+					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				} else 
+				{
+					musicObject.PlaySound("press" + to_string(rand()%4+1));
+				}
+			}
+		}
 
-			if(tile.readyToExecAssociatedAction)
-				tileManager.runActionOnAssociated(row, column);
+		if (event.key.code == sf::Keyboard::RControl)
+		{
+			float x = heroRight.position.x+heroRight.getWidth()/2;
+			float y = heroRight.position.y+heroRight.getHeight()/2;
+			glTiledLoader tileManager = gBoard.getTileManager();
+			int row, column;
+			tileManager.getTileCoords(x, y, heroRight.playerId, row, column);
+
+			glTiled& tile = gBoard.getTileManager().getTile(row, column);
+			
+			if(tile.type >= OBJECTS_MIN)
+			{
+				tile.press();	
+				if(tile.readyToExecAssociatedAction)
+				{
+					gBoard.getTileManager().runActionOnAssociated(row, column);
+					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				} else 
+				{
+					musicObject.PlaySound("press" + to_string(rand()%4+1));
+				}
+			}
 		}
 	}
 }
