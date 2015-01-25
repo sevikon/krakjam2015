@@ -39,6 +39,16 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E)
+			{
+				gameObject.GetReleasedLeft();
+			}
+
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::RShift)
+			{
+				gameObject.GetReleasedRight();
+			}
+
             if (event.type == sf::Event::Closed)
                 window.close();
 			/*else if (event.type == sf::Event::Resized)

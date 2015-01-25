@@ -1,10 +1,24 @@
 #include "glHandleMusic.h"
+#include <iostream>
+
+using namespace std;
 
 void glHandleMusic::HandleMusic()
 {	
-	/*Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"FallEgg_0"));
-	if (!Sounds.back().first.loadFromFile("data/music/FallEgg_0.ogg")) return false;
-	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"FallEgg_1"));
+	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"press1"));
+	if (!Sounds.back().first.loadFromFile("assets/music/press1.ogg")) 
+		cout << "Error while loading sounds" << endl;
+	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"press2"));
+	if (!Sounds.back().first.loadFromFile("assets/music/press2.ogg")) 
+		cout << "Error while loading sounds" << endl;
+	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"press3"));
+	if (!Sounds.back().first.loadFromFile("assets/music/press3.ogg")) 
+		cout << "Error while loading sounds" << endl;
+	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"press4"));
+	if (!Sounds.back().first.loadFromFile("assets/music/press4.ogg")) 
+		cout << "Error while loading sounds" << endl;
+
+	/*Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"FallEgg_1"));
 	if (!Sounds.back().first.loadFromFile("data/music/FallEgg_1.ogg")) return false;
 	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"CatchEgg_0"));
 	if (!Sounds.back().first.loadFromFile("data/music/CatchEgg_0.ogg")) return false;

@@ -18,6 +18,8 @@ private:
 	sf::Sprite gameOverBackgroundSprite;
 	sf::Texture backgroundTexture;
 	sf::Texture gameOverBackground;
+	sf::Texture bulletTexture;
+
 	glBoard gBoard;
 	glProgressBar gProgressBar;
 	sf::View player1View;
@@ -27,20 +29,22 @@ private:
 	
 	glScore score;
 
-
 	bool playerLeftOnLadder;
 	bool playerRightOnLadder;
-
 
 	glHero heroLeft;
 	glHero heroRight;
 
 	glHandleMusic musicObject;
-	//glBullet bullet;
 
-	glBullet bulletsLeft[10];
-	glBullet bulletsRight[10];
-	//std::vector<glBullet> glBulletsVec;
+	std::vector<glBullet> bulletsVecLeft;
+	std::vector<glBullet> bulletsVecRight;
+
+	float bulletsTimerLeft;
+	float bulletsTimerRight;
+
+	float bulletsBoundLeft;
+	float bulletsBoundRight;
 
 	enum GAME_STATE {MENU, GAMEPLAY, GAMEOVER, WIN} gameState;
 	bool isMenu, isPlaying, isGameOver, isWin;
@@ -65,6 +69,8 @@ public:
 	void CheckCollisionBorder();
 	bool Win();
 	bool GameOver();
+	void GetReleasedLeft();
+	void GetReleasedRight();
 
 	void GameStateWin();
 	void GameStateGameOver();

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "glUtils.h"
 #include "glSettings.h"
+#include "glTiled.h"
 #include <iostream>
 #include <stdlib.h>
 
@@ -13,6 +14,8 @@ const  int glGame::level2Age = 231;
 const  int glGame::level3Age = 302;
 const  int glGame::level4Age = 733;
 const  int glGame::level5Age = 1076;
+
+const float DELTA = 1.0f / 60.0f;
 
 void glGame::Load()
 {
@@ -29,6 +32,9 @@ void glGame::Load()
 
 	score.Load();
 
+
+	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
+
 	level = 1;
 
 }
@@ -44,16 +50,8 @@ void glGame::Init(sf::RenderWindow& window)
 
 	gBoard.Init(window);
 
-	bulletsLeft[0].Init(200,6200,0.005);
-	bulletsLeft[1].Init(200,6000,-0.005);
-
-	bulletsRight[0].Init(200,6200,0.005);
-	bulletsRight[1].Init(200,6000,-0.005);
-
-	/*for(int i=0; i<3;++i){
-		glBulletsVec.push_back(glBullet());
-		glBulletsVec.at(i).Init(200,6200,0.01*(i+1));
-	}*/
+	bulletsVecLeft.clear();
+	bulletsVecRight.clear();
 
 	player1View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y/1.f));
 	player2View.setSize(sf::Vector2f(window.getSize().x/2.f, window.getSize().y)/1.f);
@@ -78,6 +76,12 @@ void glGame::Init(sf::RenderWindow& window)
 	isGameOver = false;
 	isWin = false;
 
+	bulletsTimerLeft = 0.0f;
+	bulletsTimerRight = 0.0f;
+
+	bulletsBoundLeft = rand() % 10 + 15;
+	bulletsBoundRight = rand() % 10 + 15;
+
 	score.Init(0);
 }
 
@@ -89,6 +93,24 @@ bool glGame::Win()
 		win = true;}
 
 	return win;
+}
+
+void glGame::GetReleasedLeft() {
+	cout<<"KONIEC"<<endl;
+	float x = heroLeft.position.x+heroLeft.getWidth()/2;
+	float y = heroLeft.position.y+heroLeft.getHeight()/2;
+	int a,b;
+	gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId, a, b);
+	gBoard.getTileManager().runActionOnAssociatedLasersShowAgain(a, b);
+}
+
+void glGame::GetReleasedRight(){
+	cout<<"KONIEC"<<endl;
+	float x = heroRight.position.x+heroRight.getWidth()/2;
+	float y = heroRight.position.y+heroRight.getHeight()/2;
+	int a,b;
+	gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId, a, b);
+	gBoard.getTileManager().runActionOnAssociatedLasersShowAgain(a, b);
 }
 
 bool glGame::GameOver()
@@ -119,15 +141,15 @@ void glGame::Update()
 	{
 		// player 1 movement
 
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{
 			float x = heroLeft.position.x+heroLeft.getWidth()/2;
 			float y = heroLeft.position.y+heroLeft.getHeight()/2;
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId, a, b);
 			gBoard.getTileManager().runActionOnAssociated(a, b);
-		}
+			gBoard.getTileManager().runActionOnAssociatedLasers(a, b);
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
@@ -177,14 +199,15 @@ void glGame::Update()
 
 	if (!heroRight.death)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
 		{
 			float x = heroRight.position.x+heroRight.getWidth()/2;
 			float y = heroRight.position.y+heroRight.getHeight()/2;
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
 			gBoard.getTileManager().runActionOnAssociated(a,b);
-		}
+			gBoard.getTileManager().runActionOnAssociatedLasers(a,b);
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
@@ -230,17 +253,56 @@ void glGame::Update()
 	} else
 		heroRight.Update(glHero::NONE);
 
+	// updating bullets
+
+	for (int i = 0; i < bulletsVecLeft.size(); ++i) {
+		bulletsVecLeft.at(i).Update();
+
+		if (bulletsVecLeft.at(i).mOpacity <= 0)
+		{
+			bulletsVecLeft.erase(bulletsVecLeft.begin() + i); --i;
+		}
+	}
+
+	for (int i = 0; i < bulletsVecRight.size(); ++i) {
+		bulletsVecRight.at(i).Update();
+
+		if (bulletsVecRight.at(i).mOpacity <= 0)
+		{
+			bulletsVecRight.erase(bulletsVecRight.begin() + i); --i;
+		}
+	}
+
+	bulletsTimerLeft += DELTA;
+
+	if (bulletsTimerLeft > bulletsBoundLeft)
+	{
+		bulletsVecLeft.push_back(glBullet());
+		bulletsVecLeft.at(bulletsVecLeft.size() - 1).Init(player1View.getCenter().y + 384, &bulletTexture);
+
+		bulletsTimerLeft = 0.0f;
+		bulletsBoundLeft = rand() % 10 + 15;
+	}
+
+	bulletsTimerRight += DELTA;
+
+	if (bulletsTimerRight > bulletsBoundRight)
+	{
+		bulletsVecRight.push_back(glBullet());
+		bulletsVecRight.at(bulletsVecRight.size() - 1).Init(player2View.getCenter().y + 384, &bulletTexture);
+
+		bulletsTimerRight = 0.0f;
+		bulletsBoundRight = rand() % 10 + 15;
+	}
+
+	CheckColisions();
+
 	// progress bar
+
 	gProgressBar.Update(heroLeft.position.y,heroRight.position.y);
 
-	/*for(int i=0; i<10;++i){
-		bullets[i].Update();
-	}*/
-	CheckColisions();
-	//bullet.Update();
-
-
 	// updating the camera
+
 	float y1 = heroLeft.position.y + heroLeft.getHeight() / 2;
 	float y2 = heroRight.position.y + heroRight.getHeight() / 2;
 
@@ -259,9 +321,9 @@ void glGame::Update()
 
 	// Death in lava
 
-	if(heroRight.position.y + heroRight.getHeight() - 140 > gProgressBar.lava){
+	if(heroRight.position.y + heroRight.getHeight() - 170 > gProgressBar.lava){
 		heroRight.death = true;}
-	if(heroLeft.position.y + heroLeft.getHeight() - 140 > gProgressBar.lava){
+	if(heroLeft.position.y + heroLeft.getHeight() - 170 > gProgressBar.lava){
 		heroLeft.death = true;}
 
 	// updating score
@@ -337,9 +399,11 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			}
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true,heroLeft.position,heroRight.position);
 			gProgressBar.DrawLava(graphics,true);
-			for(int i=0; i<10;++i){
-				bulletsLeft[i].Draw(graphics);
+			
+			for(int i = 0; i < bulletsVecLeft.size(); ++i) {
+				bulletsVecLeft.at(i).Draw(graphics);
 			}
+
 			heroLeft.Draw(graphics);
 			gProgressBar.DrawLava(graphics, true);
 
@@ -356,8 +420,9 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			}
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false,heroLeft.position,heroRight.position);
 			gProgressBar.DrawLava(graphics,false);
-			for(int i=0; i<10;++i){
-				bulletsLeft[i].Draw(graphics);
+			
+			for (int i = 0; i < bulletsVecRight.size(); ++i) {
+				bulletsVecRight.at(i).Draw(graphics);
 			}
 
 			heroRight.Draw(graphics);
@@ -403,47 +468,84 @@ void glGame::DrawGameOver(sf::RenderWindow& graphics)
 
 void glGame::HandleEvent(sf::Event event)
 {
-	if(event.type == event.KeyPressed)
+	if(event.type == event.KeyReleased)
 	{
+		if(event.key.code == sf::Keyboard::E)
+		{
+			float x = heroLeft.position.x+heroLeft.getWidth()/2;
+			float y = heroLeft.position.y+heroLeft.getHeight()/2;
+			glTiledLoader tileManager = gBoard.getTileManager();
+			int row, column;
+			tileManager.getTileCoords(x, y, heroLeft.playerId, row, column);
+
+			glTiled& tile = gBoard.getTileManager().getTile(row, column);
+			
+			if(tile.type >= OBJECTS_MIN)
+			{
+				tile.press();	
+				if(tile.readyToExecAssociatedAction)
+				{
+					gBoard.getTileManager().runActionOnAssociated(row, column);
+					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				} else 
+				{
+					musicObject.PlaySound("press" + to_string(rand()%4+1));
+				}
+			}
+		}
+
+		if (event.key.code == sf::Keyboard::RShift)
+		{
+			float x = heroRight.position.x+heroRight.getWidth()/2;
+			float y = heroRight.position.y+heroRight.getHeight()/2;
+			glTiledLoader tileManager = gBoard.getTileManager();
+			int row, column;
+			tileManager.getTileCoords(x, y, heroRight.playerId, row, column);
+
+			glTiled& tile = gBoard.getTileManager().getTile(row, column);
+			tile.press();
+
+			if(tile.readyToExecAssociatedAction)
+			{
+				gBoard.getTileManager().runActionOnAssociated(row, column);
+				gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+			}
+		}
 	}
 }
 
 void glGame::CheckColisions()
 {
-	float leftHeroWidth  = heroLeft.getSpirte().getLocalBounds().width;
-	float leftHeroHeight = heroLeft.getSpirte().getLocalBounds().height;
-	float rightHeroWidth  = heroRight.getSpirte().getLocalBounds().width;
-	float rightHeroHeight = heroRight.getSpirte().getLocalBounds().height;
 	
-	for (int i = 0; i < 10; ++i) {
-		bulletsLeft[i].Update();
+	for (int i = 0; i < bulletsVecLeft.size(); ++i)
+	{
+		sf::Vector2f bulletPosition = bulletsVecLeft.at(i).bulletSprite.getPosition();
+		sf::Vector2u bulletSize = bulletTexture.getSize();
 
-		if(!bulletsLeft[i].mDying)
+		if (!bulletsVecLeft.at(i).mDying)
 		{
-			sf::Vector2f bulletCenter = bulletsLeft[i].bulletSprite.getOrigin();
-			float height = bulletsLeft[i].bulletSprite.getLocalBounds().height;
-			float width = bulletsLeft[i].bulletSprite.getLocalBounds().width;
-			float leftHeroCenter_x = heroLeft.getSpirte().getOrigin().x;
-			float leftHeroCenter_y = heroLeft.getSpirte().getOrigin().y;
-
-			if(std::abs(bulletCenter.y-leftHeroCenter_y) < 20 && std::abs(bulletCenter.x-leftHeroCenter_x) < 20){
-					//heroLeft.death = true;
-			}
+			if (bulletPosition.x + bulletSize.x > heroLeft.position.x && bulletPosition.x < heroLeft.position.x + heroLeft.getWidth())
+				if (bulletPosition.y + bulletSize.y > heroLeft.position.y && bulletPosition.y < heroLeft.position.y + heroLeft.getHeight())
+				{
+					heroLeft.death = true;
+					bulletsVecLeft.at(i).mDying = true;
+				}
 		}
 	}
 
-	for (int i = 0; i < 10; ++i) {
-		bulletsRight[i].Update();
+	for (int i = 0; i < bulletsVecRight.size(); ++i)
+	{
+		sf::Vector2f bulletPosition = bulletsVecRight.at(i).bulletSprite.getPosition();
+		sf::Vector2u bulletSize = bulletTexture.getSize();
 
-		if(!bulletsRight[i].mDying)
+		if (!bulletsVecRight.at(i).mDying)
 		{
-			sf::Vector2f bulletCenter = bulletsRight[i].bulletSprite.getOrigin();
-			float rightHeroCenter_x = heroRight.getSpirte().getOrigin().x;
-			float rightHeroCenter_y = heroRight.getSpirte().getOrigin().y;
-
-			if(std::abs(bulletCenter.y-rightHeroCenter_y) < 20 && std::abs(bulletCenter.x-rightHeroCenter_x) < 20){
-					//heroRight.death = true;
-			}
+			if (bulletPosition.x + bulletSize.x > heroRight.position.x && bulletPosition.x < heroRight.position.x + heroRight.getWidth())
+				if (bulletPosition.y + bulletSize.y > heroRight.position.y && bulletPosition.y < heroRight.position.y + heroRight.getHeight())
+				{
+					heroRight.death = true;
+					bulletsVecRight.at(i).mDying = true;
+				}
 		}
 	}
 								
