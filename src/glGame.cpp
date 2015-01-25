@@ -93,6 +93,24 @@ bool glGame::Win()
 	return win;
 }
 
+void glGame::GetReleasedLeft(){
+	cout<<"KONIEC"<<endl;
+	float x = heroLeft.position.x+heroLeft.getWidth()/2;
+	float y = heroLeft.position.y+heroLeft.getHeight()/2;
+	int a,b;
+	gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId, a, b);
+	gBoard.getTileManager().runActionOnAssociatedLasersShowAgain(a, b);
+}
+
+void glGame::GetReleasedRight(){
+	cout<<"KONIEC"<<endl;
+	float x = heroRight.position.x+heroRight.getWidth()/2;
+	float y = heroRight.position.y+heroRight.getHeight()/2;
+	int a,b;
+	gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId, a, b);
+	gBoard.getTileManager().runActionOnAssociatedLasersShowAgain(a, b);
+}
+
 bool glGame::GameOver()
 {	
 	bool gameOver = false;
@@ -121,15 +139,15 @@ void glGame::Update()
 	{
 		// player 1 movement
 
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{
 			float x = heroLeft.position.x+heroLeft.getWidth()/2;
 			float y = heroLeft.position.y+heroLeft.getHeight()/2;
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId, a, b);
 			gBoard.getTileManager().runActionOnAssociated(a, b);
-		}
+			gBoard.getTileManager().runActionOnAssociatedLasers(a, b);
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
@@ -186,6 +204,7 @@ void glGame::Update()
 			int a,b;
 			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
 			gBoard.getTileManager().runActionOnAssociated(a,b);
+			gBoard.getTileManager().runActionOnAssociatedLasers(a,b);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -300,9 +319,9 @@ void glGame::Update()
 
 	// Death in lava
 
-	if(heroRight.position.y + heroRight.getHeight() - 140 > gProgressBar.lava){
+	if(heroRight.position.y + heroRight.getHeight() - 170 > gProgressBar.lava){
 		heroRight.death = true;}
-	if(heroLeft.position.y + heroLeft.getHeight() - 140 > gProgressBar.lava){
+	if(heroLeft.position.y + heroLeft.getHeight() - 170 > gProgressBar.lava){
 		heroLeft.death = true;}
 
 	// updating score
@@ -449,6 +468,20 @@ void glGame::HandleEvent(sf::Event event)
 {
 	if(event.type == event.KeyPressed)
 	{
+		if(event.key.code == sf::Keyboard::E)
+		{
+			float x = heroLeft.position.x+heroLeft.getWidth()/2;
+			float y = heroLeft.position.y+heroLeft.getHeight()/2;
+			glTiledLoader tileManager = gBoard.getTileManager();
+			int row, column;
+			tileManager.getTileCoords(x, y, heroLeft.playerId, row, column);
+
+			glTiled& tile = tileManager.getTile(row, column);
+			tile.press();
+
+			if(tile.readyToExecAssociatedAction)
+				tileManager.runActionOnAssociated(row, column);
+		}
 	}
 }
 

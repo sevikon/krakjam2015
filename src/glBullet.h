@@ -6,6 +6,7 @@ class glBullet
 public:
 
 	static sf::Texture bulletTexture;
+
 	sf::Sprite bulletSprite;
 
 	const static float acceleration;

@@ -11,7 +11,9 @@
 
 using namespace std;
 
-glTiled::glTiled(int type){
+glTiled::glTiled(int type, int row, int column) {
+	this->row = row;
+	this->column = column;
 	this->type = type;
 	this->active = false;
 	this->used=false;
@@ -22,6 +24,9 @@ glTiled::glTiled(int type){
 	this->associated = NULL;
 	this->together=false;
 	this->color = sf::Color(255, 255, 255,255);
+	this->amountOfPresses = 0;
+	this->readyToExecAssociatedAction = false;
+
 }
 
 float glTiled::getLowerOpacity(){
@@ -85,6 +90,38 @@ void glTiled::runActionOnAssociated() {
 	}
 }
 
+
+void glTiled::runActionOnAssociatedLaser() {
+	if (this->associated != NULL && type>=OBJECTS_MIN && type%2==0) 
+		(*associated).setDefinitelyActive();
+
+	for(vector<glTiled*>::iterator tile_it = actionAssociated.begin(); tile_it < actionAssociated.end(); ++tile_it)
+	{
+		(*tile_it)->hideLasers();
+	}
+}
+
+void glTiled::runActionOnAssociatedLaserShow() {
+
+	this->actionAssociated;
+	for(vector<glTiled*>::iterator tile_it = actionAssociated.begin(); tile_it < actionAssociated.end(); ++tile_it)
+	{
+		(*tile_it)->showLasers();
+	}
+}
+
+void glTiled::press()
+{
+	amountOfPresses++;
+	if(amountOfPresses >= MAX_AMOUNT_OF_PRESSES)
+		readyToExecAssociatedAction = true;
+}
+
+void glTiled::resetPresses()
+{
+	amountOfPresses = 0;
+}
+
 void glTiled::setActive(int framesPressed) {
 	if (type>=OBJECTS_MIN){
 		active=true;
@@ -95,6 +132,17 @@ void glTiled::setActive(int framesPressed) {
 void glTiled::showLadder()
 {
 	type = LADDER_INNER;
+}
+
+void glTiled::hideLasers()
+{
+	type = 0;
+}
+
+void glTiled::showLasers()
+{
+	cout<<"zmin"<<endl;
+	type = LASER;
 }
 
 void glTiled::setDefinitelyActive() {
