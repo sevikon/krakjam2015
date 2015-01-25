@@ -501,7 +501,7 @@ void glGame::Draw(sf::RenderWindow& graphics)
 
 void glGame::DrawGameOver(sf::RenderWindow& graphics)
 {
-	gameOverBackground.loadFromFile(concat(glSettings::ASSETS_PATH, "gameOver.jpg"));
+	gameOverBackground.loadFromFile(concat(glSettings::ASSETS_PATH, "gameOver.png"));
 	gameOverBackgroundSprite.setTexture(gameOverBackground);
 	gameOverBackgroundSprite.setOrigin(gameOverBackground.getSize().x/2., gameOverBackground.getSize().y/2.);
 	gameOverBackgroundSprite.setPosition(graphics.getSize().x/2., graphics.getSize().y/2.);
