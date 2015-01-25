@@ -73,8 +73,9 @@ int main()
 			
         }
 
-		if(frame_timer.getElapsedTime().asMilliseconds() > DELTA) 
+		if(frame_timer.getElapsedTime().asSeconds() > DELTA) 
 		{
+
 			if(gameObject.Win()){
 				/*for(int i=0;i < 20./DELTA;++i){
 					if(frame_timer.getElapsedTime().asMilliseconds() > DELTA){

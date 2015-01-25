@@ -25,16 +25,16 @@ void glBoard::Load()
 	progressBarTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "progress-bar-texture.png"));
 }
 
-void glBoard::Init(sf::RenderWindow& window)
+void glBoard::Init(int level)
 {
 	mAngle = 0;
-	mTileManager.loadMap(1);
+	mTileManager.loadMap(level);
 }
 
 void glBoard::Update()
 {
 
-	mAngle += DELTA * 0.25f;
+	mAngle += DELTA * 2.f;
 	if (mAngle > 360.0f) mAngle = 0.0f;
 
 }
@@ -147,4 +147,10 @@ void glBoard::DrawPressStackProgressBar(sf::RenderWindow& graphics, float progre
 	bar.setTexture(&progressBarTexture);
 	bar.setPosition(posx, posy + glSettings::TILE_HEIGHT - progress*glSettings::TILE_HEIGHT);
 	graphics.draw(bar);
+}
+
+
+void glBoard::ChangeLevel(int level)
+{
+	mTileManager.loadMap(level);
 }
