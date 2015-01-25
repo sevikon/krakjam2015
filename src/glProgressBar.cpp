@@ -55,7 +55,7 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 	// define a 120x50 rectangle
 
 	if(timer.getElapsedTime().asSeconds() > 3){
-		lava-=0.009+0.0004*timer.getElapsedTime().asSeconds();}
+		lava-=0.004+0.0004*timer.getElapsedTime().asSeconds();}
 
 	if (lava<0){
 		lava=0;}
@@ -68,15 +68,15 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 	float actualPlayer2 = ((1-(player2/6400))*754);
 
 	if (lava-player1>180 || lava-player2>180 ){
-		lava-=0.061;
+		lava-=0.051;
 	}else if (lava-player1>300 || lava-player2>300 ){
-		lava-=0.074;
+		lava-=0.064;
 	}else if (lava-player1>400 || lava-player2>400 ){
-		lava-=0.104;
+		lava-=0.90;
 	}else if (lava-player1>500 || lava-player2>500 ){
-		lava-=0.167;
+		lava-=0.137;
 	}else if (lava-player1>600 || lava-player2>600 ){
-		lava-=0.7;
+		lava-=0.5;
 	}
 
 
