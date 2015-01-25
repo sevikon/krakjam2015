@@ -12,6 +12,8 @@ private:
 	sf::Texture backgroundTexture[SPRITES];
 	glTiledLoader mTileManager;
 
+	float mAngle;
+
 public: 
 	void Load();
 	void Update();

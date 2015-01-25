@@ -322,6 +322,7 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				isPlaying = true;
 			}
 
+			gBoard.Update();
 
 			graphics.setView(player1View);
 
@@ -339,8 +340,8 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			for(int i=0; i<10;++i){
 				bulletsLeft[i].Draw(graphics);
 			}
-			gProgressBar.DrawLava(graphics,true);
 			heroLeft.Draw(graphics);
+			gProgressBar.DrawLava(graphics, true);
 
 			graphics.setView(player2View);
 
@@ -358,8 +359,9 @@ void glGame::Draw(sf::RenderWindow& graphics)
 			for(int i=0; i<10;++i){
 				bulletsLeft[i].Draw(graphics);
 			}
-			gProgressBar.DrawLava(graphics,false);
+
 			heroRight.Draw(graphics);
+			gProgressBar.DrawLava(graphics, false);
 
 			graphics.setView(graphics.getDefaultView());
 			gProgressBar.Draw(graphics);
@@ -425,7 +427,7 @@ void glGame::CheckColisions()
 			float leftHeroCenter_y = heroLeft.getSpirte().getOrigin().y;
 
 			if(std::abs(bulletCenter.y-leftHeroCenter_y) < 20 && std::abs(bulletCenter.x-leftHeroCenter_x) < 20){
-					heroLeft.death = true;
+					//heroLeft.death = true;
 			}
 		}
 	}
@@ -440,7 +442,7 @@ void glGame::CheckColisions()
 			float rightHeroCenter_y = heroRight.getSpirte().getOrigin().y;
 
 			if(std::abs(bulletCenter.y-rightHeroCenter_y) < 20 && std::abs(bulletCenter.x-rightHeroCenter_x) < 20){
-					heroRight.death = true;
+					//heroRight.death = true;
 			}
 		}
 	}
