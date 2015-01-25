@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "glUtils.h"
 #include "glSettings.h"
+#include "glTiled.h"
 #include <iostream>
 #include <stdlib.h>
 
@@ -30,6 +31,7 @@ void glGame::Load()
 	gBoard.Load();
 
 	score.Load();
+
 
 	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
 	warningTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "warning.png"));
@@ -94,7 +96,7 @@ bool glGame::Win()
 	return win;
 }
 
-void glGame::GetReleasedLeft(){
+void glGame::GetReleasedLeft() {
 	cout<<"KONIEC"<<endl;
 	float x = heroLeft.position.x+heroLeft.getWidth()/2;
 	float y = heroLeft.position.y+heroLeft.getHeight()/2;
@@ -135,6 +137,7 @@ void glGame::GameStateGameOver()
 void glGame::Update()
 {	
 	glTiledLoader& tileManager = gBoard.getTileManager();
+	gBoard.Update();
 
 	if (!heroLeft.death)
 	{
@@ -198,7 +201,7 @@ void glGame::Update()
 
 	if (!heroRight.death)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
 		{
 			float x = heroRight.position.x+heroRight.getWidth()/2;
 			float y = heroRight.position.y+heroRight.getHeight()/2;
@@ -206,7 +209,7 @@ void glGame::Update()
 			gBoard.getTileManager().getTileCoords(x,y,heroRight.playerId,a,b);
 			gBoard.getTileManager().runActionOnAssociated(a,b);
 			gBoard.getTileManager().runActionOnAssociatedLasers(a,b);
-		}
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
@@ -383,8 +386,6 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				isPlaying = true;
 			}
 
-			gBoard.Update();
-
 			graphics.setView(player1View);
 
 			// for parallax-scrolling
@@ -481,7 +482,7 @@ void glGame::DrawGameOver(sf::RenderWindow& graphics)
 
 void glGame::HandleEvent(sf::Event event)
 {
-	if(event.type == event.KeyPressed)
+	if(event.type == event.KeyReleased)
 	{
 		if(event.key.code == sf::Keyboard::E)
 		{
@@ -491,11 +492,44 @@ void glGame::HandleEvent(sf::Event event)
 			int row, column;
 			tileManager.getTileCoords(x, y, heroLeft.playerId, row, column);
 
-			glTiled& tile = tileManager.getTile(row, column);
-			tile.press();
+			glTiled& tile = gBoard.getTileManager().getTile(row, column);
+			
+			if(tile.type >= OBJECTS_MIN)
+			{
+				tile.press();	
+				if(tile.readyToExecAssociatedAction)
+				{
+					gBoard.getTileManager().runActionOnAssociated(row, column);
+					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				} else 
+				{
+					musicObject.PlaySound("press" + to_string(rand()%4+1));
+				}
+			}
+		}
 
-			if(tile.readyToExecAssociatedAction)
-				tileManager.runActionOnAssociated(row, column);
+		if (event.key.code == sf::Keyboard::RControl)
+		{
+			float x = heroRight.position.x+heroRight.getWidth()/2;
+			float y = heroRight.position.y+heroRight.getHeight()/2;
+			glTiledLoader tileManager = gBoard.getTileManager();
+			int row, column;
+			tileManager.getTileCoords(x, y, heroRight.playerId, row, column);
+
+			glTiled& tile = gBoard.getTileManager().getTile(row, column);
+			
+			if(tile.type >= OBJECTS_MIN)
+			{
+				tile.press();	
+				if(tile.readyToExecAssociatedAction)
+				{
+					gBoard.getTileManager().runActionOnAssociated(row, column);
+					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				} else 
+				{
+					musicObject.PlaySound("press" + to_string(rand()%4+1));
+				}
+			}
 		}
 	}
 }

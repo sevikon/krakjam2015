@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML\Graphics.hpp"
+#include "SFML\Audio.hpp"
 #include <vector>
 
 
@@ -33,11 +34,11 @@ public:
 	bool readyToExecAssociatedAction;
 	int framesPressed;
 	int framesActive;
-public: 
+
 	sf::Color color;
 	int amountOfPresses;
 	int row, column;
-	static const int MAX_AMOUNT_OF_PRESSES = 10;
+	static const int MAX_AMOUNT_OF_PRESSES = 8;
 	glTiled(int type, int row, int column);
 	bool together;
 	glTiled *associated;
