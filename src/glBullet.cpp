@@ -5,7 +5,7 @@
 // how much time passes between frames
 
 const float DELTA = 1.0f / 60.0f;
-const float glBullet::acceleration = 60.0f;
+const float glBullet::acceleration = 1500.0f;
 
 void glBullet::Init(int bottomEdge, sf::Texture * texture, sf::Texture * warning)
 {
@@ -15,7 +15,7 @@ void glBullet::Init(int bottomEdge, sf::Texture * texture, sf::Texture * warning
 
 	bulletSprite.setTexture(*bulletTexture);
 
-	mVelocity = - (rand() % 200 + 200); // 60 - 140 px/sec
+	mVelocity = - (rand() % 600 + 1200); // 60 - 140 px/sec
 	mDying = false;
 
 	mOpacity = 1.0f;
@@ -34,7 +34,7 @@ void glBullet::Update()
 
 	if(!mDying)
 	{
-		if (mTimer > 4.5f)
+		if (mTimer > 2.2f)
 		{
 			float x = bulletSprite.getPosition().x;
 			float y = bulletSprite.getPosition().y;
@@ -63,9 +63,9 @@ void glBullet::Draw(sf::RenderWindow& graphics)
 void glBullet::DrawWarning(sf::RenderWindow& graphics, int bottomEdge)
 {
 
-	warningSprite.setPosition(bulletSprite.getPosition().x - (bulletTexture->getSize().x - warningTexture->getSize().x), bottomEdge - warningTexture->getSize().y - 30);
+	warningSprite.setPosition(bulletSprite.getPosition().x - (bulletTexture->getSize().x - warningTexture->getSize().x) + (rand() % 16 - 8), bottomEdge - warningTexture->getSize().y - 30 + (rand() % 16 - 8));
 
-	if (mTimer < 4.0f)
+	if (mTimer < 2.0f)
 		graphics.draw(warningSprite);
 
 }
