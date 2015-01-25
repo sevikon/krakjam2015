@@ -88,15 +88,15 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 
 					// draw picking progress bar
 					int pressesAmount = getTileManager().getTile(b, a).amountOfPresses;
-					if(pressesAmount && pressesAmount <= glTiled::MAX_AMOUNT_OF_PRESSES)
+					if(pressesAmount && pressesAmount < glTiled::MAX_AMOUNT_OF_PRESSES)
 					{
 						DrawPressStackProgressBar(graphics, pressesAmount/(float)glTiled::MAX_AMOUNT_OF_PRESSES, a*tiledSize + offset, (b)*tiledSize);
-						if(pressesAmount == glTiled::MAX_AMOUNT_OF_PRESSES)
-						{
-							// set nice transparency effect
-							backgroundSprite[act].setColor(sf::Color(255, 255, 255, 100));
-						}
 					} 
+					if(pressesAmount >= glTiled::MAX_AMOUNT_OF_PRESSES)
+					{
+						// set nice transparency effect
+						backgroundSprite[act].setColor(sf::Color(255, 255, 255, 100));
+					}
 					
 					graphics.draw(backgroundSprite[act]);// define a 120x50 rectangle
 					backgroundSprite[act].setColor(sf::Color(255, 255, 255,255));

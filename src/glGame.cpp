@@ -466,7 +466,7 @@ void glGame::DrawGameOver(sf::RenderWindow& graphics)
 
 void glGame::HandleEvent(sf::Event event)
 {
-	if(event.type == event.KeyPressed)
+	if(event.type == event.KeyReleased)
 	{
 		if(event.key.code == sf::Keyboard::E)
 		{
