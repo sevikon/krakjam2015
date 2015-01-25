@@ -5,9 +5,10 @@
 class glProgressBar
 {
 private:
-	sf::Sprite backgroundSprite[SPRITES];
+	sf::Sprite  backgroundSprite[SPRITES];
 	sf::Texture backgroundTexture[SPRITES];
 	sf::Texture pbTexture;
+	sf::Sprite  pbSprite;
 
 	sf::Clock timer;
 
@@ -15,6 +16,7 @@ public:
 	float lava;
 	float player1;
 	float player2;
+
 	void Load();
 	void Init();
 	void Update(float player1, float player2);
