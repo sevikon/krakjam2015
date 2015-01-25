@@ -316,7 +316,7 @@ void glGame::Update()
 		bulletsVecLeft.at(bulletsVecLeft.size() - 1).Init(player1View.getCenter().y + 384, &bulletTexture, &warningTexture);
 
 		bulletsTimerLeft = 0.0f;
-		bulletsBoundLeft = rand() % 15 + 20;
+		bulletsBoundLeft = rand() % 10 + 10;
 	}
 
 	bulletsTimerRight += DELTA;
@@ -327,7 +327,7 @@ void glGame::Update()
 		bulletsVecRight.at(bulletsVecRight.size() - 1).Init(player2View.getCenter().y + 384, &bulletTexture, &warningTexture);
 
 		bulletsTimerRight = 0.0f;
-		bulletsBoundRight = rand() % 15 + 20;
+		bulletsBoundRight = rand() % 10 + 10;
 	}
 
 	CheckColisions();
@@ -638,6 +638,6 @@ void glGame::ChangeLevel(int level)
 	bulletsTimerLeft = 0.0f;
 	bulletsTimerRight = 0.0f;
 
-	bulletsBoundLeft = rand() % 15 + 20;
-	bulletsBoundRight = rand() % 15 + 20;
+	bulletsBoundLeft = rand() % 10 + 10;
+	bulletsBoundRight = rand() % 10 + 10;
 }
