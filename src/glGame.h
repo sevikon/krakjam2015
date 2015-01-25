@@ -69,6 +69,7 @@ public:
 	void Update();
 	void CheckCollisionBorder();
 	bool Win();
+	void ChangeLevel(int level);
 	bool GameOver();
 	void GetReleasedLeft();
 	void GetReleasedRight();

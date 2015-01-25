@@ -23,7 +23,10 @@ private:
 
 	// properties
 
-	static const int walkingFrames;
+	int walkingFrames;
+
+	static const int leftWalkingFrames;
+	static const int rightWalkingFrames;
 	static const int climbingFrames;
 	static const float frameDuration;
 	static const float climbingSpeed;

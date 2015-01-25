@@ -49,7 +49,7 @@ void glGame::Init(sf::RenderWindow& window)
 	printf("Zaczynamy nowa gre.\n");
 	printf("-----------------------------------------------------\n");
 
-	gBoard.Init(window);
+	gBoard.Init(1);
 
 	bulletsVecLeft.clear();
 	bulletsVecRight.clear();
@@ -531,6 +531,14 @@ void glGame::HandleEvent(sf::Event event)
 				}
 			}
 		}
+		if (event.key.code == sf::Keyboard::Num1)
+		{
+			ChangeLevel(1);
+		}
+		if (event.key.code == sf::Keyboard::Num2)
+		{
+			ChangeLevel(2);
+		}
 	}
 }
 
@@ -569,4 +577,29 @@ void glGame::CheckColisions()
 		}
 	}
 								
+}
+
+void glGame::ChangeLevel(int level)
+{
+	//wczytanie mapy
+	printf("-----------------------------------------------------\n");
+	printf("Nowy level: %d\n", level);
+	printf("-----------------------------------------------------\n");
+
+	gBoard.Init(level);
+	gProgressBar.Init();
+
+	bulletsVecLeft.clear();
+	bulletsVecRight.clear();
+
+	heroLeft.Init(100, gBoard.getTileManager().getMapHeight() - 64 - heroLeft.getHeight(), player1View, glHero::PLAYER::FST);
+	heroRight.Init(500, gBoard.getTileManager().getMapHeight() - 64 - heroRight.getHeight(), player2View, glHero::PLAYER::SND);
+
+	playerLeftOnLadder = playerRightOnLadder = false;
+
+	bulletsTimerLeft = 0.0f;
+	bulletsTimerRight = 0.0f;
+
+	bulletsBoundLeft = rand() % 15 + 20;
+	bulletsBoundRight = rand() % 15 + 20;
 }
