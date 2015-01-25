@@ -503,7 +503,7 @@ void glGame::HandleEvent(sf::Event event)
 					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
 				} else 
 				{
-					musicObject.PlaySound("press" + std::to_string(rand()%4+1));
+					//musicObject.PlaySound("press" + std::to_string(rand()%4+1));
 				}
 			}
 		}
@@ -527,7 +527,7 @@ void glGame::HandleEvent(sf::Event event)
 					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
 				} else 
 				{
-					musicObject.PlaySound("press" + to_string(rand()%4+1));
+					//musicObject.PlaySound("press" + to_string(rand()%4+1));
 				}
 			}
 		}

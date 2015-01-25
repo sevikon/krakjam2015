@@ -19,10 +19,10 @@ glMainMenu::MenuResult glMainMenu::Show(sf::RenderWindow& window, float viewWidt
 	mExitSprite.setTexture(mExit);
 	
 	mStartSprite.setOrigin(mStart.getSize().x/2 , mStart.getSize().y/2);
-	mExitSprite.setOrigin(mExit.getSize().x/2 , mExit.getSize().y/2);
+	mExitSprite.setOrigin(mExit.getSize().x/2, mExit.getSize().y/2);
 
-	mStartSprite.setPosition(viewWidth/2, viewHeight/2 - 50);
-	mExitSprite.setPosition(viewWidth/2, viewHeight/2 + 120);
+	mStartSprite.setPosition(viewWidth/2-410, viewHeight/2 - 60);
+	mExitSprite.setPosition(viewWidth/2-410, viewHeight/2 + 110);
 
 	sf::Vector2f v1(viewWidth/2-500.0f,viewHeight- mActiveSprite1.getLocalBounds().height -25.0f);
 	mActiveSprite1.setPosition(v1);
