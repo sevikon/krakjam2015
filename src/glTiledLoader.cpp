@@ -226,9 +226,17 @@ bool glTiledLoader::isLadder(int x,int y){
 	return false;
 }
 
+bool glTiledLoader::isKilledByLaser(int x, int y)
+{
+	if (vecTiled.at(x).at(y).type==LASER){
+		return true;
+	}
+	return false;
+}
+
 bool glTiledLoader::isBlockableObject(int x, int y)
 {
-	if (vecTiled.at(x).at(y).type >= OBJECTS_MIN  && vecTiled.at(x).at(y).type <= OBJECTS_MAX && vecTiled.at(x).at(y).type % 2 == 1){
+	if (((vecTiled.at(x).at(y).type >= OBJECTS_MIN  && vecTiled.at(x).at(y).type <= OBJECTS_MAX )||(vecTiled.at(x).at(y).type==LASER))&& vecTiled.at(x).at(y).type % 2 == 1){
 		return true;
 	}
 	return false;
