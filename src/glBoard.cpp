@@ -91,6 +91,7 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 					if(pressesAmount && pressesAmount < glTiled::MAX_AMOUNT_OF_PRESSES)
 					{
 						DrawPressStackProgressBar(graphics, pressesAmount/(float)glTiled::MAX_AMOUNT_OF_PRESSES, a*tiledSize + offset, (b)*tiledSize);
+						
 					} 
 					if(pressesAmount >= glTiled::MAX_AMOUNT_OF_PRESSES)
 					{

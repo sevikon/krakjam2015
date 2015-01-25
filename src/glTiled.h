@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML\Graphics.hpp"
+#include "SFML\Audio.hpp"
 #include <vector>
 
 
@@ -33,7 +34,7 @@ public:
 	bool readyToExecAssociatedAction;
 	int framesPressed;
 	int framesActive;
-public: 
+
 	sf::Color color;
 	int amountOfPresses;
 	int row, column;

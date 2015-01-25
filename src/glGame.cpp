@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "glUtils.h"
 #include "glSettings.h"
+#include "glTiled.h"
 #include <iostream>
 #include <stdlib.h>
 
@@ -30,6 +31,7 @@ void glGame::Load()
 	gBoard.Load();
 
 	score.Load();
+
 
 	bulletTexture.loadFromFile(concat(glSettings::ASSETS_PATH, "bullet.png"));
 
@@ -477,12 +479,18 @@ void glGame::HandleEvent(sf::Event event)
 			tileManager.getTileCoords(x, y, heroLeft.playerId, row, column);
 
 			glTiled& tile = gBoard.getTileManager().getTile(row, column);
-			tile.press();
-
-			if(tile.readyToExecAssociatedAction)
+			
+			if(tile.type >= OBJECTS_MIN)
 			{
-				gBoard.getTileManager().runActionOnAssociated(row, column);
-				gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				tile.press();	
+				if(tile.readyToExecAssociatedAction)
+				{
+					gBoard.getTileManager().runActionOnAssociated(row, column);
+					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				} else 
+				{
+					musicObject.PlaySound("press" + to_string(rand()%4+1));
+				}
 			}
 		}
 
