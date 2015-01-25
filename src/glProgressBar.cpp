@@ -83,7 +83,7 @@ void glProgressBar::Draw(sf::RenderWindow& graphics)
 	pbSprite.setPosition(626,763-actual);
 	graphics.draw(pbSprite);
 
-	backgroundSprite[1].setPosition(562,763-actualPlayer1);
+	backgroundSprite[1].setPosition(552,763-actualPlayer1);
 	graphics.draw(backgroundSprite[1]);
 
 	backgroundSprite[2].setPosition(660,763-actualPlayer2);

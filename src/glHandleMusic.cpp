@@ -14,8 +14,11 @@ void glHandleMusic::HandleMusic()
 	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"press3"));
 	if (!Sounds.back().first.loadFromFile("assets/music/press3.ogg")) 
 		cout << "Error while loading sounds" << endl;
-	Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"press4"));
-	if (!Sounds.back().first.loadFromFile("assets/music/press4.ogg")) 
+	Sounds.push_back(std::pair<sf::SoundBuffer, std::string>(sf::SoundBuffer(), "press4"));
+	if (!Sounds.back().first.loadFromFile("assets/music/press4.ogg"))
+		cout << "Error while loading sounds" << endl;
+	Sounds.push_back(std::pair<sf::SoundBuffer, std::string>(sf::SoundBuffer(), "bullet"));
+	if (!Sounds.back().first.loadFromFile("assets/music/bullet.ogg"))
 		cout << "Error while loading sounds" << endl;
 
 	/*Sounds.push_back(std::pair<sf::SoundBuffer,std::string>(sf::SoundBuffer(),"FallEgg_1"));

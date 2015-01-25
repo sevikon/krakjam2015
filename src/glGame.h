@@ -36,8 +36,6 @@ private:
 	glHero heroLeft;
 	glHero heroRight;
 
-	glHandleMusic musicObject;
-
 	std::vector<glBullet> bulletsVecLeft;
 	std::vector<glBullet> bulletsVecRight;
 
