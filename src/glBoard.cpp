@@ -7,6 +7,11 @@
 #include <string>
 #include <cmath>
 
+
+// how much time passes between frames
+
+const float DELTA = 1.0f / 60.0f;
+
 void glBoard::Load()
 {
 	for (int a=1;a<SPRITES;a++){
@@ -25,7 +30,10 @@ void glBoard::Init(sf::RenderWindow& window)
 
 void glBoard::Update()
 {
-	mTileManager.Update();
+
+	mAngle += DELTA * 0.7f;
+	if (mAngle > 360.0f) mAngle = 0.0f;
+
 }
 
 glTiledLoader& glBoard::getTileManager()
@@ -63,7 +71,7 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 				}
 				else if(act>=1 && act<=SPRITES && !mTileManager.isActive(b,a)){
 					if (left)
-						backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);
+						backgroundSprite[act].setPosition(a*tiledSize, (b)*tiledSize + (act >= OBJECTS_MIN && act <= OBJECTS_MAX ? 10 * sin(mAngle) - 10 : 0));
 					else
 						backgroundSprite[act].setPosition((a-10)*tiledSize,(b)*tiledSize);
 					backgroundSprite[act].setColor(mTileManager.getColor(b,a));
@@ -76,9 +84,9 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 				}else if ((act==FREE || (act>=OBJECTS_MIN && act<=OBJECTS_MAX)) && mTileManager.isActive(b,a)){
 					float opacity = mTileManager.getLowerOpacity(b,a);
 					if (left)
-						backgroundSprite[act].setPosition(a*tiledSize,(b)*tiledSize);
+						backgroundSprite[act].setPosition(a*tiledSize, (b)*tiledSize + (act >= OBJECTS_MIN && act <= OBJECTS_MAX ? 5 * sin(mAngle) : 0));
 					else
-						backgroundSprite[act].setPosition((a-10)*tiledSize,(b)*tiledSize);
+						backgroundSprite[act].setPosition((a - 10)*tiledSize, (b)*tiledSize + (act >= OBJECTS_MIN && act <= OBJECTS_MAX ? 5 * sin(mAngle) : 0));
 					backgroundSprite[act].setColor(sf::Color(255* opacity, 255, 255 * opacity, opacity * 255));
 					graphics.draw(backgroundSprite[act]);
 				}

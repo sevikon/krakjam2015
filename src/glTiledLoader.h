@@ -48,6 +48,7 @@ public:
 	void runActionOnAssociated(int x,int y);
 	void setInvisibleRoom(int x);
 	glTiled &searchTiled(int c, int type);
+	vector<glTiled*> searchTilesAssociatedForAction(int scope, int search_type);
 		// returns tile coordinates by position
 	void getTileCoords(float posX, float posY, glHero::PLAYER playerId, int& tileX, int& tileY);
 };

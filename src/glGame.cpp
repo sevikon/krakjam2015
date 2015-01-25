@@ -125,8 +125,8 @@ void glGame::Update()
 			float x = heroLeft.position.x+heroLeft.getWidth()/2;
 			float y = heroLeft.position.y+heroLeft.getHeight()/2;
 			int a,b;
-			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId,a,b);
-			gBoard.getTileManager().runActionOnAssociated(a,b);
+			gBoard.getTileManager().getTileCoords(x,y,heroLeft.playerId, a, b);
+			gBoard.getTileManager().runActionOnAssociated(a, b);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -259,14 +259,14 @@ void glGame::Update()
 
 	// Death in lava
 
-	if(heroRight.position.y + heroRight.getHeight() > gProgressBar.lava){
+	if(heroRight.position.y + heroRight.getHeight() - 140 > gProgressBar.lava){
 		heroRight.death = true;}
-	if(heroLeft.position.y + heroLeft.getHeight() > gProgressBar.lava){
+	if(heroLeft.position.y + heroLeft.getHeight() - 140 > gProgressBar.lava){
 		heroLeft.death = true;}
 
 	// updating score
 
-	float progress = (float(gBoard.getTileManager().getMapHeight() - player1View.getCenter().y - 384) / float(gBoard.getTileManager().getMapHeight() - 768.0f));
+	float progress = (float(gBoard.getTileManager().getMapHeight() - min(player1View.getCenter().y, player2View.getCenter().y) - 384) / float(gBoard.getTileManager().getMapHeight() - 768.0f));
 	
 	switch (level)
 	{
@@ -295,6 +295,8 @@ void glGame::Draw(sf::RenderWindow& graphics)
 {		
 	graphics.setView(graphics.getDefaultView());
 
+	double pos = 0;
+
 	switch(gameState)
 	{
 		case GAME_STATE::MENU:
@@ -320,36 +322,46 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				isPlaying = true;
 			}
 
+			gBoard.Update();
 
 			graphics.setView(player1View);
 
-			for (int i = 0; i < 15; ++i)
+			// for parallax-scrolling
+			
+			pos = gBoard.getTileManager().getMapHeight() - backgroundTexture.getSize().y * 6 - 0.8 * (gBoard.getTileManager().getMapHeight() - player1View.getCenter().y - 384.0f);
+
+			for (int i = 0; i < 6; ++i)
 			{
-				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
-
 			gBoard.Draw(graphics, player1View.getCenter(), player1View.getSize(), true,heroLeft.position,heroRight.position);
 			gProgressBar.DrawLava(graphics,true);
 			for(int i=0; i<10;++i){
 				bulletsLeft[i].Draw(graphics);
 			}
 			heroLeft.Draw(graphics);
+			gProgressBar.DrawLava(graphics, true);
 
 			graphics.setView(player2View);
 
-			for (int i = 0; i < 15; ++i)
+			// for parallax-scrolling
+
+			pos = gBoard.getTileManager().getMapHeight() - backgroundTexture.getSize().y * 6 - 0.8 * (gBoard.getTileManager().getMapHeight() - player2View.getCenter().y - 384.0f);
+
+			for (int i = 0; i < 6; ++i)
 			{
-				backgroundSprite.setPosition(0, i * backgroundTexture.getSize().y);
+				backgroundSprite.setPosition(0, pos + i * backgroundTexture.getSize().y);
 				graphics.draw(backgroundSprite);
 			}
-
 			gBoard.Draw(graphics, player2View.getCenter(), player2View.getSize(), false,heroLeft.position,heroRight.position);
 			gProgressBar.DrawLava(graphics,false);
 			for(int i=0; i<10;++i){
 				bulletsLeft[i].Draw(graphics);
 			}
+
 			heroRight.Draw(graphics);
+			gProgressBar.DrawLava(graphics, false);
 
 			graphics.setView(graphics.getDefaultView());
 			gProgressBar.Draw(graphics);
@@ -398,8 +410,6 @@ void glGame::HandleEvent(sf::Event event)
 
 void glGame::CheckColisions()
 {
-	sf::Vector2f leftHeroPosition =  heroLeft.getSpirte().getPosition();
-	sf::Vector2f rightHeroPosition = heroRight.getSpirte().getPosition();
 	float leftHeroWidth  = heroLeft.getSpirte().getLocalBounds().width;
 	float leftHeroHeight = heroLeft.getSpirte().getLocalBounds().height;
 	float rightHeroWidth  = heroRight.getSpirte().getLocalBounds().width;
@@ -410,15 +420,14 @@ void glGame::CheckColisions()
 
 		if(!bulletsLeft[i].mDying)
 		{
-			sf::Vector2f positions = bulletsLeft[i].bulletSprite.getOrigin();
+			sf::Vector2f bulletCenter = bulletsLeft[i].bulletSprite.getOrigin();
 			float height = bulletsLeft[i].bulletSprite.getLocalBounds().height;
 			float width = bulletsLeft[i].bulletSprite.getLocalBounds().width;
-			float leftHeroCenter = leftHeroPosition.x + leftHeroWidth/2.;
-			float rightHeroCenter = rightHeroPosition.x + rightHeroWidth/2.;
-			sf::Vector2f bulletPosition = bulletsLeft[i].bulletSprite.getPosition();
+			float leftHeroCenter_x = heroLeft.getSpirte().getOrigin().x;
+			float leftHeroCenter_y = heroLeft.getSpirte().getOrigin().y;
 
-			if(std::abs(bulletPosition.y-leftHeroPosition.y) < 50 && std::abs(bulletPosition.x-leftHeroPosition.x) < 50){
-					heroLeft.death = true;
+			if(std::abs(bulletCenter.y-leftHeroCenter_y) < 20 && std::abs(bulletCenter.x-leftHeroCenter_x) < 20){
+					//heroLeft.death = true;
 			}
 		}
 	}
@@ -428,15 +437,12 @@ void glGame::CheckColisions()
 
 		if(!bulletsRight[i].mDying)
 		{
-			sf::Vector2f positions = bulletsRight[i].bulletSprite.getOrigin();
-			float height = bulletsRight[i].bulletSprite.getLocalBounds().height;
-			float width = bulletsRight[i].bulletSprite.getLocalBounds().width;
-			float leftHeroCenter = leftHeroPosition.x + leftHeroWidth/2.;
-			float rightHeroCenter = rightHeroPosition.x + rightHeroWidth/2.;
-			sf::Vector2f bulletPosition = bulletsRight[i].bulletSprite.getPosition();
+			sf::Vector2f bulletCenter = bulletsRight[i].bulletSprite.getOrigin();
+			float rightHeroCenter_x = heroRight.getSpirte().getOrigin().x;
+			float rightHeroCenter_y = heroRight.getSpirte().getOrigin().y;
 
-			if(std::abs(bulletPosition.y-rightHeroPosition.y) < 50 && std::abs(bulletPosition.x-rightHeroPosition.x) < 50){
-					heroRight.death = true;
+			if(std::abs(bulletCenter.y-rightHeroCenter_y) < 20 && std::abs(bulletCenter.x-rightHeroCenter_x) < 20){
+					//heroRight.death = true;
 			}
 		}
 	}
