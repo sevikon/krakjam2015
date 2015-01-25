@@ -27,13 +27,14 @@ void glBoard::Load()
 
 void glBoard::Init(sf::RenderWindow& window)
 {
+	mAngle = 0;
 	mTileManager.loadMap(1);
 }
 
 void glBoard::Update()
 {
 
-	mAngle += DELTA * 0.7f;
+	mAngle += DELTA * 0.25f;
 	if (mAngle > 360.0f) mAngle = 0.0f;
 
 }
@@ -75,10 +76,7 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 					p=a;
 					r=b;
 				} else if(act>=1 && act<=SPRITES && !mTileManager.isActive(b,a)){
-					if (left)
-						backgroundSprite[act].setPosition(a*tiledSize, (b)*tiledSize + (act >= OBJECTS_MIN && act <= OBJECTS_MAX ? 10 * sin(mAngle) - 10 : 0));
-					else
-						backgroundSprite[act].setPosition((a-10)*tiledSize,(b)*tiledSize);
+					backgroundSprite[act].setPosition(a*tiledSize + offset, (b)*tiledSize + (act >= OBJECTS_MIN && act <= OBJECTS_MAX ? 10 * sin(mAngle) - 10 : 0));
 					backgroundSprite[act].setColor(mTileManager.getColor(b,a));
 					float opacity = mTileManager.getOpacity(b,a);
 					if (std::abs(leftHero.y-rightHero.y)<=4*64){
@@ -103,6 +101,7 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 					backgroundSprite[act].setColor(sf::Color(255, 255, 255,255));
 
 				} else if ((act==FREE || (act>=OBJECTS_MIN && act<=OBJECTS_MAX)) && mTileManager.isActive(b,a)) {
+
 					float opacity = mTileManager.getLowerOpacity(b,a);
 					if (left)
 						backgroundSprite[act].setPosition(a*tiledSize, (b)*tiledSize + (act >= OBJECTS_MIN && act <= OBJECTS_MAX ? 5 * sin(mAngle) : 0));
@@ -111,7 +110,6 @@ void glBoard::Draw(sf::RenderWindow& graphics,sf::Vector2f pos,sf::Vector2f size
 						
 					backgroundSprite[act].setColor(sf::Color(255* opacity, 255, 255 * opacity, opacity * 255));
 					graphics.draw(backgroundSprite[act]);
-				
 				}
 
 				/*

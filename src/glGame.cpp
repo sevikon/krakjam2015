@@ -136,6 +136,7 @@ void glGame::GameStateGameOver()
 void glGame::Update()
 {	
 	glTiledLoader& tileManager = gBoard.getTileManager();
+	gBoard.Update();
 
 	if (!heroLeft.death)
 	{
@@ -384,8 +385,6 @@ void glGame::Draw(sf::RenderWindow& graphics)
 				isPlaying = true;
 			}
 
-			gBoard.Update();
-
 			graphics.setView(player1View);
 
 			// for parallax-scrolling
@@ -494,7 +493,7 @@ void glGame::HandleEvent(sf::Event event)
 			}
 		}
 
-		if (event.key.code == sf::Keyboard::RShift)
+		if (event.key.code == sf::Keyboard::RControl)
 		{
 			float x = heroRight.position.x+heroRight.getWidth()/2;
 			float y = heroRight.position.y+heroRight.getHeight()/2;
@@ -503,12 +502,18 @@ void glGame::HandleEvent(sf::Event event)
 			tileManager.getTileCoords(x, y, heroRight.playerId, row, column);
 
 			glTiled& tile = gBoard.getTileManager().getTile(row, column);
-			tile.press();
-
-			if(tile.readyToExecAssociatedAction)
+			
+			if(tile.type >= OBJECTS_MIN)
 			{
-				gBoard.getTileManager().runActionOnAssociated(row, column);
-				gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				tile.press();	
+				if(tile.readyToExecAssociatedAction)
+				{
+					gBoard.getTileManager().runActionOnAssociated(row, column);
+					gBoard.getTileManager().runActionOnAssociatedLasers(row, column);
+				} else 
+				{
+					musicObject.PlaySound("press" + to_string(rand()%4+1));
+				}
 			}
 		}
 	}
